@@ -1,0 +1,909 @@
+/* =============================================================================
+   LAB.CSS — Reaction Studio Page Styles
+   Dark mode, scientific aesthetic. Chemify Lab design language.
+   Imported after global.css.
+   ============================================================================= */
+
+
+/* --- Keyframe Animations --------------------------------------------------- */
+
+@keyframes chipIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 36px rgba(0, 212, 255, 0.55);
+    }
+}
+
+@keyframes equationReveal {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes overlayFadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@keyframes spinRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes blinkCursor {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes badgeEnter {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* --- Spinner (inline loading indicator) ------------------------------------ */
+
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #374151;
+    border-top-color: #00d4ff;
+    border-radius: 50%;
+    animation: spinRotate 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 0.35rem;
+}
+
+
+/* --- Dark Theme Body Override ---------------------------------------------- */
+
+.lab-body {
+    background: #0a0d14;
+    color: #f9fafb;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* --- Dark Navbar ----------------------------------------------------------- */
+
+.topbar--dark {
+    background: #0a0d14;
+    border-bottom: 1px solid #1f2937;
+}
+
+.topbar--dark .topbar__logo-text {
+    color: #f9fafb;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.topbar__nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.topbar__nav-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #9ca3af;
+    letter-spacing: 0.02em;
+    transition: color 0.25s ease;
+    position: relative;
+}
+
+.topbar__nav-link:hover {
+    color: #f9fafb;
+}
+
+.topbar__nav-link--active {
+    color: #00d4ff;
+}
+
+.topbar__nav-link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #00d4ff;
+    border-radius: 1px;
+}
+
+
+/* --- Page Header ----------------------------------------------------------- */
+
+.lab-hero {
+    text-align: center;
+    padding: 3rem 2rem 1.5rem;
+    border-bottom: 1px solid #1f2937;
+}
+
+.lab-hero__label {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.lab-hero__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f9fafb;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.lab-hero__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+/* Status Indicator (injected by main.js) */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.35rem 1rem;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1f2937;
+    border-radius: 999px;
+}
+
+.status-indicator__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6b7280;
+    box-shadow: 0 0 6px #6b7280;
+    flex-shrink: 0;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-indicator__dot--pulse {
+    animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+    }
+}
+
+.status-indicator__text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6b7280;
+    transition: color 0.3s ease;
+}
+
+
+/* --- Main Lab Container ---------------------------------------------------- */
+
+.lab-main {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+}
+
+
+/* --- Top Control Bar ------------------------------------------------------- */
+
+.control-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+}
+
+
+/* --- Shared Button Base ---------------------------------------------------- */
+
+.btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    border: none;
+    line-height: 1;
+}
+
+.btn__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Ghost Button (Add Reactant) */
+.btn--ghost {
+    background: transparent;
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+}
+
+.btn--ghost:hover {
+    background: rgba(0, 212, 255, 0.08);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+}
+
+/* Primary Button (Run Reaction) */
+.btn--primary {
+    background: #00d4ff;
+    color: #0a0d14;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    transition: all 0.25s ease;
+}
+
+.btn--primary:hover {
+    box-shadow: 0 0 32px rgba(0, 212, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Disabled state */
+.btn--primary:disabled,
+.btn--primary[disabled] {
+    background: #1f2937;
+    color: #4b5563;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading / running state */
+.btn--primary.running {
+    animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+
+/* --- Reactants Chip Area --------------------------------------------------- */
+
+.reactants-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    min-height: 44px;
+}
+
+
+/* --- Reactant Chip --------------------------------------------------------- */
+
+.reactant-chip {
+    display: inline-flex;
+    align-items: center;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #f9fafb;
+    animation: chipIn 0.2s ease-out both;
+}
+
+.reactant-chip--placeholder {
+    opacity: 0.5;
+    animation: none;
+}
+
+.reactant-chip__formula {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.reactant-chip__remove {
+    margin-left: 0.5rem;
+    color: #6b7280;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+    font-family: inherit;
+}
+
+.reactant-chip__remove:hover {
+    color: #ef4444;
+}
+
+/* chip-enter class used by JS for dynamic chips */
+.chip-enter {
+    animation: chipIn 0.2s ease-out both;
+}
+
+
+/* --- Equation Display Card ------------------------------------------------- */
+
+.card--equation {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.equation-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    color: #f9fafb;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+}
+
+.equation-text--placeholder {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #4b5563;
+    font-style: italic;
+    letter-spacing: 0;
+}
+
+.equation-text--analyzing {
+    color: #6b7280;
+}
+
+.blink-cursor {
+    animation: blinkCursor 0.8s step-end infinite;
+    color: #00d4ff;
+    margin-left: 2px;
+}
+
+/* Equation parts coloring */
+.eq-reactant,
+.eq-product {
+    color: #00d4ff;
+}
+
+.eq-arrow {
+    color: #6b7280;
+    margin: 0 0.3em;
+}
+
+/* Equation reveal animation */
+.equation-reveal {
+    animation: equationReveal 0.6s ease both;
+}
+
+
+/* --- Energy Badge ---------------------------------------------------------- */
+
+.energy-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.energy-badge--hidden {
+    display: none;
+}
+
+.badge-enter {
+    animation: badgeEnter 0.3s ease both;
+}
+
+.energy-badge--exothermic {
+    display: inline-block;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+}
+
+.energy-badge--endothermic {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid #3b82f6;
+    color: #93c5fd;
+}
+
+
+/* --- Bottom Grid ----------------------------------------------------------- */
+
+.lab-grid {
+    display: grid;
+    grid-template-columns: 60% 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+
+/* --- Reaction Diagram Card ------------------------------------------------- */
+
+.card--diagram {
+    background: #0d1117;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.diagram-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border-radius: 12px;
+}
+
+.diagram-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #374151;
+    pointer-events: none;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+/* When reaction runs, overlay fades out */
+.diagram-overlay--hidden {
+    animation: overlayFadeOut 0.4s ease forwards;
+}
+
+
+/* --- Right Column Info Panels ---------------------------------------------- */
+
+.info-panels {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* --- Shared Info Card ------------------------------------------------------ */
+
+.card--info {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.card__label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 0.75rem;
+}
+
+
+/* --- Reaction Type Badge --------------------------------------------------- */
+
+.badge {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.badge--muted {
+    background: #1f2937;
+    color: #6b7280;
+    border: 1px solid #374151;
+}
+
+.badge--synthesis {
+    background: rgba(0, 212, 255, 0.12);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.badge--decomposition {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge--combustion {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge--displacement {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+
+/* --- Conditions Rows ------------------------------------------------------- */
+
+.conditions-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.condition-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #1f2937;
+}
+
+.condition-row:last-child {
+    border-bottom: none;
+}
+
+.condition-row__label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.condition-row__value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #f9fafb;
+    text-align: right;
+}
+
+
+/* --- Accordion (Calculations) ---------------------------------------------- */
+
+.accordion {
+    border-bottom: 1px solid #1f2937;
+}
+
+.accordion:last-child {
+    border-bottom: none;
+}
+
+.accordion__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.accordion__title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.accordion__icon {
+    font-size: 0.7rem;
+    color: #6b7280;
+    transition: transform 0.3s ease, color 0.2s ease;
+    display: inline-block;
+}
+
+/* Collapsed body — max-height transition */
+.accordion__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+/* Open state — toggled via JS adding .is-open */
+.accordion.is-open .accordion__icon {
+    transform: rotate(90deg);
+    color: #00d4ff;
+}
+
+.accordion.is-open .accordion__title {
+    color: #f9fafb;
+}
+
+.accordion.is-open .accordion__body {
+    max-height: 200px;
+}
+
+.accordion__header:hover .accordion__title {
+    color: #f9fafb;
+}
+
+.accordion__content {
+    padding: 0 0 0.5rem;
+}
+
+
+/* --- Add Reactant Modal ---------------------------------------------------- */
+
+.reactant-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.reactant-modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.reactant-modal {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 420px;
+    max-width: 90vw;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s ease;
+}
+
+.reactant-modal-overlay.is-open .reactant-modal {
+    transform: scale(1) translateY(0);
+}
+
+.reactant-modal__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f9fafb;
+    margin-bottom: 0.35rem;
+}
+
+.reactant-modal__subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 1.25rem;
+}
+
+.reactant-modal__input {
+    display: block;
+    width: 100%;
+    background: #0a0d14;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: #f9fafb;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.reactant-modal__input::placeholder {
+    color: #4b5563;
+}
+
+.reactant-modal__input:focus {
+    border-color: #00d4ff;
+}
+
+.reactant-modal__error {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #ef4444;
+    min-height: 1.4em;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.reactant-modal__error.is-visible {
+    opacity: 1;
+}
+
+.reactant-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.btn--modal {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+}
+
+
+/* --- Footer ---------------------------------------------------------------- */
+
+.lab-footer {
+    border-top: 1px solid #1f2937;
+    padding: 2rem;
+    margin-top: auto;
+}
+
+.lab-footer__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.lab-footer__text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.lab-footer__links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.lab-footer__links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.lab-footer__links a:hover {
+    color: #00d4ff;
+}
+
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+    .lab-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .control-bar {
+        flex-wrap: wrap;
+    }
+
+    .equation-text {
+        font-size: 1.4rem;
+    }
+
+    .lab-hero__title {
+        font-size: 1.8rem;
+    }
+
+    .topbar__nav {
+        gap: 18px;
+    }
+
+    .topbar__nav-link {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .lab-main {
+        padding: 1rem;
+    }
+
+    .lab-hero {
+        padding: 2rem 1rem 1rem;
+    }
+
+    .lab-hero__title {
+        font-size: 1.5rem;
+    }
+
+    .lab-footer__inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .control-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
