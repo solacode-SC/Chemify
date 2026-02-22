@@ -4,7 +4,7 @@
 // =============================================================================
 
 import { addReactant, removeReactant, getState } from './store.js';
-
+import { elements } from './elements.js';
 
 // --- Modal HTML Template --------------------------------------------------- 
 
@@ -12,16 +12,20 @@ const MODAL_HTML = `
 <div class="reactant-modal-overlay" id="reactant-modal-overlay">
     <div class="reactant-modal" id="reactant-modal">
         <h2 class="reactant-modal__title">Add Reactant</h2>
-        <p class="reactant-modal__subtitle">Enter a chemical formula</p>
+        <p class="reactant-modal__subtitle">Build a formula or type it below</p>
 
-        <input
-            type="text"
-            class="reactant-modal__input"
-            id="reactant-input"
-            placeholder="e.g. H₂, O₂, NaCl, CH₄"
-            autocomplete="off"
-            spellcheck="false"
-        />
+        <div class="periodic-table" id="periodic-table"></div>
+
+        <div class="reactant-input-group">
+            <input
+                type="text"
+                class="reactant-modal__input"
+                id="reactant-input"
+                placeholder="e.g. H₂, O₂, NaCl, CH₄"
+                autocomplete="off"
+                spellcheck="false"
+            />
+        </div>
 
         <div class="reactant-modal__error" id="reactant-error"></div>
 
@@ -42,6 +46,7 @@ let input = null;
 let errorDiv = null;
 let addBtn = null;
 let cancelBtn = null;
+let periodicTableContainer = null;
 
 
 // --- Modal Logic ----------------------------------------------------------- 
@@ -57,6 +62,42 @@ function injectModal() {
     errorDiv = document.getElementById('reactant-error');
     addBtn = document.getElementById('reactant-add-btn');
     cancelBtn = document.getElementById('reactant-cancel-btn');
+    periodicTableContainer = document.getElementById('periodic-table');
+}
+
+function renderPeriodicTable() {
+    if (!periodicTableContainer) return;
+
+    periodicTableContainer.innerHTML = '';
+
+    elements.forEach(el => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `element-btn element-btn--${el.type}`;
+        btn.style.gridColumn = el.group;
+        btn.style.gridRow = el.period;
+
+        btn.innerHTML = `
+            <span class="element-btn__number">${el.symbol === 'Hf' ? '72' : '' /* Hack to hide atomic numbers for brevity */}</span>
+            <span class="element-btn__symbol">${el.symbol}</span>
+        `;
+
+        btn.title = el.name;
+
+        btn.addEventListener('click', () => {
+            // Append symbol to input
+            input.value += el.symbol;
+            input.focus();
+
+            // Clear errors
+            if (errorDiv.classList.contains('is-visible')) {
+                errorDiv.classList.remove('is-visible');
+                errorDiv.textContent = '';
+            }
+        });
+
+        periodicTableContainer.appendChild(btn);
+    });
 }
 
 function openModal() {
@@ -157,6 +198,9 @@ export function renderReactantTags(reactants) {
 export function initReactants() {
     // Inject modal HTML
     injectModal();
+
+    // Render periodic table
+    renderPeriodicTable();
 
     // Open modal on "Add Reactant" button click
     const openBtn = document.getElementById('add-reactant-btn');

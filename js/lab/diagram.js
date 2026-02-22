@@ -282,8 +282,16 @@ export function initDiagram() {
     initParticles(rect.width, rect.height);
 
     // ResizeObserver for responsive canvas
-    const observer = new ResizeObserver(() => {
-        sizeCanvas();
+    let currentWidth = 0;
+    let currentHeight = 0;
+    const observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+            const { width, height } = entry.contentRect;
+            if (width === currentWidth && height === currentHeight) return;
+            currentWidth = width;
+            currentHeight = height;
+            sizeCanvas();
+        }
     });
     observer.observe(canvas.parentElement);
 
