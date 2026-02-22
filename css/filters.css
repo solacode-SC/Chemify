@@ -1,0 +1,352 @@
+/* ===================================================
+   ChemVerse — Search & Filter Styles
+   =================================================== */
+
+/* ---------- Filter Panel ---------- */
+.filter-panel {
+   background: var(--color-bg);
+   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+   padding: 24px 0 16px;
+   position: sticky;
+   top: 64px;
+   z-index: 90;
+}
+
+.filter-panel__inner {
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 0 32px;
+}
+
+/* ---------- Search Input ---------- */
+.filter-search {
+   position: relative;
+   max-width: 360px;
+   margin-bottom: 16px;
+}
+
+.filter-search__input {
+   width: 100%;
+   font-family: var(--font-family);
+   font-size: 1rem;
+   font-weight: 400;
+   color: var(--color-text);
+   background: transparent;
+   border: none;
+   padding: 8px 0;
+   outline: none;
+}
+
+.filter-search__input::placeholder {
+   color: #aaa;
+}
+
+/* Animated underline */
+.filter-search__line {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 2px;
+   background: #e0e0e0;
+}
+
+.filter-search__line::after {
+   content: '';
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 0;
+   height: 2px;
+   background: #1a1a1a;
+   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-search__input:focus~.filter-search__line::after {
+   width: 100%;
+}
+
+/* ---------- Filter Chips Nav Wrapper ---------- */
+.filter-chips-nav {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+}
+
+/* ---------- Arrow Buttons ---------- */
+.filter-arrow {
+   width: 32px;
+   height: 32px;
+   border-radius: 50%;
+   border: 1px solid #e0e0e0;
+   background: #fff;
+   color: #888;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   flex-shrink: 0;
+   transition: all 0.2s ease;
+}
+
+.filter-arrow:hover {
+   border-color: #1a1a1a;
+   color: #1a1a1a;
+   background: #f5f5f5;
+}
+
+.filter-arrow.is-hidden {
+   opacity: 0.25;
+   pointer-events: none;
+}
+
+/* ---------- Filter Chips Scroll ---------- */
+.filter-chips-scroll {
+   overflow-x: auto;
+   flex: 1;
+   min-width: 0;
+   -ms-overflow-style: none;
+   scrollbar-width: none;
+   scroll-behavior: smooth;
+}
+
+.filter-chips-scroll::-webkit-scrollbar {
+   display: none;
+}
+
+.filter-chips {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   flex-wrap: nowrap;
+   padding-bottom: 4px;
+}
+
+/* ---------- Filter Chip ---------- */
+.filter-chip {
+   background: #f0f0f0;
+   border: 1px solid transparent;
+   border-radius: 999px;
+   padding: 0.4rem 1rem;
+   font-family: var(--font-family);
+   font-size: 0.85rem;
+   font-weight: 400;
+   color: #444;
+   cursor: pointer;
+   white-space: nowrap;
+   transition: all 0.15s ease;
+   flex-shrink: 0;
+}
+
+.filter-chip:hover {
+   border-color: #1a1a1a;
+}
+
+.filter-chip:focus-visible {
+   outline: 2px solid #1a1a1a;
+   outline-offset: 2px;
+}
+
+.filter-chip.is-active {
+   background: #1a1a1a;
+   color: #faf9f7;
+   border-color: #1a1a1a;
+}
+
+/* Scale bounce on activate */
+.filter-chip.chip-bounce {
+   animation: chipBounce 0.25s ease;
+}
+
+@keyframes chipBounce {
+   0% {
+      transform: scale(1);
+   }
+
+   50% {
+      transform: scale(1.08);
+   }
+
+   100% {
+      transform: scale(1);
+   }
+}
+
+/* ---------- Filter Divider ---------- */
+.filter-divider {
+   width: 1px;
+   height: 24px;
+   background: #ddd;
+   flex-shrink: 0;
+   margin: 0 4px;
+}
+
+/* ---------- Period Chips ---------- */
+.filter-period-chips {
+   display: contents;
+}
+
+.filter-period-select {
+   display: none;
+   font-family: var(--font-family);
+   font-size: 0.85rem;
+   color: #444;
+   background: #f0f0f0;
+   border: 1px solid transparent;
+   border-radius: 999px;
+   padding: 0.4rem 1rem;
+   cursor: pointer;
+   flex-shrink: 0;
+}
+
+/* ---------- Filter Meta ---------- */
+.filter-meta {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-top: 12px;
+   gap: 16px;
+}
+
+.filter-counter {
+   font-size: 0.85rem;
+   color: #888;
+   transition: opacity 0.2s ease;
+}
+
+.filter-counter.is-fading {
+   opacity: 0;
+}
+
+.filter-meta__right {
+   display: flex;
+   align-items: center;
+   gap: 20px;
+}
+
+/* ---------- Clear All ---------- */
+.filter-clear {
+   font-family: var(--font-family);
+   font-size: 0.85rem;
+   font-weight: 500;
+   color: #888;
+   background: none;
+   border: none;
+   cursor: pointer;
+   text-decoration: underline;
+   text-underline-offset: 2px;
+   transition: color 0.2s;
+}
+
+.filter-clear:hover {
+   color: #1a1a1a;
+}
+
+/* ---------- Highlight Toggle ---------- */
+.highlight-toggle {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   cursor: pointer;
+   user-select: none;
+}
+
+.highlight-toggle input {
+   position: absolute;
+   opacity: 0;
+   pointer-events: none;
+}
+
+.highlight-toggle__track {
+   width: 36px;
+   height: 20px;
+   background: #ddd;
+   border-radius: 10px;
+   position: relative;
+   transition: background 0.2s ease;
+   flex-shrink: 0;
+}
+
+.highlight-toggle input:checked~.highlight-toggle__track {
+   background: #1a1a1a;
+}
+
+.highlight-toggle__knob {
+   position: absolute;
+   top: 2px;
+   left: 2px;
+   width: 16px;
+   height: 16px;
+   background: #fff;
+   border-radius: 50%;
+   transition: transform 0.2s ease;
+}
+
+.highlight-toggle input:checked~.highlight-toggle__track .highlight-toggle__knob {
+   transform: translateX(16px);
+}
+
+.highlight-toggle__label {
+   font-size: 0.85rem;
+   color: #888;
+   white-space: nowrap;
+}
+
+/* ---------- Highlight mode tile classes ---------- */
+.el-tile.is-highlighted {
+   border-color: #1a1a1a;
+   border-width: 2px;
+   box-shadow: inset 0 3px 0 0 #1a1a1a;
+}
+
+.el-tile.is-muted {
+   opacity: 0.35 !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+   .filter-search {
+      max-width: 100%;
+   }
+
+   .filter-panel__inner {
+      padding: 0 16px;
+   }
+
+   .filter-arrow {
+      display: none;
+   }
+
+   .filter-chips-scroll {
+      margin: 0 -16px;
+      padding: 0 16px;
+   }
+}
+
+@media (max-width: 480px) {
+   .filter-period-chips {
+      display: none;
+   }
+
+   /* Hide the divider before period chips */
+   .filter-chips .filter-divider:last-of-type {
+      display: none;
+   }
+
+   .filter-period-select {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      appearance: auto;
+   }
+
+   .filter-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+   }
+
+   .highlight-toggle__label {
+      font-size: 0.78rem;
+   }
+}

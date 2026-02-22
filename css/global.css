@@ -1,0 +1,138 @@
+/* ===================================================
+   ChemVerse — Global Shared Styles
+   Variables, resets, typography
+   =================================================== */
+
+*,
+*::before,
+*::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+/* Hide all scrollbars globally */
+*::-webkit-scrollbar {
+   display: none;
+}
+
+* {
+   -ms-overflow-style: none;
+   scrollbar-width: none;
+}
+
+:root {
+   --color-bg: #faf9f7;
+   --color-bg-scroll: #ffffff;
+   --color-text: #1a1a1a;
+   --color-text-muted: rgba(26, 26, 26, 0.55);
+   --color-border: #1a1a1a;
+   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+   --font-serif: Georgia, 'Times New Roman', serif;
+   --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+   scroll-behavior: smooth;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+   font-family: var(--font-family);
+   background: var(--color-bg);
+   color: var(--color-text);
+   line-height: 1.6;
+}
+
+a {
+   text-decoration: none;
+   color: inherit;
+}
+
+ul {
+   list-style: none;
+}
+
+/* ===================================================
+   Top Bar (shared across inner pages)
+   =================================================== */
+
+.topbar {
+   position: sticky;
+   top: 0;
+   z-index: 100;
+   background: var(--color-bg);
+   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+   height: 64px;
+}
+
+.topbar__inner {
+   max-width: 1400px;
+   height: 100%;
+   margin: 0 auto;
+   padding: 0 32px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 24px;
+}
+
+.topbar__logo {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   flex-shrink: 0;
+}
+
+.topbar__logo-icon {
+   width: 30px;
+   height: 30px;
+}
+
+.topbar__logo-text {
+   font-size: 1.1rem;
+   font-weight: 600;
+   letter-spacing: 0.05em;
+   color: var(--color-text);
+}
+
+.topbar__search-wrap {
+   flex: 0 1 280px;
+}
+
+.topbar__search {
+   width: 100%;
+   font-family: var(--font-family);
+   font-size: 0.9rem;
+   font-weight: 400;
+   color: var(--color-text);
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid #ccc;
+   padding: 8px 0;
+   outline: none;
+   transition: border-color var(--transition-smooth);
+}
+
+.topbar__search::placeholder {
+   color: #aaa;
+}
+
+.topbar__search:focus {
+   border-bottom-color: var(--color-text);
+}
+
+@media (max-width: 480px) {
+   .topbar__inner {
+      padding: 0 16px;
+   }
+
+   .topbar__logo-text {
+      font-size: 1rem;
+   }
+
+   .topbar__search-wrap {
+      flex: 0 1 160px;
+   }
+}

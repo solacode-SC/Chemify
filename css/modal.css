@@ -1,0 +1,312 @@
+/* ===================================================
+   ChemVerse — Element Modal Styles
+   =================================================== */
+
+/* ---------- Overlay ---------- */
+.modal-overlay {
+   position: fixed;
+   inset: 0;
+   z-index: 500;
+   background: rgba(0, 0, 0, 0);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   visibility: hidden;
+   transition: background 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.is-active {
+   background: rgba(0, 0, 0, 0.4);
+   visibility: visible;
+}
+
+/* ---------- Panel ---------- */
+.modal-panel {
+   position: relative;
+   width: 100%;
+   max-width: 680px;
+   max-height: 90vh;
+   background: #faf9f7;
+   border-radius: 12px;
+   padding: 2.5rem;
+   overflow-y: auto;
+   transform: translateY(40px) scale(0.96);
+   opacity: 0;
+   transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-overlay.is-active .modal-panel {
+   transform: translateY(0) scale(1);
+   opacity: 1;
+}
+
+/* Scrollbar styling */
+.modal-panel::-webkit-scrollbar {
+   width: 4px;
+}
+
+.modal-panel::-webkit-scrollbar-thumb {
+   background: #ccc;
+   border-radius: 4px;
+}
+
+/* ---------- Close button ---------- */
+.modal-close {
+   position: absolute;
+   top: 1.2rem;
+   right: 1.2rem;
+   width: 36px;
+   height: 36px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 1.5rem;
+   color: #888;
+   background: none;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: color 0.2s, background 0.2s;
+   line-height: 1;
+}
+
+.modal-close:hover {
+   color: #1a1a1a;
+   background: rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Header ---------- */
+.modal-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   margin-bottom: 32px;
+   gap: 24px;
+}
+
+.modal-header__info {
+   flex: 1;
+}
+
+.modal-header__badge {
+   display: inline-block;
+   font-size: 0.7rem;
+   font-weight: 600;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   color: #888;
+   margin-bottom: 8px;
+}
+
+.modal-header__symbol {
+   font-family: Georgia, 'Times New Roman', serif;
+   font-size: 5rem;
+   font-weight: 700;
+   color: #1a1a1a;
+   line-height: 1;
+   margin-bottom: 4px;
+}
+
+.modal-header__name {
+   font-family: Georgia, 'Times New Roman', serif;
+   font-size: 1.8rem;
+   font-weight: 400;
+   color: #1a1a1a;
+   margin-bottom: 8px;
+}
+
+.modal-header__meta {
+   font-size: 0.95rem;
+   font-weight: 400;
+   color: #555;
+}
+
+/* Decorative circle tile */
+.modal-header__circle {
+   width: 100px;
+   height: 100px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   border: 1px solid #e0e0e0;
+}
+
+.modal-header__circle-sym {
+   font-family: Georgia, 'Times New Roman', serif;
+   font-size: 2.4rem;
+   font-weight: 700;
+   color: #1a1a1a;
+}
+
+/* ---------- Properties Grid ---------- */
+.modal-props {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 16px;
+   margin-bottom: 32px;
+}
+
+.modal-prop {
+   padding: 12px 0;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-prop__label {
+   font-size: 0.7rem;
+   font-weight: 600;
+   letter-spacing: 0.08em;
+   text-transform: uppercase;
+   color: #888;
+   margin-bottom: 4px;
+}
+
+.modal-prop__value {
+   font-size: 1rem;
+   font-weight: 500;
+   color: #1a1a1a;
+}
+
+/* ---------- About / Description ---------- */
+.modal-about__heading,
+.modal-uses__heading,
+.modal-shells__heading {
+   font-family: Georgia, 'Times New Roman', serif;
+   font-size: 1.1rem;
+   font-weight: 400;
+   color: #1a1a1a;
+   margin-bottom: 12px;
+}
+
+.modal-about__text {
+   font-size: 1rem;
+   font-weight: 400;
+   line-height: 1.7;
+   color: #444;
+   margin-bottom: 28px;
+}
+
+/* ---------- Uses Pills ---------- */
+.modal-uses {
+   margin-bottom: 28px;
+}
+
+.modal-uses__list {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+}
+
+.modal-uses__pill {
+   background: #f0f0f0;
+   border-radius: 999px;
+   padding: 0.3rem 0.8rem;
+   font-size: 0.85rem;
+   font-weight: 400;
+   color: #444;
+}
+
+/* ---------- Electron Shell Visual ---------- */
+.modal-shells {
+   margin-bottom: 8px;
+}
+
+.modal-shells__svg-wrap {
+   display: flex;
+   justify-content: center;
+   padding: 16px 0;
+}
+
+.modal-shells__svg-wrap svg {
+   max-width: 240px;
+   max-height: 240px;
+}
+
+/* Shell orbit rings */
+.shell-ring {
+   fill: none;
+   stroke: rgba(26, 26, 26, 0.12);
+   stroke-width: 1;
+}
+
+/* Electron dots */
+.shell-electron {
+   fill: #1a1a1a;
+}
+
+/* Shell orbit animation groups */
+.shell-group {
+   transform-origin: center;
+}
+
+.shell-group--0 {
+   animation: shellSpin 4s linear infinite;
+}
+
+.shell-group--1 {
+   animation: shellSpin 6s linear infinite reverse;
+}
+
+.shell-group--2 {
+   animation: shellSpin 8s linear infinite;
+}
+
+.shell-group--3 {
+   animation: shellSpin 10s linear infinite reverse;
+}
+
+.shell-group--4 {
+   animation: shellSpin 12s linear infinite;
+}
+
+.shell-group--5 {
+   animation: shellSpin 14s linear infinite reverse;
+}
+
+.shell-group--6 {
+   animation: shellSpin 16s linear infinite;
+}
+
+@keyframes shellSpin {
+   from {
+      transform: rotate(0deg);
+   }
+
+   to {
+      transform: rotate(360deg);
+   }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+   .modal-panel {
+      max-width: 100%;
+      max-height: 100%;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      padding: 2rem 1.5rem;
+   }
+
+   .modal-header__symbol {
+      font-size: 3.5rem;
+   }
+
+   .modal-header__name {
+      font-size: 1.4rem;
+   }
+
+   .modal-header__circle {
+      width: 72px;
+      height: 72px;
+   }
+
+   .modal-header__circle-sym {
+      font-size: 1.8rem;
+   }
+
+   .modal-props {
+      grid-template-columns: 1fr;
+   }
+}
