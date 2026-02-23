@@ -292,7 +292,7 @@
 .btn--ghost {
     background: transparent;
     color: var(--color-text);
-    border: 1px solid #00d4ff;
+    border: 1px solid #0b0d0d;
 }
 
 .btn--ghost:hover {

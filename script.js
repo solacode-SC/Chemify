@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — Navbar Interactions (vanilla JS)
+   Chemify — Navbar Interactions (vanilla JS)
    =================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {

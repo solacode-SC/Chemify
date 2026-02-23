@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — Table Grid Logic
+   Chemify — Table Grid Logic
    Renders the periodic table, search, click, animation
    =================================================== */
 

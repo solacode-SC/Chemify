@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — Search & Filter Logic
+   Chemify — Search & Filter Logic
    =================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {

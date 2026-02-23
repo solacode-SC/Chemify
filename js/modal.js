@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — Modal Open / Close / Render
+   Chemify — Modal Open / Close / Render
    =================================================== */
 
 (function () {

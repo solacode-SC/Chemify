@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — All 118 Elements Data
+   Chemify — All 118 Elements Data
    Each element: name, symbol, atomicNumber, atomicMass,
    category, period, group, gridColumn, gridRow
    =================================================== */

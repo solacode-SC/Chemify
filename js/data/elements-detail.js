@@ -1,5 +1,5 @@
 /* ===================================================
-   ChemVerse — Extended Element Details
+   Chemify — Extended Element Details
    phase, mp, bp, density, en, ec (electron config),
    ox (oxidation states), year, by, shells, desc, uses
    =================================================== */
