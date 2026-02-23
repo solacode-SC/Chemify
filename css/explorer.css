@@ -3,6 +3,34 @@
    =================================================== */
 
 /* ---------- Explorer Layout ---------- */
+.explorer-hero {
+   padding: calc(var(--navbar-height) + 40px) 32px 10px;
+   max-width: 1000px;
+   margin: 0 auto;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+}
+
+.explorer-hero__heading {
+   font-family: Georgia, 'Times New Roman', serif;
+   font-size: 3.5rem;
+   font-weight: 400;
+   margin-bottom: 24px;
+   line-height: 1.2;
+   color: var(--color-text);
+}
+
+.explorer-hero__sub {
+   font-family: var(--font-family);
+   font-size: 1.1rem;
+   color: #444;
+   max-width: 520px;
+   line-height: 1.7;
+   margin-bottom: 0;
+}
+
 .explorer {
    padding: 32px 32px 64px;
    max-width: 1400px;
@@ -252,6 +280,14 @@
 @media (max-width: 768px) {
    .explorer {
       padding: 20px 16px 48px;
+   }
+
+   .explorer-hero {
+      padding: calc(var(--navbar-height) + 20px) 16px 10px;
+   }
+
+   .explorer-hero__heading {
+      font-size: 2.8rem;
    }
 
    .explorer__scroll-hint {

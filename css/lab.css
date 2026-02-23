@@ -23,7 +23,7 @@
 
     0%,
     100% {
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     50% {
@@ -89,8 +89,8 @@
     display: inline-block;
     width: 14px;
     height: 14px;
-    border: 2px solid #374151;
-    border-top-color: #00d4ff;
+    border: 2px solid #e5e5e5;
+    border-top-color: var(--color-text);
     border-radius: 50%;
     animation: spinRotate 0.8s linear infinite;
     vertical-align: middle;
@@ -101,9 +101,9 @@
 /* --- Dark Theme Body Override ---------------------------------------------- */
 
 .lab-body {
-    background: #0a0d14;
-    color: #f9fafb;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -113,13 +113,13 @@
 /* --- Dark Navbar ----------------------------------------------------------- */
 
 .topbar--dark {
-    background: #0a0d14;
-    border-bottom: 1px solid #1f2937;
+    background: var(--color-bg);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.15);
 }
 
 .topbar--dark .topbar__logo-text {
-    color: #f9fafb;
-    font-family: 'DM Sans', sans-serif;
+    color: var(--color-text);
+    font-family: var(--font-family);
     font-weight: 700;
     letter-spacing: 0.06em;
 }
@@ -131,21 +131,21 @@
 }
 
 .topbar__nav-link {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.9rem;
     font-weight: 500;
-    color: #9ca3af;
+    color: #444;
     letter-spacing: 0.02em;
     transition: color 0.25s ease;
     position: relative;
 }
 
 .topbar__nav-link:hover {
-    color: #f9fafb;
+    color: var(--color-text);
 }
 
 .topbar__nav-link--active {
-    color: #00d4ff;
+    color: var(--color-text);
 }
 
 .topbar__nav-link--active::after {
@@ -155,7 +155,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: #00d4ff;
+    background: var(--color-text);
     border-radius: 1px;
 }
 
@@ -164,34 +164,34 @@
 
 .lab-hero {
     text-align: center;
-    padding: 3rem 2rem 1.5rem;
-    border-bottom: 1px solid #1f2937;
+    padding: calc(var(--navbar-height) + 40px) 32px 1.5rem;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.15);
 }
 
 .lab-hero__label {
     display: block;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: #9ca3af;
+    color: #444;
     text-transform: uppercase;
     margin-bottom: 0.75rem;
 }
 
 .lab-hero__title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 2.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 3.5rem;
     font-weight: 700;
-    color: #f9fafb;
+    color: var(--color-text);
     line-height: 1.2;
     margin-bottom: 0.5rem;
 }
 
 .lab-hero__desc {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 1rem;
-    color: #9ca3af;
+    color: #444;
     line-height: 1.5;
 }
 
@@ -202,8 +202,8 @@
     gap: 0.5rem;
     margin-top: 1rem;
     padding: 0.35rem 1rem;
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1f2937;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(26, 26, 26, 0.15);
     border-radius: 999px;
 }
 
@@ -211,8 +211,8 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #6b7280;
-    box-shadow: 0 0 6px #6b7280;
+    background: #1a1a1a;
+    box-shadow: 0 0 6px rgba(26, 26, 26, 0.5);
     flex-shrink: 0;
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
@@ -236,10 +236,10 @@
 }
 
 .status-indicator__text {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.8rem;
     font-weight: 500;
-    color: #6b7280;
+    color: #666;
     transition: color 0.3s ease;
 }
 
@@ -268,7 +268,7 @@
 /* --- Shared Button Base ---------------------------------------------------- */
 
 .btn {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.9rem;
     font-weight: 600;
     border-radius: 8px;
@@ -291,39 +291,40 @@
 /* Ghost Button (Add Reactant) */
 .btn--ghost {
     background: transparent;
-    color: #00d4ff;
+    color: var(--color-text);
     border: 1px solid #00d4ff;
 }
 
 .btn--ghost:hover {
-    background: rgba(0, 212, 255, 0.08);
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+    background: var(--color-accent);
+    box-shadow: none;
+    color: #fff;
 }
 
 /* Primary Button (Run Reaction) */
 .btn--primary {
-    background: #00d4ff;
-    color: #0a0d14;
+    background: var(--color-text);
+    color: #faf9f7;
     font-weight: 600;
     padding: 0.75rem 2rem;
     font-size: 1rem;
     border: none;
     cursor: pointer;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.25s ease;
 }
 
 .btn--primary:hover {
-    box-shadow: 0 0 32px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 
 /* Disabled state */
 .btn--primary:disabled,
 .btn--primary[disabled] {
-    background: #1f2937;
-    color: #4b5563;
+    background: transparent;
+    color: #888;
     box-shadow: none;
     cursor: not-allowed;
     transform: none;
@@ -352,13 +353,13 @@
 .reactant-chip {
     display: inline-flex;
     align-items: center;
-    background: #1f2937;
-    border: 1px solid #374151;
+    background: transparent;
+    border: 1px solid rgba(26, 26, 26, 0.2);
     border-radius: 999px;
     padding: 0.35rem 0.9rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.9rem;
-    color: #f9fafb;
+    color: var(--color-text);
     animation: chipIn 0.2s ease-out both;
 }
 
@@ -374,7 +375,7 @@
 
 .reactant-chip__remove {
     margin-left: 0.5rem;
-    color: #6b7280;
+    color: #666;
     cursor: pointer;
     background: none;
     border: none;
@@ -398,8 +399,8 @@
 /* --- Equation Display Card ------------------------------------------------- */
 
 .card--equation {
-    background: #111827;
-    border: 1px solid #1f2937;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(26, 26, 26, 0.15);
     border-radius: 12px;
     padding: 2.5rem;
     text-align: center;
@@ -413,40 +414,40 @@
 }
 
 .equation-text {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 2rem;
-    color: #f9fafb;
+    color: var(--color-text);
     letter-spacing: 0.02em;
     line-height: 1.4;
 }
 
 .equation-text--placeholder {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 1rem;
     font-weight: 400;
-    color: #4b5563;
+    color: #888;
     font-style: italic;
     letter-spacing: 0;
 }
 
 .equation-text--analyzing {
-    color: #6b7280;
+    color: #666;
 }
 
 .blink-cursor {
     animation: blinkCursor 0.8s step-end infinite;
-    color: #00d4ff;
+    color: var(--color-text);
     margin-left: 2px;
 }
 
 /* Equation parts coloring */
 .eq-reactant,
 .eq-product {
-    color: #00d4ff;
+    color: var(--color-text);
 }
 
 .eq-arrow {
-    color: #6b7280;
+    color: #666;
     margin: 0 0.3em;
 }
 
@@ -464,7 +465,7 @@
     right: 1rem;
     border-radius: 999px;
     padding: 0.3rem 0.8rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.8rem;
     font-weight: 600;
     line-height: 1.2;
@@ -506,8 +507,8 @@
 /* --- Reaction Diagram Card ------------------------------------------------- */
 
 .card--diagram {
-    background: #0d1117;
-    border: 1px solid #1f2937;
+    background: #fff;
+    border: 1px solid rgba(26, 26, 26, 0.15);
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -532,9 +533,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.9rem;
-    color: #374151;
+    color: #888;
     pointer-events: none;
     text-align: center;
     padding: 0 1rem;
@@ -558,19 +559,19 @@
 /* --- Shared Info Card ------------------------------------------------------ */
 
 .card--info {
-    background: #111827;
-    border: 1px solid #1f2937;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(26, 26, 26, 0.15);
     border-radius: 12px;
     padding: 1.25rem;
 }
 
 .card__label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #6b7280;
+    color: #666;
     margin-bottom: 0.75rem;
 }
 
@@ -581,21 +582,21 @@
     display: inline-block;
     border-radius: 999px;
     padding: 0.3rem 1rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 0.02em;
 }
 
 .badge--muted {
-    background: #1f2937;
-    color: #6b7280;
-    border: 1px solid #374151;
+    background: transparent;
+    color: #666;
+    border: 1px solid rgba(26, 26, 26, 0.2);
 }
 
 .badge--synthesis {
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
+    background: rgba(26, 26, 26, 0.05);
+    color: var(--color-text);
     border: 1px solid rgba(0, 212, 255, 0.3);
 }
 
@@ -630,7 +631,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 0;
-    border-bottom: 1px solid #1f2937;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.15);
 }
 
 .condition-row:last-child {
@@ -638,16 +639,16 @@
 }
 
 .condition-row__label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.85rem;
-    color: #9ca3af;
+    color: #444;
 }
 
 .condition-row__value {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.85rem;
     font-weight: 500;
-    color: #f9fafb;
+    color: var(--color-text);
     text-align: right;
 }
 
@@ -655,7 +656,7 @@
 /* --- Accordion (Calculations) ---------------------------------------------- */
 
 .accordion {
-    border-bottom: 1px solid #1f2937;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.15);
 }
 
 .accordion:last-child {
@@ -673,15 +674,15 @@
 }
 
 .accordion__title {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.85rem;
-    color: #9ca3af;
+    color: #444;
     transition: color 0.2s ease;
 }
 
 .accordion__icon {
     font-size: 0.7rem;
-    color: #6b7280;
+    color: #666;
     transition: transform 0.3s ease, color 0.2s ease;
     display: inline-block;
 }
@@ -696,11 +697,11 @@
 /* Open state — toggled via JS adding .is-open */
 .accordion.is-open .accordion__icon {
     transform: rotate(90deg);
-    color: #00d4ff;
+    color: var(--color-text);
 }
 
 .accordion.is-open .accordion__title {
-    color: #f9fafb;
+    color: var(--color-text);
 }
 
 .accordion.is-open .accordion__body {
@@ -708,7 +709,7 @@
 }
 
 .accordion__header:hover .accordion__title {
-    color: #f9fafb;
+    color: var(--color-text);
 }
 
 .accordion__content {
@@ -738,8 +739,8 @@
 }
 
 .reactant-modal {
-    background: #111827;
-    border: 1px solid #1f2937;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(26, 26, 26, 0.15);
     border-radius: 12px;
     padding: 2rem;
     width: 800px;
@@ -753,17 +754,17 @@
 }
 
 .reactant-modal__title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #f9fafb;
+    color: var(--color-text);
     margin-bottom: 0.35rem;
 }
 
 .reactant-modal__subtitle {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.9rem;
-    color: #9ca3af;
+    color: #444;
     margin-bottom: 1.25rem;
 }
 
@@ -780,7 +781,7 @@
     /* Space for scrollbar */
     /* Custom scrollbar for webkit */
     scrollbar-width: thin;
-    scrollbar-color: #374151 transparent;
+    scrollbar-color: #ccc transparent;
 }
 
 .periodic-table::-webkit-scrollbar {
@@ -792,16 +793,16 @@
 }
 
 .periodic-table::-webkit-scrollbar-thumb {
-    background-color: #374151;
+    background-color: #ccc;
     border-radius: 10px;
 }
 
 .element-btn {
     appearance: none;
     -webkit-appearance: none;
-    border: 1px solid #1f2937;
-    background: #0a0d14;
-    color: #f9fafb;
+    border: 1px solid rgba(26, 26, 26, 0.15);
+    background: var(--color-bg);
+    color: var(--color-text);
     border-radius: 4px;
     aspect-ratio: 1 / 1;
     padding: 0;
@@ -811,7 +812,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     position: relative;
     user-select: none;
 }
@@ -820,7 +821,7 @@
     transform: scale(1.1);
     z-index: 10;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    border-color: #00d4ff;
+    border-color: var(--color-text);
 }
 
 .element-btn:active {
@@ -829,7 +830,7 @@
 
 .element-btn__number {
     font-size: 0.5rem;
-    color: #6b7280;
+    color: #666;
     position: absolute;
     top: 2px;
     left: 3px;
@@ -894,27 +895,27 @@
     flex: 1;
     display: block;
     width: 100%;
-    background: #0a0d14;
-    border: 1px solid #374151;
+    background: var(--color-bg);
+    border: 1px solid rgba(26, 26, 26, 0.2);
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    color: #f9fafb;
-    font-family: 'DM Sans', sans-serif;
+    color: var(--color-text);
+    font-family: var(--font-family);
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s ease;
 }
 
 .reactant-modal__input::placeholder {
-    color: #4b5563;
+    color: #888;
 }
 
 .reactant-modal__input:focus {
-    border-color: #00d4ff;
+    border-color: var(--color-text);
 }
 
 .reactant-modal__error {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.85rem;
     color: #ef4444;
     min-height: 1.4em;
@@ -945,7 +946,7 @@
 /* --- Footer ---------------------------------------------------------------- */
 
 .lab-footer {
-    border-top: 1px solid #1f2937;
+    border-top: 1px solid rgba(26, 26, 26, 0.15);
     padding: 2rem;
     margin-top: auto;
 }
@@ -961,9 +962,9 @@
 }
 
 .lab-footer__text {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.8rem;
-    color: #9ca3af;
+    color: #444;
 }
 
 .lab-footer__links {
@@ -972,14 +973,14 @@
 }
 
 .lab-footer__links a {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
     font-size: 0.8rem;
-    color: #9ca3af;
+    color: #444;
     transition: color 0.2s ease;
 }
 
 .lab-footer__links a:hover {
-    color: #00d4ff;
+    color: var(--color-text);
 }
 
 

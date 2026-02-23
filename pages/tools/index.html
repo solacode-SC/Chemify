@@ -5,15 +5,376 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chemistry Tools — ChemVerse</title>
-    <meta name="description" content="Molar mass calculators, unit converters, equation balancers, and more." />
+
+    <!-- Google Fonts as requested -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Link styles as requested -->
     <link rel="stylesheet" href="../../css/global.css" />
+    <link rel="stylesheet" href="../../css/tools.css" />
+    <!-- Including root styles for shared navbar/footer from landing page -->
+    <link rel="stylesheet" href="../../styles.css" />
 </head>
 
 <body>
-    <!-- Phase 3 — Chemistry Tools -->
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__inner">
+            <a href="../../index.html" class="navbar__logo" aria-label="ChemVerse Home">
+                <svg class="navbar__logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                    <!-- nucleus -->
+                    <circle cx="20" cy="20" r="4" fill="#1a1a1a" />
+                    <!-- orbit 1 — horizontal ellipse -->
+                    <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#1a1a1a" stroke-width="1.4" fill="none" />
+                    <!-- orbit 2 — tilted 60° -->
+                    <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#1a1a1a" stroke-width="1.4" fill="none"
+                        transform="rotate(60 20 20)" />
+                    <!-- orbit 3 — tilted -60° -->
+                    <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#1a1a1a" stroke-width="1.4" fill="none"
+                        transform="rotate(-60 20 20)" />
+                    <!-- electrons -->
+                    <circle cx="36" cy="20" r="2.2" fill="#1a1a1a" />
+                    <circle cx="12" cy="6.15" r="2.2" fill="#1a1a1a" />
+                    <circle cx="12" cy="33.85" r="2.2" fill="#1a1a1a" />
+                </svg>
+                <span class="navbar__logo-text">ChemVerse</span>
+            </a>
+
+            <!-- Desktop nav links -->
+            <ul class="navbar__links" id="navLinks">
+                <li><a href="../explorer/index.html" class="navbar__link">Elements</a></li>
+                <li><a href="../lab/index.html" class="navbar__link">Reactions</a></li>
+                <li><a href="#" class="navbar__link">Tools</a></li>
+                <li><a href="../../index.html#about" class="navbar__link">About</a></li>
+            </ul>
+
+            <a href="../lab/index.html" class="navbar__cta">Enter the Lab</a>
+
+            <!-- Hamburger (mobile) -->
+            <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== MOBILE OVERLAY ========== -->
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true">
+        <button class="mobile-overlay__close" id="overlayCloseBtn" aria-label="Close menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="6" y1="6" x2="22" y2="22" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                <line x1="22" y1="6" x2="6" y2="22" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+        <ul class="mobile-overlay__links">
+            <li><a href="../explorer/index.html" class="mobile-overlay__link">Elements</a></li>
+            <li><a href="../lab/index.html" class="mobile-overlay__link">Reactions</a></li>
+            <li><a href="#" class="mobile-overlay__link">Tools</a></li>
+            <li><a href="../../index.html#about" class="mobile-overlay__link">About</a></li>
+            <li><a href="../lab/index.html" class="mobile-overlay__cta">Enter the Lab</a></li>
+        </ul>
+    </div>
+
+    <!-- ========== TOOLS PAGE CONTENT ========== -->
+    <main>
+        <!-- Hero Section -->
+        <section class="tools-hero">
+            <span class="tools-hero__label">CHEMISTRY TOOLS</span>
+            <h1 class="tools-hero__heading">Every tool a chemist needs</h1>
+            <p class="tools-hero__sub">From molar mass to pH calculations — built for students, researchers, and
+                everyone in between.</p>
+            <hr class="tools-hero__divider" />
+        </section>
+
+        <!-- Search Bar Section -->
+        <section class="tools-search-section" id="tools-search">
+            <div class="tools-search__inner">
+                <label for="search-tools" class="tools-search__label">Find a tool</label>
+                <input type="text" id="search-tools" class="tools-search__input" placeholder="Search tools..."
+                    aria-label="Search tools" />
+                <div class="tools-search__results-count" id="results-count">Showing 5 tools</div>
+            </div>
+
+            <!-- Category Filter Chips -->
+            <div class="tools-filters-nav" id="tools-filters-nav">
+                <button class="filter-arrow filter-arrow--left" id="chipArrowLeft" aria-label="Scroll filters left">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M11 4L6 9L11 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <div class="tools-filters-scroll" id="chipsScroll">
+                    <div class="tools-filters">
+                        <button class="tools-filter active" data-category="All">All</button>
+                        <button class="tools-filter" data-category="Calculations">Calculations</button>
+                        <button class="tools-filter" data-category="Equations">Equations</button>
+                        <button class="tools-filter" data-category="Solutions">Solutions</button>
+                        <button class="tools-filter" data-category="Thermodynamics">Thermodynamics</button>
+                        <button class="tools-filter" data-category="Gas Laws">Gas Laws</button>
+                        <button class="tools-filter" data-category="Reference">Reference</button>
+                    </div>
+                </div>
+                <button class="filter-arrow filter-arrow--right" id="chipArrowRight" aria-label="Scroll filters right">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M7 4L12 9L7 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Tools Grid Section -->
+        <section class="tools-grid" id="tools-grid">
+
+            <!-- Molar Mass Calculator -->
+            <a href="/pages/tools/molar-mass.html" class="tool-card" data-category="Calculations"
+                style="animation-delay: 0s">
+                <span class="tool-card__badge">Basic</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M40 10 L40 50" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M20 25 L60 25" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M20 25 L15 45 M20 25 L25 45" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M60 25 L55 45 M60 25 L65 45" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M10 45 C15 50 25 50 30 45" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <path d="M50 45 C55 50 65 50 70 45" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <path d="M30 65 L50 65 L45 50 L35 50 Z" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <text x="40" y="75" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">H₂O</text>
+                </svg>
+                <h3 class="tool-card__title">Molar Mass Calculator</h3>
+                <p class="tool-card__desc">Find the molar mass and average mass of any chemical formula.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Stoichiometry Calculator -->
+            <a href="/pages/tools/stoichiometry.html" class="tool-card" data-category="Calculations"
+                style="animation-delay: 0.08s">
+                <span class="tool-card__badge">Intermediate</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 25 L15 55 C15 60 18 63 25 63 C32 63 35 60 35 55 L35 25" fill="#f5f3ef" stroke="#1a1a1a"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10 25 L40 25" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M15 45 Q25 40 35 45" stroke="#1a1a1a" stroke-width="2" fill="none" />
+                    <path d="M45 25 L45 55 C45 60 48 63 55 63 C62 63 65 60 65 55 L65 25" fill="#f5f3ef" stroke="#1a1a1a"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M40 25 L70 25" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M45 50 Q55 55 65 50" stroke="#1a1a1a" stroke-width="2" fill="none" />
+                    <path d="M30 20 Q40 10 50 20" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                        fill="none" />
+                    <path d="M45 15 L50 20 L45 25" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none" />
+                </svg>
+                <h3 class="tool-card__title">Stoichiometry Calculator</h3>
+                <p class="tool-card__desc">Calculate reactant and product relationships easily.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Chemical Equation Balancer -->
+            <a href="/pages/tools/equation-balancer.html" class="tool-card" data-category="Equations"
+                style="animation-delay: 0.16s">
+                <span class="tool-card__badge">Intermediate</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <text x="40" y="35" font-family="'Inter', sans-serif" font-size="12" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">A + B &rarr; AB</text>
+                    <circle cx="40" cy="55" r="12" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <path d="M35 55 L39 59 L46 51" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none" />
+                </svg>
+                <h3 class="tool-card__title">Chemical Equation Balancer</h3>
+                <p class="tool-card__desc">Automatically balance complex chemical reactions.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- pH & pOH Calculator -->
+            <a href="/pages/tools/ph-calculator.html" class="tool-card" data-category="Solutions"
+                style="animation-delay: 0.24s">
+                <span class="tool-card__badge">Basic</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="15" y="32" width="50" height="16" rx="8" fill="#f5f3ef" stroke="#1a1a1a"
+                        stroke-width="2" />
+                    <path d="M25 20 L25 30 M25 30 L20 25 M25 30 L30 25" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                    <line x1="25" y1="32" x2="25" y2="48" stroke="#1a1a1a" stroke-width="1.5" />
+                    <line x1="40" y1="32" x2="40" y2="48" stroke="#1a1a1a" stroke-width="1.5" />
+                    <line x1="55" y1="32" x2="55" y2="48" stroke="#1a1a1a" stroke-width="1.5" />
+                    <text x="25" y="62" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">pH</text>
+                </svg>
+                <h3 class="tool-card__title">pH &amp; pOH Calculator</h3>
+                <p class="tool-card__desc">Calculate pH, pOH, and ion concentrations.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Molarity & Dilution Calculator -->
+            <a href="/pages/tools/molarity-dilution.html" class="tool-card" data-category="Solutions"
+                style="animation-delay: 0.32s">
+                <span class="tool-card__badge">Basic</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M35 15 L45 15" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path
+                        d="M36 15 L36 35 C36 40 25 45 25 55 C25 62 30 68 40 68 C50 68 55 62 55 55 C55 45 44 40 44 35 L44 15"
+                        fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <line x1="36" y1="25" x2="44" y2="25" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <path d="M26 50 Q40 46 54 50" stroke="#1a1a1a" stroke-width="2" fill="none" />
+                </svg>
+                <h3 class="tool-card__title">Molarity &amp; Dilution</h3>
+                <p class="tool-card__desc">Compute solution concentrations and dilutions precisely.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Percent Composition -->
+            <a href="/pages/tools/percent-composition.html" class="tool-card" data-category="Calculations"
+                style="animation-delay: 0.4s">
+                <span class="tool-card__badge">Basic</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="22" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <path d="M40 40 L40 18 A22 22 0 0 1 61 33 Z" fill="none" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <path d="M40 40 L61 33 A22 22 0 0 1 31 60 Z" fill="none" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <line x1="55" y1="25" x2="65" y2="18" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <text x="70" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">C</text>
+                    <line x1="25" y1="52" x2="16" y2="60" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <text x="12" y="65" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">H</text>
+                </svg>
+                <h3 class="tool-card__title">Percent Composition</h3>
+                <p class="tool-card__desc">Determine elemental mass percentages within compounds.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Gibbs Free Energy -->
+            <a href="/pages/tools/gibbs-free-energy.html" class="tool-card" data-category="Thermodynamics"
+                style="animation-delay: 0.48s">
+                <span class="tool-card__badge">Advanced</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 46 L38 32 L46 46 Z" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <text x="50" y="46" font-family="Georgia, serif" font-size="20" font-weight="bold"
+                        fill="#1a1a1a">G</text>
+                    <path d="M15 60 C 25 20, 55 20, 65 60" fill="none" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linecap="round" />
+                    <path d="M60 55 L65 60 L70 55" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <h3 class="tool-card__title">Gibbs Free Energy</h3>
+                <p class="tool-card__desc">Assess reaction spontaneity given enthalpy and entropy.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Ideal Gas Law -->
+            <a href="/pages/tools/ideal-gas-law.html" class="tool-card" data-category="Gas Laws"
+                style="animation-delay: 0.56s">
+                <span class="tool-card__badge">Intermediate</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 25 L30 65 A10 5 0 0 0 50 65 L50 25 Z" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M30 25 C30 18 50 18 50 25" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <path d="M37 18 L37 12 L43 12 L43 18" fill="none" stroke="#1a1a1a" stroke-width="2"
+                        stroke-linejoin="round" />
+                    <line x1="33" y1="12" x2="47" y2="12" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <text x="40" y="48" font-family="'Inter', sans-serif" font-size="8" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">PV=nRT</text>
+                </svg>
+                <h3 class="tool-card__title">Ideal Gas Law</h3>
+                <p class="tool-card__desc">Find pressure, volume, temperature, or moles of a gas.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Empirical Formula Finder -->
+            <a href="/pages/tools/empirical-formula.html" class="tool-card" data-category="Calculations"
+                style="animation-delay: 0.64s">
+                <span class="tool-card__badge">Intermediate</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="20" r="6" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <circle cx="20" cy="45" r="6" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <circle cx="60" cy="45" r="6" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <circle cx="40" cy="65" r="6" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <line x1="36" y1="25" x2="24" y2="40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <line x1="44" y1="25" x2="56" y2="40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <line x1="24" y1="50" x2="36" y2="60" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                    <line x1="56" y1="50" x2="44" y2="60" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <h3 class="tool-card__title">Empirical Formula Finder</h3>
+                <p class="tool-card__desc">Calculate lowest whole number ratios of elements.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+            <!-- Oxidation State Finder -->
+            <a href="/pages/tools/oxidation-state.html" class="tool-card" data-category="Equations"
+                style="animation-delay: 0.72s">
+                <span class="tool-card__badge">Intermediate</span>
+                <svg class="tool-card__icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="28" cy="40" r="16" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <text x="28" y="45" font-family="'Inter', sans-serif" font-size="14" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">Fe</text>
+                    <text x="40" y="30" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a">3+</text>
+                    <circle cx="58" cy="50" r="12" fill="#f5f3ef" stroke="#1a1a1a" stroke-width="2" />
+                    <text x="58" y="54" font-family="'Inter', sans-serif" font-size="12" font-weight="bold"
+                        fill="#1a1a1a" text-anchor="middle">O</text>
+                    <text x="66" y="42" font-family="'Inter', sans-serif" font-size="10" font-weight="bold"
+                        fill="#1a1a1a">2-</text>
+                </svg>
+                <h3 class="tool-card__title">Oxidation State Finder</h3>
+                <p class="tool-card__desc">Identify oxidation numbers of atoms in compounds.</p>
+                <span class="tool-card__link">Open tool &rarr;</span>
+            </a>
+
+        </section>
+
+        <!-- Empty State -->
+        <section class="tools-empty" id="empty-state" style="display: none;">
+            <h2 class="tools-empty__heading">No tools found</h2>
+            <p class="tools-empty__sub">Try a different search term</p>
+        </section>
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__brand">
+                <a href="../../index.html" class="footer__logo" aria-label="ChemVerse Home">
+                    <svg class="footer__logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <circle cx="20" cy="20" r="4" fill="#888" />
+                        <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#888" stroke-width="1.4" fill="none" />
+                        <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#888" stroke-width="1.4" fill="none"
+                            transform="rotate(60 20 20)" />
+                        <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#888" stroke-width="1.4" fill="none"
+                            transform="rotate(-60 20 20)" />
+                    </svg>
+                    <span class="footer__logo-text">ChemVerse</span>
+                </a>
+                <p class="footer__tagline">Chemistry, visualized.</p>
+            </div>
+            <nav class="footer__nav">
+                <ul class="footer__links">
+                    <li><a href="../explorer/index.html" class="footer__link">Elements</a></li>
+                    <li><a href="../lab/index.html" class="footer__link">Reactions</a></li>
+                    <li><a href="#" class="footer__link">Tools</a></li>
+                    <li><a href="#" class="footer__link">Privacy</a></li>
+                    <li><a href="#" class="footer__link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="footer__bottom">
+            <p>Built with curiosity. © 2026 ChemVerse.</p>
+        </div>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script type="module" src="../../js/tools-search.js"></script>
 </body>
 
 </html>

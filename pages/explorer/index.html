@@ -14,15 +14,16 @@
     <link rel="stylesheet" href="../../css/explorer.css" />
     <link rel="stylesheet" href="../../css/modal.css" />
     <link rel="stylesheet" href="../../css/filters.css" />
+    <link rel="stylesheet" href="../../styles.css" />
 </head>
 
 <body>
 
-    <!-- ========== TOP BAR ========== -->
-    <header class="topbar">
-        <div class="topbar__inner">
-            <a href="../../index.html" class="topbar__logo" aria-label="Back to ChemVerse Home">
-                <svg class="topbar__logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__inner">
+            <a href="../../index.html" class="navbar__logo" aria-label="ChemVerse Home">
+                <svg class="navbar__logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
                     aria-hidden="true">
                     <circle cx="20" cy="20" r="4" fill="#1a1a1a" />
                     <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#1a1a1a" stroke-width="1.4" fill="none" />
@@ -30,13 +31,55 @@
                         transform="rotate(60 20 20)" />
                     <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#1a1a1a" stroke-width="1.4" fill="none"
                         transform="rotate(-60 20 20)" />
+                    <circle cx="36" cy="20" r="2.2" fill="#1a1a1a" />
+                    <circle cx="12" cy="6.15" r="2.2" fill="#1a1a1a" />
+                    <circle cx="12" cy="33.85" r="2.2" fill="#1a1a1a" />
                 </svg>
-                <span class="topbar__logo-text">ChemVerse</span>
+                <span class="navbar__logo-text">ChemVerse</span>
             </a>
-        </div>
-    </header>
 
-    <!-- ========== SEARCH & FILTER PANEL ========== -->
+            <!-- Desktop nav links -->
+            <ul class="navbar__links" id="navLinks">
+                <li><a href="#" class="navbar__link">Elements</a></li>
+                <li><a href="../lab/index.html" class="navbar__link">Reactions</a></li>
+                <li><a href="../tools/index.html" class="navbar__link">Tools</a></li>
+                <li><a href="../../index.html#about" class="navbar__link">About</a></li>
+            </ul>
+
+            <a href="../lab/index.html" class="navbar__cta">Enter the Lab</a>
+
+            <!-- Hamburger (mobile) -->
+            <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== MOBILE OVERLAY ========== -->
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true">
+        <button class="mobile-overlay__close" id="overlayCloseBtn" aria-label="Close menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="6" y1="6" x2="22" y2="22" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+                <line x1="22" y1="6" x2="6" y2="22" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+        <ul class="mobile-overlay__links">
+            <li><a href="#" class="mobile-overlay__link">Elements</a></li>
+            <li><a href="../lab/index.html" class="mobile-overlay__link">Reactions</a></li>
+            <li><a href="../tools/index.html" class="mobile-overlay__link">Tools</a></li>
+            <li><a href="../../index.html#about" class="mobile-overlay__link">About</a></li>
+            <li><a href="../lab/index.html" class="mobile-overlay__cta">Enter the Lab</a></li>
+        </ul>
+    </div>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="explorer-hero">
+        <h1 class="explorer-hero__heading">Explore the Elements</h1>
+        <p class="explorer-hero__sub">Dive into the building blocks of the universe. Search, filter, and discover the
+            properties of all 118 elements.</p>
+    </section>
     <section class="filter-panel">
         <div class="filter-panel__inner">
 
@@ -187,6 +230,8 @@
         </div>
     </div>
 
+    <!-- ========== SCRIPT IMPORTS ========== -->
+    <script src="../../script.js"></script>
     <script src="../../js/data/elements.js"></script>
     <script src="../../js/data/elements-detail.js"></script>
     <script src="../../js/explorer.js"></script>
