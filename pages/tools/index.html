@@ -4,16 +4,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../assets/favicon.png" />
     <title>Chemistry Tools — Chemify</title>
 
-    <!-- Google Fonts as requested -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet" />
 
-    <!-- Link styles as requested -->
+    <!-- Link styles -->
     <link rel="stylesheet" href="../../css/global.css" />
     <link rel="stylesheet" href="../../css/tools.css" />
+    <link rel="stylesheet" href="../../css/tool-modal.css" />
+    <link rel="stylesheet" href="../../css/tools-ui.css" />
     <!-- Including root styles for shared navbar/footer from landing page -->
     <link rel="stylesheet" href="../../styles.css" />
 </head>
@@ -132,8 +137,7 @@
         <section class="tools-grid" id="tools-grid">
 
             <!-- Molar Mass Calculator -->
-            <a href="/pages/tools/molar-mass.html" class="tool-card" data-category="Calculations"
-                style="animation-delay: 0s">
+            <div class="tool-card" data-category="Calculations" data-tool-id="molar-mass" style="animation-delay: 0s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Molar%20Mass%20Calculator.png" alt="Molar Mass Calculator" />
                     <span class="tool-card__badge">Basic</span>
@@ -141,12 +145,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Molar Mass Calculator</h3>
                     <p class="tool-card__desc">Find the molar mass and average mass of any chemical formula.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--available">Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Stoichiometry Calculator -->
-            <a href="/pages/tools/stoichiometry.html" class="tool-card" data-category="Calculations"
+            <div class="tool-card" data-category="Calculations" data-tool-id="stoichiometry"
                 style="animation-delay: 0.08s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Stoichiometry%20Calculator.png" alt="Stoichiometry Calculator" />
@@ -155,12 +162,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Stoichiometry Calculator</h3>
                     <p class="tool-card__desc">Calculate reactant and product relationships easily.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Chemical Equation Balancer -->
-            <a href="/pages/tools/equation-balancer.html" class="tool-card" data-category="Equations"
+            <div class="tool-card" data-category="Equations" data-tool-id="equation-balancer"
                 style="animation-delay: 0.16s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Chemical%20Equation%20Balancer.png" alt="Chemical Equation Balancer" />
@@ -169,12 +179,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Chemical Equation Balancer</h3>
                     <p class="tool-card__desc">Automatically balance complex chemical reactions.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- pH & pOH Calculator -->
-            <a href="/pages/tools/ph-calculator.html" class="tool-card" data-category="Solutions"
+            <div class="tool-card" data-category="Solutions" data-tool-id="ph-calculator"
                 style="animation-delay: 0.24s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/pH%20%26%20pOH%20Calculator.png" alt="pH &amp; pOH Calculator" />
@@ -183,12 +196,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">pH &amp; pOH Calculator</h3>
                     <p class="tool-card__desc">Calculate pH, pOH, and ion concentrations.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Molarity & Dilution Calculator -->
-            <a href="/pages/tools/molarity-dilution.html" class="tool-card" data-category="Solutions"
+            <div class="tool-card" data-category="Solutions" data-tool-id="molarity-dilution"
                 style="animation-delay: 0.32s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Molarity%20%26%20Dilution.png" alt="Molarity &amp; Dilution" />
@@ -197,12 +213,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Molarity &amp; Dilution</h3>
                     <p class="tool-card__desc">Compute solution concentrations and dilutions precisely.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Percent Composition -->
-            <a href="/pages/tools/percent-composition.html" class="tool-card" data-category="Calculations"
+            <div class="tool-card" data-category="Calculations" data-tool-id="percent-composition"
                 style="animation-delay: 0.4s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Percent%20Composition.png" alt="Percent Composition" />
@@ -211,12 +230,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Percent Composition</h3>
                     <p class="tool-card__desc">Determine elemental mass percentages within compounds.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Gibbs Free Energy -->
-            <a href="/pages/tools/gibbs-free-energy.html" class="tool-card" data-category="Thermodynamics"
+            <div class="tool-card" data-category="Thermodynamics" data-tool-id="gibbs-free-energy"
                 style="animation-delay: 0.48s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Gibbs%20Free%20Energy.png" alt="Gibbs Free Energy" />
@@ -225,13 +247,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Gibbs Free Energy</h3>
                     <p class="tool-card__desc">Assess reaction spontaneity given enthalpy and entropy.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Ideal Gas Law -->
-            <a href="/pages/tools/ideal-gas-law.html" class="tool-card" data-category="Gas Laws"
-                style="animation-delay: 0.56s">
+            <div class="tool-card" data-category="Gas Laws" data-tool-id="ideal-gas-law" style="animation-delay: 0.56s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Ideal%20Gas%20Law.png" alt="Ideal Gas Law" />
                     <span class="tool-card__badge">Intermediate</span>
@@ -239,12 +263,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Ideal Gas Law</h3>
                     <p class="tool-card__desc">Find pressure, volume, temperature, or moles of a gas.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Empirical Formula Finder -->
-            <a href="/pages/tools/empirical-formula.html" class="tool-card" data-category="Calculations"
+            <div class="tool-card" data-category="Calculations" data-tool-id="empirical-formula"
                 style="animation-delay: 0.64s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Empirical%20Formula%20Finder.png" alt="Empirical Formula Finder" />
@@ -253,12 +280,15 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Empirical Formula Finder</h3>
                     <p class="tool-card__desc">Calculate lowest whole number ratios of elements.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Oxidation State Finder -->
-            <a href="/pages/tools/oxidation-state.html" class="tool-card" data-category="Equations"
+            <div class="tool-card" data-category="Equations" data-tool-id="oxidation-state"
                 style="animation-delay: 0.72s">
                 <div class="tool-card__cover">
                     <img src="../../assets/icons/Oxidation%20State%20Finder.png" alt="Oxidation State Finder" />
@@ -267,9 +297,12 @@
                 <div class="tool-card__body">
                     <h3 class="tool-card__title">Oxidation State Finder</h3>
                     <p class="tool-card__desc">Identify oxidation numbers of atoms in compounds.</p>
-                    <span class="tool-card__link">Open tool &rarr;</span>
+                    <div class="tool-card__footer">
+                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__link">Open tool &rarr;</span>
+                    </div>
                 </div>
-            </a>
+            </div>
 
         </section>
 
@@ -315,6 +348,31 @@
 
     <script src="../../script.js"></script>
     <script type="module" src="../../js/tools-search.js"></script>
+
+    <!-- Tool modal click handlers (lazy-loaded) -->
+    <script type="module">
+        import { openModal } from '../../js/tools/modal.js';
+
+        document.querySelectorAll('.tool-card[data-tool-id]').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const toolId = card.dataset.toolId;
+
+                if (toolId === 'molar-mass') {
+                    const { initMolarMass } = await import('../../js/tools/molar-mass.js');
+                    openModal({
+                        title: 'Molar Mass Calculator',
+                        subtitle: 'Find the molar mass of any chemical formula',
+                        category: 'Calculations',
+                        badge: 'Basic',
+                        init: (body) => initMolarMass(body)
+                    });
+                }
+                // Other tools added here as they're built
+            });
+        });
+    </script>
 </body>
 
 </html>

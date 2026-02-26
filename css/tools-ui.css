@@ -1,0 +1,298 @@
+/* ===================================================
+   Chemify — Tool Interior Styles
+   Styles for tool UIs rendered inside the tool modal.
+   Uses the warm off-white design language.
+   =================================================== */
+
+/* ========== Molar Mass Calculator ========== */
+
+.mm-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ---------- Label ---------- */
+.mm-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+/* ---------- Input ---------- */
+.mm-input-wrap {
+    position: relative;
+}
+
+.mm-input {
+    width: 100%;
+    background: #f5f3ef;
+    border: 1px solid #e0ddd8;
+    border-radius: 8px;
+    padding: 0.875rem 3rem 0.875rem 1rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.mm-input:focus {
+    border-color: #1a1a1a;
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.06);
+}
+
+.mm-input::placeholder {
+    color: #bbb;
+}
+
+/* ---------- Status indicator ---------- */
+.mm-input-status {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.mm-input-status--valid {
+    color: #2d8a4e;
+}
+
+.mm-input-status--invalid {
+    color: #d44;
+}
+
+/* ---------- Quick Chips ---------- */
+.mm-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.mm-chip {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #666;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.1s;
+    user-select: none;
+}
+
+.mm-chip:hover {
+    border-color: #1a1a1a;
+    color: #1a1a1a;
+}
+
+.mm-chip:active {
+    transform: scale(0.95);
+}
+
+/* ---------- Calculate Button ---------- */
+.mm-calculate-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: #1a1a1a;
+    color: #faf9f7;
+    border: none;
+    border-radius: 8px;
+    padding: 0.875rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.mm-calculate-btn:hover {
+    background: #333;
+}
+
+.mm-calculate-btn:active {
+    transform: scale(0.98);
+}
+
+/* ---------- Result Hero ---------- */
+.mm-result-hero {
+    background: #f5f3ef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.mm-result-formula {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    color: #1a1a1a;
+}
+
+.mm-result-mass {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.mm-result-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.mm-result-unit {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #888;
+}
+
+/* ---------- Breakdown ---------- */
+.mm-breakdown {
+    margin-top: 0.5rem;
+}
+
+.mm-breakdown-title {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin: 0 0 0.75rem 0;
+    font-weight: 500;
+}
+
+.mm-breakdown-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1.5fr 2fr;
+    padding: 0.4rem 0.75rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e8e5e0;
+}
+
+.mm-breakdown-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1.5fr 2fr;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f0ece4;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.88rem;
+    align-items: center;
+    color: #1a1a1a;
+    animation: mmRowFadeIn 0.35s ease both;
+}
+
+.mm-breakdown-row:nth-child(even) {
+    background: rgba(245, 243, 239, 0.4);
+}
+
+@keyframes mmRowFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Breakdown cells */
+.mm-breakdown-cell {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mm-breakdown-cell--element {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.mm-breakdown-cell--element strong {
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+.mm-breakdown-cell--element small {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.mm-breakdown-cell--percent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mm-percent-text {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* ---------- Percentage Bar ---------- */
+.mm-bar {
+    height: 4px;
+    background: #e8e5e0;
+    border-radius: 999px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.mm-bar-fill {
+    height: 100%;
+    background: #1a1a1a;
+    border-radius: 999px;
+    transition: width 0.6s ease;
+    width: 0%;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+
+    /* Hide atomic mass column on mobile */
+    .mm-breakdown-header {
+        grid-template-columns: 2fr 1fr 1.5fr 2fr;
+    }
+
+    .mm-breakdown-header span:nth-child(3) {
+        display: none;
+    }
+
+    .mm-breakdown-row {
+        grid-template-columns: 2fr 1fr 1.5fr 2fr;
+    }
+
+    .mm-breakdown-row .mm-breakdown-cell:nth-child(3) {
+        display: none;
+    }
+
+    .mm-result-value {
+        font-size: 2.2rem;
+    }
+
+    .mm-result-hero {
+        padding: 1.25rem;
+    }
+}

@@ -1,0 +1,168 @@
+/* ===================================================
+   Chemify — Tool Modal Overlay + Panel
+   Separate from the element explorer modal (modal.css).
+   =================================================== */
+
+/* ---------- Overlay ---------- */
+.tool-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.25s ease, background 0.25s ease, backdrop-filter 0.25s ease;
+}
+
+.tool-modal-overlay.is-active {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+/* ---------- Modal Panel ---------- */
+.tool-modal {
+    background: #faf9f7;
+    border-radius: 16px;
+    width: min(680px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+    transform: translateY(24px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.tool-modal-overlay.is-active .tool-modal {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Scrollbar */
+.tool-modal::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tool-modal::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+/* ---------- Header ---------- */
+.tool-modal__header {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid #e8e5e0;
+    position: relative;
+}
+
+/* Meta row */
+.tool-modal__meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+/* Category label */
+.tool-modal__category {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+/* Badge pill */
+.tool-modal__badge {
+    display: inline-block;
+    background: #f0ece4;
+    color: #888;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+}
+
+/* Title */
+.tool-modal__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.2;
+}
+
+/* Subtitle */
+.tool-modal__subtitle {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Close button */
+.tool-modal__close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.tool-modal__close:hover {
+    color: #1a1a1a;
+    background: #f0ece4;
+}
+
+/* ---------- Body ---------- */
+.tool-modal__body {
+    padding: 2rem;
+}
+
+/* ---------- Responsive: Mobile Bottom Sheet ---------- */
+@media (max-width: 640px) {
+    .tool-modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .tool-modal {
+        width: 100%;
+        max-height: 100vh;
+        border-radius: 16px 16px 0 0;
+        transform: translateY(100%);
+    }
+
+    .tool-modal-overlay.is-active .tool-modal {
+        transform: translateY(0);
+    }
+
+    .tool-modal__header {
+        padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    .tool-modal__title {
+        font-size: 1.4rem;
+    }
+
+    .tool-modal__body {
+        padding: 1.5rem;
+    }
+}

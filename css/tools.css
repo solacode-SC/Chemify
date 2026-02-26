@@ -237,130 +237,178 @@ h6 {
 
 /* Tools Grid Section */
 .tools-grid {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 2.5rem 5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
-  box-sizing: border-box;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2.5rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    box-sizing: border-box;
 }
 
 /* Tool Cards */
 .tool-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #e8e5e0;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  opacity: 0; /* for entrance animation */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e8e5e0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    opacity: 0;
+    /* for entrance animation */
 }
 
 .tool-card.card-visible {
-  animation: cardFadeUp 0.5s ease forwards;
+    animation: cardFadeUp 0.5s ease forwards;
 }
 
 .tool-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
-  border-color: #c8c4be;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
+    border-color: #c8c4be;
 }
 
 /* ── Square Cover ── */
 .tool-card__cover {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1; /* perfect square */
-  overflow: hidden;
-  background: #f5f3ef;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* perfect square */
+    overflow: hidden;
+    background: #f5f3ef;
 }
 
 .tool-card__cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.4s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s ease;
 }
 
 .tool-card:hover .tool-card__cover img {
-  transform: scale(1.04);
+    transform: scale(1.04);
 }
 
 /* ── Badge — overlaps top-right of image ── */
 .tool-card__badge {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  color: #555;
-  font-family: var(--font-family);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.08);
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #555;
+    font-family: var(--font-family);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 /* ── Card Body ── */
 .tool-card__body {
-  padding: 1.25rem 1.5rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 0.5rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
 }
 
 /* ── Title ── */
 .tool-card__title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: #1a1a1a;
-  line-height: 1.3;
-  margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1.3;
+    margin: 0;
 }
 
 /* ── Description ── */
 .tool-card__desc {
-  font-family: var(--font-family);
-  font-size: 0.9rem;
-  color: #555;
-  line-height: 1.6;
-  margin: 0;
-  flex: 1;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+}
+
+/* ── Card Footer ── */
+.tool-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+/* ── Status indicator ── */
+.tool-card__status {
+    font-family: var(--font-family);
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tool-card__status::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.tool-card__status--available {
+    color: #2d8a4e;
+}
+
+.tool-card__status--available::before {
+    background-color: #2d8a4e;
+}
+
+.tool-card__status--unavailable {
+    color: #999;
+}
+
+.tool-card__status--unavailable::before {
+    background-color: #999;
 }
 
 /* ── Open Tool link — bottom right ── */
 .tool-card__link {
-  display: block;
-  text-align: right;
-  font-family: var(--font-family);
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #888;
-  text-decoration: none;
-  margin-top: 0.5rem;
-  transition: color 0.2s;
+    font-family: var(--font-family);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
 .tool-card:hover .tool-card__link {
-  color: #1a1a1a;
+    color: #1a1a1a;
 }
 
 @keyframes cardFadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Empty State */
