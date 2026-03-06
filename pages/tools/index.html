@@ -102,7 +102,7 @@
                 <label for="search-tools" class="tools-search__label">Find a tool</label>
                 <input type="text" id="search-tools" class="tools-search__input" placeholder="Search tools..."
                     aria-label="Search tools" />
-                <div class="tools-search__results-count" id="results-count">Showing 5 tools</div>
+                <div class="tools-search__results-count" id="results-count">Showing 10 tools</div>
             </div>
 
             <!-- Category Filter Chips -->
@@ -163,7 +163,7 @@
                     <h3 class="tool-card__title">Stoichiometry Calculator</h3>
                     <p class="tool-card__desc">Calculate reactant and product relationships easily.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                     <h3 class="tool-card__title">Chemical Equation Balancer</h3>
                     <p class="tool-card__desc">Automatically balance complex chemical reactions.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -197,7 +197,7 @@
                     <h3 class="tool-card__title">pH &amp; pOH Calculator</h3>
                     <p class="tool-card__desc">Calculate pH, pOH, and ion concentrations.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                     <h3 class="tool-card__title">Molarity &amp; Dilution</h3>
                     <p class="tool-card__desc">Compute solution concentrations and dilutions precisely.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -231,7 +231,7 @@
                     <h3 class="tool-card__title">Percent Composition</h3>
                     <p class="tool-card__desc">Determine elemental mass percentages within compounds.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -248,7 +248,7 @@
                     <h3 class="tool-card__title">Gibbs Free Energy</h3>
                     <p class="tool-card__desc">Assess reaction spontaneity given enthalpy and entropy.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -264,7 +264,7 @@
                     <h3 class="tool-card__title">Ideal Gas Law</h3>
                     <p class="tool-card__desc">Find pressure, volume, temperature, or moles of a gas.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
                     <h3 class="tool-card__title">Empirical Formula Finder</h3>
                     <p class="tool-card__desc">Calculate lowest whole number ratios of elements.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -298,7 +298,7 @@
                     <h3 class="tool-card__title">Oxidation State Finder</h3>
                     <p class="tool-card__desc">Identify oxidation numbers of atoms in compounds.</p>
                     <div class="tool-card__footer">
-                        <span class="tool-card__status tool-card__status--unavailable">Not Available</span>
+                        <span class="tool-card__status tool-card__status--available">Available</span>
                         <span class="tool-card__link">Open tool &rarr;</span>
                     </div>
                 </div>
@@ -349,27 +349,44 @@
     <script src="../../script.js"></script>
     <script type="module" src="../../js/tools-search.js"></script>
 
-    <!-- Tool modal click handlers (lazy-loaded) -->
+    <!-- Tool modal click handlers (lazy-loaded via unified toolMap) -->
     <script type="module">
-        import { openModal } from '../../js/tools/modal.js';
+        import { openModal, fillModalBody } from '../../js/tools/modal.js';
+
+        const toolMap = {
+            'molar-mass':        { title: 'Molar Mass Calculator',    subtitle: 'Find the molar mass of any chemical formula',       category: 'Calculations',   badge: 'Basic',        module: '../../js/tools/molar-mass.js',          fn: 'initMolarMass' },
+            'ph-calculator':     { title: 'pH & pOH Calculator',      subtitle: 'Calculate pH, pOH, and ion concentrations',         category: 'Solutions',      badge: 'Basic',        module: '../../js/tools/ph-calculator.js',        fn: 'initPHCalculator' },
+            'molarity-dilution': { title: 'Molarity & Dilution',      subtitle: 'Compute solution concentrations and dilutions',     category: 'Solutions',      badge: 'Basic',        module: '../../js/tools/molarity.js',             fn: 'initMolarity' },
+            'equation-balancer': { title: 'Equation Balancer',        subtitle: 'Automatically balance chemical reactions',          category: 'Equations',      badge: 'Intermediate', module: '../../js/tools/eq-balancer.js',          fn: 'initEqBalancer' },
+            'stoichiometry':     { title: 'Stoichiometry Calculator', subtitle: 'Calculate reactant and product relationships',      category: 'Calculations',   badge: 'Intermediate', module: '../../js/tools/stoichiometry.js',        fn: 'initStoichiometry' },
+            'percent-composition':{ title: 'Percent Composition',     subtitle: 'Determine elemental mass percentages',              category: 'Calculations',   badge: 'Basic',        module: '../../js/tools/percent-composition.js',  fn: 'initPercentComposition' },
+            'empirical-formula': { title: 'Empirical Formula Finder', subtitle: 'Calculate lowest whole number element ratios',      category: 'Calculations',   badge: 'Intermediate', module: '../../js/tools/empirical-formula.js',    fn: 'initEmpiricalFormula' },
+            'gibbs-free-energy': { title: 'Gibbs Free Energy',        subtitle: 'Assess reaction spontaneity from ΔH and ΔS',       category: 'Thermodynamics', badge: 'Advanced',     module: '../../js/tools/gibbs.js',                fn: 'initGibbs' },
+            'ideal-gas-law':     { title: 'Ideal Gas Law',            subtitle: 'Solve for P, V, n, or T in PV=nRT',                category: 'Gas Laws',       badge: 'Intermediate', module: '../../js/tools/ideal-gas.js',            fn: 'initIdealGas' },
+            'oxidation-state':   { title: 'Oxidation State Finder',   subtitle: 'Identify oxidation numbers of atoms in compounds',  category: 'Equations',      badge: 'Intermediate', module: '../../js/tools/oxidation-states.js',     fn: 'initOxidationStates' },
+        };
 
         document.querySelectorAll('.tool-card[data-tool-id]').forEach(card => {
             card.style.cursor = 'pointer';
             card.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const toolId = card.dataset.toolId;
+                const id = card.dataset.toolId;
+                const cfg = toolMap[id];
+                if (!cfg) return;
 
-                if (toolId === 'molar-mass') {
-                    const { initMolarMass } = await import('../../js/tools/molar-mass.js');
-                    openModal({
-                        title: 'Molar Mass Calculator',
-                        subtitle: 'Find the molar mass of any chemical formula',
-                        category: 'Calculations',
-                        badge: 'Basic',
-                        init: (body) => initMolarMass(body)
-                    });
-                }
-                // Other tools added here as they're built
+                // Open modal immediately with skeleton loader
+                openModal({
+                    title:    cfg.title,
+                    subtitle: cfg.subtitle,
+                    category: cfg.category,
+                    badge:    cfg.badge,
+                });
+
+                // Lazy-load the tool module
+                const mod = await import(cfg.module);
+
+                // Replace skeleton with tool content
+                fillModalBody(mod[cfg.fn]);
             });
         });
     </script>

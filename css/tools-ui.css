@@ -296,3 +296,2468 @@
         padding: 1.25rem;
     }
 }
+
+
+/* ========== pH & pOH Calculator ========== */
+
+.ph-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- Segmented Control (mode toggle) ---------- */
+.tool-seg-control {
+    display: flex;
+    background: #f0ece4;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.tool-seg-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 0.625rem 1rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.tool-seg-btn:hover {
+    color: #555;
+}
+
+.tool-seg-btn.active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Acid / Base type toggle ---------- */
+.ph-type-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.ph-type-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid #e0ddd8;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.ph-type-btn:hover {
+    border-color: #bbb;
+    color: #555;
+}
+
+.ph-type-btn.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #faf9f7;
+}
+
+/* ---------- Formula Hint ---------- */
+.ph-formula-hint {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #aaa;
+    text-align: center;
+    margin-top: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+/* ---------- Weak mode inputs ---------- */
+.ph-weak-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ph-weak-ka-group {
+    margin-top: 1rem;
+}
+
+.ph-weak-calc-btn {
+    margin-top: 1rem;
+}
+
+/* ---------- Tooltip ? badge ---------- */
+.ph-tooltip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #aaa;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: help;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.ph-tooltip:hover {
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+/* ---------- Error Message ---------- */
+.ph-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Results Area ---------- */
+.ph-results {
+    margin-top: 2rem;
+}
+
+/* ---------- pH Scale ---------- */
+.ph-scale-wrap {
+    margin-top: 0.5rem;
+}
+
+.ph-scale-bar {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(to right, #dc2626, #ea580c, #eab308, #16a34a, #0891b2, #2563eb, #7c3aed);
+}
+
+.ph-scale-marker {
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    background: #1a1a1a;
+    border: 2.5px solid #faf9f7;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    left: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.ph-scale-marker-value {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #faf9f7;
+    background: #1a1a1a;
+    padding: 2px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.ph-scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: #aaa;
+    user-select: none;
+}
+
+/* ---------- Result Grid ---------- */
+.ph-result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.ph-result-card {
+    background: #f5f3ef;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #e8e5e0;
+}
+
+.ph-result-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 0.35rem;
+}
+
+.ph-result-val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.ph-result-val--mono {
+    font-family: 'DM Mono', 'SF Mono', 'Fira Code', monospace;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ---------- Classification Badge ---------- */
+.ph-classification-wrap {
+    text-align: center;
+    margin-top: 1.25rem;
+}
+
+.ph-classification {
+    display: inline-block;
+    padding: 0.45rem 1.25rem;
+    border-radius: 9999px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #fff;
+    letter-spacing: 0.02em;
+}
+
+/* ---------- Dissociation Row ---------- */
+.ph-dissociation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.ph-dissociation-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+}
+
+.ph-dissociation-val {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
+/* ---------- Reference Accordion ---------- */
+.ph-reference {
+    margin-top: 1.75rem;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+
+.ph-reference-summary {
+    cursor: pointer;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    outline: none;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ph-reference-summary::before {
+    content: '\25B6';
+    font-size: 0.55rem;
+    transition: transform 0.2s ease;
+    color: #aaa;
+}
+
+.ph-reference[open] > .ph-reference-summary::before {
+    transform: rotate(90deg);
+}
+
+.ph-reference-summary::-webkit-details-marker {
+    display: none;
+}
+
+.ph-ref-table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.ph-ref-table tr {
+    border-bottom: 1px solid #e8e5e0;
+}
+
+.ph-ref-table tr:last-child {
+    border-bottom: none;
+}
+
+.ph-ref-table td {
+    padding: 0.5rem 0;
+}
+
+.ph-ref-table td:last-child {
+    text-align: right;
+    font-weight: 500;
+    color: #1a1a1a;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- pH Responsive ---------- */
+@media (max-width: 480px) {
+    .tool-seg-btn {
+        font-size: 0.78rem;
+        padding: 0.5rem 0.5rem;
+    }
+
+    .ph-type-btn {
+        font-size: 0.78rem;
+        padding: 0.45rem 0.5rem;
+    }
+
+    .ph-result-val {
+        font-size: 1.3rem;
+    }
+
+    .ph-result-val--mono {
+        font-size: 0.85rem;
+    }
+
+    .ph-result-grid {
+        gap: 0.5rem;
+    }
+
+    .ph-result-card {
+        padding: 0.75rem;
+    }
+}
+
+
+/* ========== Chemical Equation Balancer ========== */
+
+.eq-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ---------- Input area ---------- */
+.eq-input-wrap {
+    position: relative;
+}
+
+.eq-input {
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+}
+
+.eq-arrow-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #aaa;
+    letter-spacing: 0.01em;
+}
+
+/* ---------- Quick-example chips ---------- */
+.eq-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+}
+
+/* ---------- Error ---------- */
+.eq-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Results container ---------- */
+.eq-results {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- Balanced equation display ---------- */
+.eq-balanced-display {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    text-align: center;
+    font-size: 1.35rem;
+    line-height: 1.8;
+    color: #1a1a1a;
+    letter-spacing: 0.02em;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.eq-coeff {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #1a1a1a;
+    margin-right: 1px;
+}
+
+.eq-formula {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.eq-plus {
+    display: inline-block;
+    margin: 0 0.45rem;
+    color: #aaa;
+    font-weight: 400;
+}
+
+.eq-arrow {
+    display: inline-block;
+    margin: 0 0.65rem;
+    color: #1a1a1a;
+    font-size: 1.3rem;
+}
+
+/* ---------- Verification table ---------- */
+.eq-verify-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.88rem;
+}
+
+.eq-verify-table thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #aaa;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e8e5e0;
+    text-align: left;
+}
+
+.eq-verify-table thead th:nth-child(2),
+.eq-verify-table thead th:nth-child(3),
+.eq-verify-table thead th:nth-child(4) {
+    text-align: center;
+}
+
+.eq-verify-table tbody tr {
+    border-bottom: 1px solid #f0ece4;
+    animation: mmRowFadeIn 0.35s ease both;
+}
+
+.eq-verify-table tbody tr:nth-child(even) {
+    background: rgba(245, 243, 239, 0.4);
+}
+
+.eq-verify-el {
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 0.55rem 0.75rem;
+}
+
+.eq-verify-count {
+    text-align: center;
+    padding: 0.55rem 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: #555;
+}
+
+.eq-verify-status {
+    text-align: center;
+    padding: 0.55rem 0.75rem;
+}
+
+.eq-check {
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.eq-cross {
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* ---------- Reaction type badge ---------- */
+.eq-type-badge-wrap {
+    text-align: center;
+}
+
+.eq-type-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    border-radius: 9999px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+    background: #f0ece4;
+    border: 1px solid #e0ddd8;
+}
+
+/* ---------- Equation Balancer Responsive ---------- */
+@media (max-width: 480px) {
+    .eq-balanced-display {
+        font-size: 1.05rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .eq-coeff {
+        font-size: 1.1rem;
+    }
+
+    .eq-quick-chips {
+        gap: 0.3rem;
+    }
+}
+
+
+/* ========== Stoichiometry Calculator ========== */
+
+.sto-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ---------- Quick chips ---------- */
+.sto-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+/* ---------- Error ---------- */
+.sto-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Compound summary cards ---------- */
+.sto-compounds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.sto-compound-card {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    flex: 1 1 140px;
+    min-width: 140px;
+    animation: stoCardIn 0.35s ease both;
+}
+
+@keyframes stoCardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.sto-compound-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.sto-compound-formula {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.sto-compound-mass {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: #888;
+}
+
+/* ---------- Side badges ---------- */
+.sto-side-badge {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+.sto-side-badge--reactant {
+    background: #f0ece4;
+    color: #888;
+    border: 1px solid #e0ddd8;
+}
+
+.sto-side-badge--product {
+    background: #1a1a1a;
+    color: #faf9f7;
+}
+
+/* ---------- Known substance row ---------- */
+.sto-known-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sto-select {
+    background: #f5f3ef;
+    border: 1px solid #e0ddd8;
+    border-radius: 8px;
+    padding: 0.75rem 0.75rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    appearance: auto;
+}
+
+.sto-select:focus {
+    border-color: #1a1a1a;
+}
+
+.sto-amount-input {
+    flex: 1;
+    min-width: 100px;
+}
+
+.sto-unit-select {
+    min-width: 70px;
+}
+
+/* ---------- Results grid ---------- */
+.sto-results {
+    margin-top: 1.5rem;
+}
+
+.sto-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+/* ---------- Result cards ---------- */
+.sto-result-card {
+    background: #fff;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid #e5e7eb;
+    animation: stoCardIn 0.4s ease both;
+}
+
+.sto-result-card--product {
+    border-left-color: #1a1a1a;
+}
+
+.sto-result-card--reactant {
+    border-left-color: #e5e7eb;
+}
+
+.sto-result-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.sto-result-formula {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.sto-result-coeff {
+    font-weight: 700;
+    margin-right: 1px;
+}
+
+.sto-known-tag {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #4f46e5;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+}
+
+/* ---------- Result values ---------- */
+.sto-result-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.sto-result-value-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.sto-result-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #aaa;
+}
+
+.sto-result-val {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Stoichiometry Responsive ---------- */
+@media (max-width: 480px) {
+    .sto-results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sto-known-row {
+        flex-direction: column;
+    }
+
+    .sto-select,
+    .sto-amount-input {
+        width: 100%;
+    }
+
+    .sto-compound-card {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* ========== Percent Composition Calculator ========== */
+
+.pc-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- Quick chips ---------- */
+.pc-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+/* ---------- Error ---------- */
+.pc-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- By-Mass mode rows ---------- */
+.pc-mass-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pc-mass-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pc-mass-el-input {
+    width: 80px;
+    flex: 0 0 80px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.pc-mass-val-input {
+    flex: 1;
+}
+
+.pc-mass-remove-btn {
+    background: transparent;
+    border: 1px solid #e0ddd8;
+    border-radius: 6px;
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+    color: #aaa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.pc-mass-remove-btn:hover {
+    color: #dc2626;
+    border-color: #fca5a5;
+    background: #fef2f2;
+}
+
+.pc-add-row-btn {
+    background: transparent;
+    border: 1px dashed #d0cdc8;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.pc-add-row-btn:hover {
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+    background: rgba(26, 26, 26, 0.02);
+}
+
+/* ---------- Results area ---------- */
+.pc-results {
+    margin-top: 1rem;
+}
+
+/* ---------- Composition bar ---------- */
+.pc-bar-wrap {
+    margin-bottom: 0.75rem;
+}
+
+.pc-composition-bar {
+    display: flex;
+    width: 100%;
+    height: 28px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.pc-bar-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: width 0.6s ease;
+    min-width: 0;
+}
+
+.pc-bar-seg-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    padding: 0 4px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Legend ---------- */
+.pc-bar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.pc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.pc-legend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ---------- Breakdown table ---------- */
+.pc-table-wrap {
+    margin-top: 0.5rem;
+}
+
+.pc-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1.5fr 2fr;
+    padding: 0.4rem 0.75rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e8e5e0;
+}
+
+/* 4-column variant for mass mode (no Atoms column) */
+.pc-table-header--mass {
+    grid-template-columns: 2fr 1.5fr 1.5fr 2fr;
+}
+
+.pc-table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1.5fr 2fr;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f0ece4;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.88rem;
+    align-items: center;
+    color: #1a1a1a;
+    animation: mmRowFadeIn 0.35s ease both;
+}
+
+.pc-table-row:nth-child(even) {
+    background: rgba(245, 243, 239, 0.4);
+}
+
+/* 4-column variant for mass mode */
+.pc-table-row--mass {
+    grid-template-columns: 2fr 1.5fr 1.5fr 2fr;
+}
+
+.pc-table-cell {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pc-table-cell--element {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.pc-table-cell--element strong {
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+.pc-table-cell--element small {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.pc-table-cell--percent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* ---------- Percent Composition Responsive ---------- */
+@media (max-width: 480px) {
+    .pc-composition-bar {
+        height: 22px;
+    }
+
+    .pc-bar-seg-label {
+        font-size: 0.6rem;
+    }
+
+    .pc-table-header,
+    .pc-table-row {
+        grid-template-columns: 2fr 1fr 1.5fr 2fr;
+    }
+
+    /* Hide Atomic Mass column on mobile */
+    .pc-table-header span:nth-child(3),
+    .pc-table-row .pc-table-cell:nth-child(3) {
+        display: none;
+    }
+
+    .pc-mass-el-input {
+        flex: 0 0 60px;
+        width: 60px;
+    }
+}
+
+
+/* ========== Empirical Formula Finder ========== */
+
+.ef-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ef-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ---------- Molar mass optional section ---------- */
+.ef-mm-section {
+    border-top: 1px solid #f0ece4;
+    padding-top: 1rem;
+}
+
+/* ---------- Error ---------- */
+.ef-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Formula hero ---------- */
+.ef-formula-hero {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ef-hero-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.ef-hero-formula {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.ef-hero-mass {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* ---------- Steps ---------- */
+.ef-steps {
+    margin-top: 0.5rem;
+}
+
+.ef-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ef-step {
+    display: flex;
+    gap: 0.75rem;
+    animation: stoCardIn 0.35s ease both;
+}
+
+.ef-step-number {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #faf9f7;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ef-step-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ef-step-title {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.ef-step-detail {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: #666;
+    margin: 0;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    background: #f5f3ef;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+}
+
+/* ---------- Molecular formula ---------- */
+.ef-molecular {
+    margin-top: 0.75rem;
+}
+
+.ef-molecular-inner {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-left: 4px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ef-mol-calc {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* ---------- EF Responsive ---------- */
+@media (max-width: 480px) {
+    .ef-hero-formula {
+        font-size: 1.8rem;
+    }
+
+    .ef-step-detail {
+        font-size: 0.75rem;
+    }
+}
+
+
+/* ========== Gibbs Free Energy Calculator ========== */
+
+.gb-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.gb-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.gb-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* ---------- Temp row with unit toggle ---------- */
+.gb-temp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gb-temp-unit-toggle {
+    display: flex;
+    gap: 4px;
+    background: #f0ece4;
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.gb-unit-btn {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.6rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.gb-unit-btn.active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Error ---------- */
+.gb-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- DG hero ---------- */
+.gb-dg-hero {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.gb-dg-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.gb-dg-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.1;
+}
+
+.gb-dg-unit {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* ---------- Spontaneity ---------- */
+.gb-spontaneity {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.gb-badge {
+    display: inline-block;
+    padding: 0.4rem 1.1rem;
+    border-radius: 9999px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+}
+
+.gb-badge--spontaneous {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.gb-badge--nonspontaneous {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.gb-badge--equilibrium {
+    background: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fde68a;
+}
+
+.gb-explanation {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: #666;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+/* ---------- Temperature effect grid ---------- */
+.gb-temp-grid-wrap {
+    margin-top: 1rem;
+}
+
+.gb-temp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.gb-grid-cell {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.gb-grid-cell--active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+.gb-grid-cell--active .gb-grid-signs,
+.gb-grid-cell--active .gb-grid-verdict {
+    color: #faf9f7;
+}
+
+.gb-grid-signs {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 0.3rem;
+}
+
+.gb-grid-verdict {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* ---------- Temperature slider ---------- */
+.gb-slider-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0ece4;
+}
+
+.gb-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.gb-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0ddd8;
+    outline: none;
+}
+
+.gb-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    cursor: pointer;
+    border: 2px solid #faf9f7;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gb-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    cursor: pointer;
+    border: 2px solid #faf9f7;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gb-slider-val {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    min-width: 60px;
+    text-align: right;
+}
+
+.gb-slider-dg {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.gb-slider-dg-val {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* ---------- Gibbs Responsive ---------- */
+@media (max-width: 480px) {
+    .gb-dg-value {
+        font-size: 2rem;
+    }
+
+    .gb-temp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gb-grid-signs {
+        font-size: 0.7rem;
+    }
+
+    .tool-seg-control .tool-seg-btn {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.25rem;
+    }
+}
+
+
+/* ========== Ideal Gas Law Calculator ========== */
+
+.ig-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- 2x2 variable grid ---------- */
+.ig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.ig-card {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.ig-card--unknown {
+    border-color: #22d3ee;
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+.ig-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ig-card-symbol {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.ig-card-name {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.ig-card-input-row {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.ig-var-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.625rem 0.75rem;
+    font-size: 1rem;
+}
+
+.ig-unit-select {
+    min-width: 65px;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.82rem;
+}
+
+.ig-solved-input {
+    color: #0891b2 !important;
+    font-weight: 600;
+}
+
+/* ---------- Extra sections ---------- */
+.ig-extra-section,
+.ig-vdw-section {
+    border-top: 1px solid #f0ece4;
+    padding-top: 1rem;
+}
+
+.ig-density-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ig-vdw-toggle-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ig-vdw-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ig-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.ig-toggle-text {
+    user-select: none;
+}
+
+.ig-vdw-gas-select {
+    min-width: 140px;
+}
+
+.ig-vdw-info {
+    margin-top: 0.4rem;
+}
+
+.ig-vdw-params {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: #888;
+}
+
+/* ---------- Error ---------- */
+.ig-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Results ---------- */
+.ig-results {
+    margin-top: 0.5rem;
+}
+
+.ig-result-equation {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.ig-eq-line {
+    margin-bottom: 0.5rem;
+}
+
+.ig-eq-label {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    color: #888;
+    font-style: italic;
+}
+
+.ig-eq-result {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.ig-eq-var {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.ig-eq-equals {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #aaa;
+}
+
+.ig-eq-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.1;
+}
+
+.ig-eq-unit {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* ---------- Extras (density, VdW correction) ---------- */
+.ig-result-extras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.ig-extra-card {
+    flex: 1 1 160px;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+}
+
+.ig-extra-label {
+    display: block;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.ig-extra-value {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* ---------- Ideal Gas Responsive ---------- */
+@media (max-width: 480px) {
+    .ig-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ig-card-symbol {
+        font-size: 1.3rem;
+    }
+
+    .ig-eq-value {
+        font-size: 1.8rem;
+    }
+
+    .ig-vdw-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* ========== Oxidation State Finder ========== */
+
+.ox-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ---------- Input section ---------- */
+.ox-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ox-input-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.ox-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ox-input-group--formula {
+    flex: 1;
+}
+
+.ox-input-group--charge {
+    flex: 0 0 100px;
+}
+
+/* ---------- Quick examples ---------- */
+.ox-examples {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ox-examples-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.ox-examples-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.ox-example-btn {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 6px;
+    padding: 0.3rem 0.65rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.ox-example-btn:hover {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #faf9f7;
+}
+
+/* ---------- Error ---------- */
+.ox-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Element tiles ---------- */
+.ox-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.ox-tile {
+    width: 100px;
+    padding: 1rem 0.5rem 0.75rem;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    animation: stoCardIn 0.35s ease both;
+    border: 2px solid transparent;
+}
+
+.ox-tile--positive {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+
+.ox-tile--negative {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.ox-tile--zero {
+    background: #f5f3ef;
+    border-color: #e8e5e0;
+}
+
+.ox-tile-state {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.ox-tile--positive .ox-tile-state {
+    color: #c2410c;
+}
+
+.ox-tile--negative .ox-tile-state {
+    color: #1d4ed8;
+}
+
+.ox-tile--zero .ox-tile-state {
+    color: #555;
+}
+
+.ox-tile-symbol {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.1;
+}
+
+.ox-tile-name {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Compound diagram ---------- */
+.ox-diagram {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 1.25rem 1rem;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    position: relative;
+}
+
+.ox-diagram-formula {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.15rem;
+}
+
+.ox-diagram-atom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.ox-diagram-state {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+}
+
+.ox-state--positive {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.ox-state--negative {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.ox-state--zero {
+    background: #f0ece4;
+    color: #555;
+}
+
+.ox-diagram-el {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.ox-diagram-count {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1;
+    align-self: flex-end;
+    margin-bottom: -0.1rem;
+}
+
+.ox-diagram-charge {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #888;
+    align-self: flex-start;
+    margin-left: 0.15rem;
+}
+
+/* ---------- Verification ---------- */
+.ox-verification {
+    margin-top: 0.25rem;
+}
+
+.ox-verify-body {
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+
+.ox-verify-equation {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: center;
+    word-break: break-word;
+}
+
+.ox-verify-sum {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e8e5e0;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.ox-verify--pass {
+    color: #166534;
+}
+
+.ox-verify--fail {
+    color: #991b1b;
+}
+
+.ox-verify-icon {
+    font-size: 1.2rem;
+}
+
+.ox-fractional-note {
+    margin-top: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: #fef9c3;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #854d0e;
+    line-height: 1.5;
+}
+
+/* ---------- Rules applied ---------- */
+.ox-rules {
+    margin-top: 0.25rem;
+}
+
+.ox-rules-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ox-rule-item {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* ---------- Oxidation State Responsive ---------- */
+@media (max-width: 480px) {
+    .ox-input-row {
+        flex-direction: column;
+    }
+
+    .ox-input-group--charge {
+        flex: 1;
+    }
+
+    .ox-tile {
+        width: 80px;
+        padding: 0.75rem 0.35rem 0.5rem;
+    }
+
+    .ox-tile-symbol {
+        font-size: 1.4rem;
+    }
+
+    .ox-tile-state {
+        font-size: 1.1rem;
+    }
+
+    .ox-diagram-el {
+        font-size: 1.6rem;
+    }
+
+    .ox-verify-equation {
+        font-size: 0.78rem;
+    }
+}
+
+
+/* ========== Molarity & Dilution Calculator ========== */
+
+.mol-tool {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mol-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ---------- Input grid ---------- */
+.mol-input-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.mol-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mol-input-unit-wrap {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.mol-input-unit-wrap .mm-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.mol-unit-select {
+    min-width: 70px;
+    padding: 0.625rem 0.5rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    background: #f5f3ef;
+    border: 1px solid #e0ddd8;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 22px;
+}
+
+.mol-unit-select:focus {
+    border-color: #1a1a1a;
+}
+
+.mol-unit-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    white-space: nowrap;
+    padding: 0 0.25rem;
+}
+
+.mol-tooltip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e8e5e0;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #888;
+    cursor: help;
+    vertical-align: middle;
+    margin-left: 0.25rem;
+}
+
+/* ---------- Error ---------- */
+.mol-error {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ---------- Results hero ---------- */
+.mol-result-hero {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.mol-result-item {
+    flex: 1;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.mol-result-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+}
+
+.mol-result-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.1;
+}
+
+.mol-result-unit {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+/* ---------- Step-by-step ---------- */
+.mol-steps {
+    margin-top: 0.5rem;
+}
+
+.mol-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.mol-step {
+    display: flex;
+    gap: 0.65rem;
+    animation: stoCardIn 0.35s ease both;
+}
+
+.mol-step-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #faf9f7;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mol-step-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.mol-step-title {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+.mol-step-detail {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* ---------- Dilution equation layout ---------- */
+.dil-equation {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.dil-eq-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.4rem;
+}
+
+.dil-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.dil-field .mol-input-unit-wrap {
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dil-field .mm-input {
+    width: 100%;
+}
+
+.dil-field .mol-unit-select {
+    width: 100%;
+    min-width: 0;
+}
+
+.dil-op {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #aaa;
+    padding-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.dil-equals {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.dil-hint {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+    margin: 0;
+}
+
+/* ---------- Calculated input highlight ---------- */
+.dil-input--calculated {
+    color: #0891b2 !important;
+    font-weight: 600;
+    border-color: #22d3ee !important;
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+/* ---------- Beaker visual ---------- */
+.dil-beakers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.dil-beaker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dil-beaker-svg {
+    width: 80px;
+    height: 100px;
+}
+
+.dil-beaker-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dil-arrow {
+    font-size: 1.6rem;
+    color: #ccc;
+    padding-bottom: 1.2rem;
+}
+
+/* ---------- Dilution result ---------- */
+.dil-result {
+    text-align: center;
+    padding: 0.85rem 1rem;
+    background: #f5f3ef;
+    border: 1px solid #e8e5e0;
+    border-radius: 10px;
+}
+
+.dil-result-text {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
+/* ---------- Molarity Responsive ---------- */
+@media (max-width: 480px) {
+    .mol-result-hero {
+        flex-direction: column;
+    }
+
+    .mol-result-value {
+        font-size: 1.6rem;
+    }
+
+    .dil-equation {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dil-eq-group {
+        width: 100%;
+    }
+
+    .dil-field {
+        flex: 1;
+    }
+
+    .dil-equals {
+        padding-bottom: 0;
+        transform: rotate(90deg);
+    }
+
+    .dil-op {
+        padding-bottom: 0;
+    }
+
+    .dil-beakers {
+        gap: 0.75rem;
+    }
+
+    .dil-beaker-svg {
+        width: 60px;
+        height: 75px;
+    }
+}

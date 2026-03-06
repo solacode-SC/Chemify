@@ -74,9 +74,15 @@ export function openModal({ title, subtitle, category, badge, init }) {
     // Reset cleanup
     cleanupFn = null;
 
-    // Call tool's init function
+    // Call tool's init function, or show skeleton if none provided
     if (typeof init === 'function') {
         init(body);
+    } else {
+        body.innerHTML = `
+            <div class="tool-modal__skeleton">
+                <div class="tool-modal__skeleton-rect tool-modal__skeleton-rect--lg"></div>
+                <div class="tool-modal__skeleton-rect tool-modal__skeleton-rect--sm"></div>
+            </div>`;
     }
 
     // Show with animation
@@ -133,4 +139,18 @@ export function closeModal() {
  */
 export function registerCleanup(fn) {
     cleanupFn = fn;
+}
+
+/**
+ * Replace the skeleton loader with actual tool content.
+ * Safe to call after an async import — silently exits if the
+ * modal was closed before the import finished.
+ * @param {Function} initFn – Called with the modal body element
+ */
+export function fillModalBody(initFn) {
+    if (!overlay || !overlay.classList.contains('is-active')) return;
+    const body = document.getElementById('toolModalBody');
+    if (!body) return;
+    body.innerHTML = '';
+    if (typeof initFn === 'function') initFn(body);
 }
