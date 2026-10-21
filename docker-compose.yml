@@ -1,0 +1,23 @@
+services:
+  chemify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chemify-production
+    restart: unless-stopped
+    ports:
+      - "4326:4326"
+      - "5467:5467"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:4326/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.chemify.project=chemify"
+      - "com.chemify.description=Modern Chemistry Visualized"
+      - "com.chemify.environment=production"
+

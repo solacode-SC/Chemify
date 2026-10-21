@@ -1,0 +1,37 @@
+{
+  "name": "chemify",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "<div align=\"center\">   <img src=\"assets/favicon.png\" alt=\"Chemify Logo\" width=\"120\" />   <h1>Chemify</h1>   <p><strong>Chemistry, finally made visual.</strong></p>",
+  "main": "script.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solacode-SC/Chemify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solacode-SC/Chemify/issues"
+  },
+  "homepage": "https://github.com/solacode-SC/Chemify#readme",
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "lucide-react": "^1.60.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}
