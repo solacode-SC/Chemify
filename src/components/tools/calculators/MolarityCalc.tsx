@@ -1,21 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateDilution, calculateMolarity } from '../../../utils/chemistryCalculations';
 import { calculateMolarMass } from '../../../utils/formulaParser';
 
-export const MolarityCalc: React.FC = () => {
-  const [tab, setTab] = useState<'molarity' | 'dilution'>('molarity');
+interface MolarityCalcProps {
+  initialTab?: 'molarity' | 'dilution';
+  initialFormula?: string;
+  initialMass?: number;
+  initialVolume?: number;
+  initialM1?: number;
+  initialV1?: number;
+  initialM2?: number;
+  initialV2?: number;
+  initialSolveFor?: 'M1' | 'V1' | 'M2' | 'V2';
+}
+
+export const MolarityCalc: React.FC<MolarityCalcProps> = ({
+  initialTab = 'molarity',
+  initialFormula = 'NaCl',
+  initialMass = 5.84,
+  initialVolume = 0.5,
+  initialM1 = 2.0,
+  initialV1 = 50,
+  initialM2 = 0.5,
+  initialV2 = 200,
+  initialSolveFor = 'V2'
+}) => {
+  const [tab, setTab] = useState<'molarity' | 'dilution'>(initialTab);
 
   // Molarity state
-  const [formula, setFormula] = useState('NaCl');
-  const [mass, setMass] = useState<number>(5.84);
-  const [volume, setVolume] = useState<number>(0.5); // Liters
+  const [formula, setFormula] = useState(initialFormula);
+  const [mass, setMass] = useState<number>(initialMass);
+  const [volume, setVolume] = useState<number>(initialVolume); // Liters
 
   // Dilution state: M1*V1 = M2*V2
-  const [m1, setM1] = useState<number>(2.0);
-  const [v1, setV1] = useState<number>(50); // mL
-  const [m2, setM2] = useState<number>(0.5);
-  const [v2, setV2] = useState<number>(200); // mL
-  const [solveFor, setSolveFor] = useState<'M1' | 'V1' | 'M2' | 'V2'>('V2');
+  const [m1, setM1] = useState<number>(initialM1);
+  const [v1, setV1] = useState<number>(initialV1); // mL
+  const [m2, setM2] = useState<number>(initialM2);
+  const [v2, setV2] = useState<number>(initialV2); // mL
+  const [solveFor, setSolveFor] = useState<'M1' | 'V1' | 'M2' | 'V2'>(initialSolveFor);
+
+  useEffect(() => {
+    if (initialTab) setTab(initialTab);
+    if (initialFormula) setFormula(initialFormula);
+    if (initialMass !== undefined) setMass(initialMass);
+    if (initialVolume !== undefined) setVolume(initialVolume);
+    if (initialM1 !== undefined) setM1(initialM1);
+    if (initialV1 !== undefined) setV1(initialV1);
+    if (initialM2 !== undefined) setM2(initialM2);
+    if (initialV2 !== undefined) setV2(initialV2);
+    if (initialSolveFor) setSolveFor(initialSolveFor);
+  }, [initialTab, initialFormula, initialMass, initialVolume, initialM1, initialV1, initialM2, initialV2, initialSolveFor]);
 
   const mw = calculateMolarMass(formula) || 58.44;
   const molarityResult = calculateMolarity(mass, mw, volume);

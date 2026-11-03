@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculatePHFromAny } from '../../../utils/chemistryCalculations';
 
-export const PHCalc: React.FC = () => {
-  const [val, setVal] = useState<number>(7.0);
-  const [mode, setMode] = useState<'pH' | 'pOH' | 'H' | 'OH'>('pH');
+interface PHCalcProps {
+  initialMode?: 'pH' | 'pOH' | 'H' | 'OH';
+  initialVal?: number;
+}
+
+export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal = 7.0 }) => {
+  const [val, setVal] = useState<number>(initialVal);
+  const [mode, setMode] = useState<'pH' | 'pOH' | 'H' | 'OH'>(initialMode);
+
+  useEffect(() => {
+    if (initialMode) setMode(initialMode);
+    if (initialVal !== undefined) setVal(initialVal);
+  }, [initialMode, initialVal]);
 
   const result = calculatePHFromAny(mode, val) || {
     pH: 7.0,

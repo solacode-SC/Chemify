@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateMolarMass, getElementBreakdown, validateFormula } from '../../../utils/formulaParser';
 
-export const MolarMassCalc: React.FC = () => {
-  const [formula, setFormula] = useState('H2O');
+interface MolarMassCalcProps {
+  initialFormula?: string;
+}
+
+export const MolarMassCalc: React.FC<MolarMassCalcProps> = ({ initialFormula = 'H2O' }) => {
+  const [formula, setFormula] = useState(initialFormula);
+
+  useEffect(() => {
+    if (initialFormula) {
+      setFormula(initialFormula);
+    }
+  }, [initialFormula]);
 
   const validation = validateFormula(formula);
   const molarMass = validation.valid ? calculateMolarMass(formula) : 0;

@@ -54,16 +54,16 @@ export const LabView: React.FC = () => {
   };
 
   const handleRunReaction = () => {
-    setStatus('running');
-    setTimeout(() => {
-      setStatus('complete');
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ['#4E5B47', '#6F7F63', '#8FA882', '#E6E2D3']
-      });
-    }, 3000);
+    if (status === 'complete') {
+      setStatus('ready');
+      setTimeout(() => setStatus('running'), 50);
+    } else {
+      setStatus('running');
+    }
+  };
+
+  const handleResetReaction = () => {
+    setStatus('ready');
   };
 
   return (
@@ -251,29 +251,50 @@ export const LabView: React.FC = () => {
               )}
             </div>
 
-            {/* Run Reaction Button */}
-            <button
-              onClick={handleRunReaction}
-              disabled={reactants.length < 1 || status === 'running'}
-              style={{
-                background: status === 'running' ? '#6F7F63' : '#4E5B47',
-                color: '#FAF8F5',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '0.75rem 1.5rem',
-                fontWeight: 700,
-                fontSize: '0.95rem',
-                cursor: reactants.length >= 1 && status !== 'running' ? 'pointer' : 'not-allowed',
-                opacity: reactants.length < 1 ? 0.5 : 1,
-                boxShadow: '0 4px 12px rgba(78, 91, 71, 0.25)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-            >
-              <span>{status === 'running' ? '⏳' : '⚗️'}</span>
-              <span>{status === 'running' ? 'Reacting…' : status === 'complete' ? 'Run Again ↺' : 'Run Reaction'}</span>
-            </button>
+            {/* Run & Reset Reaction Buttons */}
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <button
+                onClick={handleRunReaction}
+                disabled={reactants.length < 1 || status === 'running'}
+                style={{
+                  background: status === 'running' ? '#6F7F63' : '#4E5B47',
+                  color: '#FAF8F5',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.75rem 1.4rem',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  cursor: reactants.length >= 1 && status !== 'running' ? 'pointer' : 'not-allowed',
+                  opacity: reactants.length < 1 ? 0.5 : 1,
+                  boxShadow: '0 4px 12px rgba(78, 91, 71, 0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span>{status === 'running' ? '⏳' : '⚗️'}</span>
+                <span>{status === 'running' ? 'Reacting…' : status === 'complete' ? 'Run Again ↺' : 'Run Reaction'}</span>
+              </button>
+
+              <button
+                onClick={handleResetReaction}
+                style={{
+                  background: '#FAF8F5',
+                  color: '#4E5B47',
+                  border: '1.5px solid #6F7F63',
+                  borderRadius: '8px',
+                  padding: '0.75rem 1rem',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                title="Reset simulation to initial reactant solution"
+              >
+                Reset ↺
+              </button>
+            </div>
           </div>
         </div>
 
@@ -345,6 +366,7 @@ export const LabView: React.FC = () => {
             conditions={reactionData.conditions}
             reactants={reactants}
             onReset={() => setStatus('ready')}
+            onComplete={() => setStatus('complete')}
           />
 
           {/* Right Info Panels */}

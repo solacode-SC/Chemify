@@ -25,8 +25,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
-                  src="assets/images/img4.png"
-                  alt="Student in chemistry laboratory conducting experiments"
+                  src="assets/images/botanical-student-chemist.png"
+                  alt="Student chemist with dark wavy hair studying glowing atomic models in sunlit botanical greenhouse with white wisteria and kitten"
                   className="persona-card__img"
                   loading="lazy"
                 />
@@ -59,8 +59,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
-                  src="assets/images/img3.png"
-                  alt="Researcher analyzing chemical equations and isotopic data"
+                  src="assets/images/botanical-researcher-chemist.png"
+                  alt="Researcher examining glowing crystal solutions and analytical balances in vintage greenhouse herbarium"
                   className="persona-card__img"
                   loading="lazy"
                 />
@@ -93,8 +93,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
-                  src="assets/images/curious-mind.png"
-                  alt="Curious explorer discovering atomic structures and glowing reactions"
+                  src="assets/images/botanical-tools-guide.png"
+                  alt="Curious explorer discovering atomic structures and glowing reactions in botanical conservatory"
                   className="persona-card__img"
                   loading="lazy"
                 />
@@ -127,8 +127,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
         <div className="studio-showcase">
           <div className="studio-showcase__image-wrap">
             <img
-              src="assets/images/lab-studio.png"
-              alt="Reaction Studio laboratory apparatus with distillation flask and balance"
+              src="assets/images/ghibli-botanical-lab.png"
+              alt="Reaction Studio botanical laboratory apparatus with distillation flask and glowing solutions"
               className="studio-showcase__img"
               loading="lazy"
             />

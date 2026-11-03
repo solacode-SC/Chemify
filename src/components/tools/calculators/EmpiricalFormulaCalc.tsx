@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateEmpiricalFormula, ElementInput } from '../../../utils/chemistryCalculations';
 
-export const EmpiricalFormulaCalc: React.FC = () => {
-  const [elements, setElements] = useState<ElementInput[]>([
-    { symbol: 'C', amount: 40.0 },
-    { symbol: 'H', amount: 6.7 },
-    { symbol: 'O', amount: 53.3 }
-  ]);
+interface EmpiricalFormulaCalcProps {
+  initialElements?: ElementInput[];
+}
+
+export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ initialElements }) => {
+  const [elements, setElements] = useState<ElementInput[]>(
+    initialElements && initialElements.length > 0
+      ? initialElements
+      : [
+          { symbol: 'C', amount: 40.0 },
+          { symbol: 'H', amount: 6.7 },
+          { symbol: 'O', amount: 53.3 }
+        ]
+  );
+
+  useEffect(() => {
+    if (initialElements && initialElements.length > 0) {
+      setElements(initialElements);
+    }
+  }, [initialElements]);
 
   const result = calculateEmpiricalFormula(elements);
 

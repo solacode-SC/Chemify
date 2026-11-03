@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { balanceChemicalEquation, parseEquationInput } from '../../../utils/equationBalancer';
 
-export const EquationBalancerCalc: React.FC = () => {
-  const [equationInput, setEquationInput] = useState('C3H8 + O2 -> CO2 + H2O');
+interface EquationBalancerCalcProps {
+  initialEquation?: string;
+}
+
+export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
+  initialEquation = 'C3H8 + O2 -> CO2 + H2O'
+}) => {
+  const [equationInput, setEquationInput] = useState(initialEquation);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialEquation) {
+      setEquationInput(initialEquation);
+      setError(null);
+    }
+  }, [initialEquation]);
 
   const presets = [
     'H2 + O2 -> H2O',

@@ -46,7 +46,7 @@ export const ElementModal: React.FC<ElementModalProps> = ({
 
   return (
     <div
-      className="modal-overlay is-open"
+      className="modal-overlay is-open no-scrollbar"
       onClick={e => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -67,7 +67,7 @@ export const ElementModal: React.FC<ElementModalProps> = ({
       }}
     >
       <div
-        className="modal-panel"
+        className="modal-panel no-scrollbar"
         style={{
           background: '#E6E2D3',
           border: '1.5px solid #6F7F63',

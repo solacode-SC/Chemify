@@ -17,6 +17,7 @@ export const ToolsView: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory>('All');
   const [activeTool, setActiveTool] = useState<ToolItem | null>(null);
+  const [modalInitialTab, setModalInitialTab] = useState<'calculator' | 'crashcourse'>('calculator');
 
   const chipsScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,29 +42,151 @@ export const ToolsView: React.FC = () => {
     });
   }, [search, selectedCategory]);
 
+  const openTool = (tool: ToolItem, mode: 'calculator' | 'crashcourse') => {
+    setActiveTool(tool);
+    setModalInitialTab(mode);
+  };
+
   return (
-    <div className="tools-page" style={{ minHeight: '100vh', paddingBottom: '6rem', paddingTop: '110px' }}>
-      {/* Hero Section */}
-      <section style={{ textAlign: 'center', marginBottom: '3rem', padding: '0 1.5rem' }}>
-        <span className="section-eyebrow">Calculators & Reference</span>
-        <h1
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
-            color: '#4E5B47',
-            marginBottom: '0.85rem',
-            lineHeight: 1.15
-          }}
-        >
-          Every Tool a Chemist Needs
-        </h1>
-        <p style={{ color: '#5F6F5B', maxWidth: '680px', margin: '0 auto', fontSize: '1.08rem', lineHeight: 1.65 }}>
-          From molar mass decomposition and matrix Gaussian balancing to Gibbs spontaneity thresholds and Henderson-Hasselbalch equations — engineered for precision research and rapid problem-solving.
-        </p>
+    <div className="tools-page" style={{ minHeight: '100vh', paddingBottom: '6rem', paddingTop: '100px' }}>
+      {/* Featured Botanical Field Guide Hero Banner with Art Reference */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto 2.5rem', padding: '0 1.5rem' }}>
+        <div className="tools-hero-banner">
+          {/* Left Column: Copy & Explanation */}
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
+              <span
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  background: '#4E5B47',
+                  color: '#FAF8F5',
+                  padding: '4px 12px',
+                  borderRadius: '999px'
+                }}
+              >
+                Botanical Field Guide & Toolkit
+              </span>
+              <span
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#4E5B47',
+                  background: 'rgba(111, 127, 99, 0.25)',
+                  padding: '4px 10px',
+                  borderRadius: '999px'
+                }}
+              >
+                🌿 10 Chemistry Calculators + Crash Courses
+              </span>
+            </div>
+
+            <h1
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+                color: '#4E5B47',
+                margin: '0 0 1rem',
+                lineHeight: 1.18
+              }}
+            >
+              Every Chemistry Tool, Explained & Solved
+            </h1>
+
+            <p style={{ color: '#5F6F5B', fontSize: '1.05rem', lineHeight: 1.65, margin: '0 0 1.5rem' }}>
+              Welcome to the Chemify Observatory. Whether you need an instant molar mass decomposition, a Gaussian equation balancer, or an in-depth <strong>Crash Course</strong> that breaks down difficult chemical principles into intuitive steps — every calculator in our suite includes an illustrated guide to master the concept.
+            </p>
+
+            {/* Feature Highlights Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ background: '#FAF8F5', border: '1px solid #6F7F63', borderRadius: '10px', padding: '10px 14px' }}>
+                <div style={{ fontWeight: 700, color: '#4E5B47', fontSize: '0.9rem' }}>🧮 Instant Solvers</div>
+                <div style={{ fontSize: '0.8rem', color: '#5F6F5B' }}>Real-time math with variable auto-detection</div>
+              </div>
+              <div style={{ background: '#FAF8F5', border: '1px solid #6F7F63', borderRadius: '10px', padding: '10px 14px' }}>
+                <div style={{ fontWeight: 700, color: '#4E5B47', fontSize: '0.9rem' }}>📖 Crash Courses</div>
+                <div style={{ fontSize: '0.8rem', color: '#5F6F5B' }}>Worked examples, pitfalls & pro chemist tips</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => {
+                  const el = document.getElementById('tools-catalog');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                style={{
+                  background: '#4E5B47',
+                  color: '#FAF8F5',
+                  border: 'none',
+                  borderRadius: '999px',
+                  padding: '10px 22px',
+                  fontWeight: 700,
+                  fontSize: '0.92rem',
+                  cursor: 'pointer',
+                  boxShadow: 'var(--shadow-sm)'
+                }}
+              >
+                Explore All 10 Tools ↓
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Whimsical Botanical Art Frame */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '360px',
+                aspectRatio: '9 / 12',
+                borderRadius: '24px',
+                overflow: 'hidden',
+                border: '3px solid #6F7F63',
+                boxShadow: '0 16px 36px rgba(78, 91, 71, 0.22)',
+                background: '#FAF8F5'
+              }}
+            >
+              <img
+                src="assets/images/ghibli-botanical-lab.png"
+                alt="Botanical Chemistry Greenhouse Art — Inquisitive student chemist under hanging wisteria with a white cat, generated via Nano Banana"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  transition: 'transform 0.5s ease'
+                }}
+              />
+              {/* Botanical Overlay Badge */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  background: 'linear-gradient(transparent, rgba(35, 42, 33, 0.88))',
+                  padding: '1.25rem 1rem 0.85rem',
+                  color: '#FAF8F5',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.04em' }}>
+                  Botanical Science Observatory
+                </div>
+                <div style={{ fontSize: '0.76rem', opacity: 0.85, marginTop: '2px' }}>
+                  Where nature, mathematics, and molecular curiosity meet.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Filter and Search Container */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 1.5rem 2.5rem' }}>
+      <section id="tools-catalog" style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 1.5rem 2.5rem' }}>
         <div
           style={{
             background: 'rgba(220, 224, 207, 0.45)',
@@ -149,6 +272,7 @@ export const ToolsView: React.FC = () => {
 
             <div
               ref={chipsScrollRef}
+              className="no-scrollbar"
               style={{
                 display: 'flex',
                 gap: '0.6rem',
@@ -208,18 +332,18 @@ export const ToolsView: React.FC = () => {
           </div>
         </div>
 
-        {/* Tools Grid — Full Width Cards with Edge-to-Edge Images */}
+        {/* Tools Grid — Full Width Cards with Dual Action Buttons (Calculator + Crash Course) */}
         {filteredTools.length > 0 ? (
-          <div className="tools-grid">
+          <div className="tools-grid no-scrollbar">
             {filteredTools.map(tool => (
               <article
                 key={tool.id}
-                className="tool-card"
-                onClick={() => setActiveTool(tool)}
+                className="tool-card no-scrollbar"
+                onClick={() => openTool(tool, 'calculator')}
                 role="button"
                 tabIndex={0}
                 onKeyDown={e => {
-                  if (e.key === 'Enter' || e.key === ' ') setActiveTool(tool);
+                  if (e.key === 'Enter' || e.key === ' ') openTool(tool, 'calculator');
                 }}
               >
                 {/* Full-bleed illustration taking all the width of the card */}
@@ -234,17 +358,74 @@ export const ToolsView: React.FC = () => {
                 </div>
 
                 {/* Card Content */}
-                <div className="tool-card__body">
+                <div className="tool-card__body no-scrollbar">
                   <span className="tool-card__category">{tool.category}</span>
                   <h3 className="tool-card__title">{tool.title}</h3>
                   <p className="tool-card__desc">{tool.desc}</p>
 
-                  <div className="tool-card__footer">
-                    <span className="tool-card__action-text">Launch Calculator</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                  {/* Dual Action Options: Launch Calculator & Crash Course */}
+                  <div
+                    className="tool-card__footer"
+                    style={{
+                      display: 'flex',
+                      gap: '8px',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap'
+                    }}
+                  >
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        openTool(tool, 'calculator');
+                      }}
+                      style={{
+                        background: '#4E5B47',
+                        color: '#FAF8F5',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '6px 14px',
+                        fontWeight: 700,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 2px 6px rgba(78, 91, 71, 0.25)',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <span>Launch</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </button>
+
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        openTool(tool, 'crashcourse');
+                      }}
+                      style={{
+                        background: '#FAF8F5',
+                        color: '#4E5B47',
+                        border: '1.5px solid #6F7F63',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        fontWeight: 700,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.15s ease'
+                      }}
+                      title="Open Crash Course & Guide for this tool"
+                    >
+                      <span>📖</span>
+                      <span>Crash Course</span>
+                    </button>
                   </div>
                 </div>
               </article>
@@ -289,8 +470,12 @@ export const ToolsView: React.FC = () => {
         )}
       </section>
 
-      {/* Tool Modal Dialog */}
-      <ToolModal tool={activeTool} onClose={() => setActiveTool(null)} />
+      {/* Tool Modal Dialog with Calculator & Crash Course Tabs */}
+      <ToolModal
+        tool={activeTool}
+        initialTab={modalInitialTab}
+        onClose={() => setActiveTool(null)}
+      />
     </div>
   );
 };

@@ -71,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           <div className="hero-deck-label">
             <span>Featured Elemental Building Blocks</span>
           </div>
-          <div className="hero-deck">
+          <div className="hero-deck no-scrollbar">
             {HERO_TILES.map(tile => (
               <div
                 key={tile.sym}

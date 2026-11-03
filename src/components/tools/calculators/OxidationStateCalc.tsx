@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { determineOxidationStates } from '../../../utils/chemistryCalculations';
 
-export const OxidationStateCalc: React.FC = () => {
-  const [formula, setFormula] = useState('KMnO4');
+interface OxidationStateCalcProps {
+  initialFormula?: string;
+}
+
+export const OxidationStateCalc: React.FC<OxidationStateCalcProps> = ({ initialFormula = 'KMnO4' }) => {
+  const [formula, setFormula] = useState(initialFormula);
+
+  useEffect(() => {
+    if (initialFormula) setFormula(initialFormula);
+  }, [initialFormula]);
 
   const results = determineOxidationStates(formula);
 

@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import confetti from 'canvas-confetti';
 import { ReactantItem, ReactionStatus } from '../../types/reaction';
+import { parseFormula } from '../../utils/formulaParser';
 
 interface ReactionDiagramProps {
   status: ReactionStatus;
@@ -10,12 +12,13 @@ interface ReactionDiagramProps {
   conditions?: { temperature: string | null; pressure: string | null; catalyst: string | null };
   reactants?: ReactantItem[];
   onReset?: () => void;
+  onComplete?: () => void;
 }
 
 // ==========================================
 // Atomic & Molecular Geometry Specifications
 // ==========================================
-interface AtomNode {
+export interface AtomNode {
   sym: string;
   dx: number;
   dy: number;
@@ -25,13 +28,13 @@ interface AtomNode {
   border?: string;
 }
 
-interface BondEdge {
+export interface BondEdge {
   from: number;
   to: number;
   order?: 1 | 2 | 3;
 }
 
-interface MoleculeSpec {
+export interface MoleculeSpec {
   formula: string;
   name: string;
   atoms: AtomNode[];
@@ -40,7 +43,7 @@ interface MoleculeSpec {
   isPrecipitate?: boolean;
 }
 
-const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
+export const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
   // Diatomic Hydrogen H2
   H2: {
     formula: 'H₂',
@@ -137,7 +140,7 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
     ],
     isGas: true
   },
-  // Acid-Base: HCl / Hydronium & Chloride
+  // Hydrochloric Acid HCl
   HCl: {
     formula: 'HCl',
     name: 'Hydrochloric Acid',
@@ -171,7 +174,7 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
     ],
     bonds: [{ from: 0, to: 1, order: 1 }]
   },
-  // Single Displacement: Metallic Iron Fe
+  // Metallic Iron Fe
   Fe: {
     formula: 'Fe',
     name: 'Iron Metal',
@@ -195,7 +198,7 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
       { from: 1, to: 3, order: 1 }
     ]
   },
-  // Ferrous Sulfate FeSO4
+  // Iron Sulfate FeSO4
   FeSO4: {
     formula: 'FeSO₄',
     name: 'Iron(II) Sulfate',
@@ -205,7 +208,7 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
     ],
     bonds: [{ from: 0, to: 1, order: 1 }]
   },
-  // Precipitated Copper Cu
+  // Copper Precipitate Cu
   Cu: {
     formula: 'Cu',
     name: 'Copper Precipitate',
@@ -229,14 +232,14 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
       { from: 2, to: 3, order: 1 }
     ]
   },
-  // Thermite: Aluminum Al
+  // Aluminum Al
   Al: {
     formula: 'Al',
     name: 'Aluminum',
     atoms: [{ sym: 'Al', dx: 0, dy: 0, r: 10, color: '#94A3B8', textColor: '#0F172A', border: '#64748B' }],
     bonds: []
   },
-  // Thermite: Iron Oxide Fe2O3
+  // Iron(III) Oxide Fe2O3
   Fe2O3: {
     formula: 'Fe₂O₃',
     name: 'Iron(III) Oxide',
@@ -250,7 +253,7 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
       { from: 1, to: 2, order: 1 }
     ]
   },
-  // Alumina Al2O3
+  // Aluminum Oxide Al2O3
   Al2O3: {
     formula: 'Al₂O₃',
     name: 'Aluminum Oxide',
@@ -294,13 +297,21 @@ const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
 };
 
 // ==========================================
-// Reaction Archetypes & Dynamics Profile
+// Stoichiometric Item Definition
 // ==========================================
-interface ReactionProfile {
+export interface StoichSpecies {
+  specKey: string;
+  coeff: number;
+  formula: string;
+  name: string;
+}
+
+export interface StoichiometricReactionProfile {
   id: string;
   name: string;
-  reactants: string[];
-  products: string[];
+  equation: string;
+  reactants: StoichSpecies[];
+  products: StoichSpecies[];
   energyType: 'exothermic' | 'endothermic';
   tempBase: number;
   tempPeak: number;
@@ -308,9 +319,10 @@ interface ReactionProfile {
   hasBubbles: boolean;
   hasPrecipitate: boolean;
   colorTheme: string;
+  batches: number; // default number of batches for full visual beaker representation
 }
 
-function resolveReactionProfile(eq: string): ReactionProfile {
+export function resolveStoichiometricProfile(eq: string): StoichiometricReactionProfile {
   const clean = eq.toLowerCase();
 
   // Water Synthesis 2H2 + O2 -> 2H2O
@@ -318,15 +330,22 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'water-synthesis',
       name: 'Formation of Water (Covalent Synthesis)',
-      reactants: ['H2', 'H2', 'O2'],
-      products: ['H2O', 'H2O'],
+      equation: '2H₂ + O₂ → 2H₂O',
+      reactants: [
+        { specKey: 'H2', coeff: 2, formula: 'H₂', name: 'Hydrogen' },
+        { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen' }
+      ],
+      products: [
+        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 280,
       hasSparks: true,
       hasBubbles: false,
       hasPrecipitate: false,
-      colorTheme: '#DC2626'
+      colorTheme: '#DC2626',
+      batches: 4 // yields 8 H2 + 4 O2 -> 8 H2O
     };
   }
 
@@ -335,15 +354,23 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'methane-combustion',
       name: 'Hydrocarbon Combustion (High Exothermic)',
-      reactants: ['CH4', 'O2', 'O2'],
-      products: ['CO2', 'H2O', 'H2O'],
+      equation: 'CH₄ + 2O₂ → CO₂ + 2H₂O',
+      reactants: [
+        { specKey: 'CH4', coeff: 1, formula: 'CH₄', name: 'Methane' },
+        { specKey: 'O2', coeff: 2, formula: 'O₂', name: 'Oxygen' }
+      ],
+      products: [
+        { specKey: 'CO2', coeff: 1, formula: 'CO₂', name: 'Carbon Dioxide' },
+        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 620,
       hasSparks: true,
       hasBubbles: true,
       hasPrecipitate: false,
-      colorTheme: '#EA580C'
+      colorTheme: '#EA580C',
+      batches: 3 // yields 3 CH4 + 6 O2 -> 3 CO2 + 6 H2O
     };
   }
 
@@ -352,15 +379,22 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'haber-process',
       name: 'Haber-Bosch Ammonia Synthesis (Catalyzed)',
-      reactants: ['N2', 'H2', 'H2', 'H2'],
-      products: ['NH3', 'NH3'],
+      equation: 'N₂ + 3H₂ → 2NH₃',
+      reactants: [
+        { specKey: 'N2', coeff: 1, formula: 'N₂', name: 'Nitrogen' },
+        { specKey: 'H2', coeff: 3, formula: 'H₂', name: 'Hydrogen' }
+      ],
+      products: [
+        { specKey: 'NH3', coeff: 2, formula: 'NH₃', name: 'Ammonia' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 450,
       hasSparks: true,
       hasBubbles: true,
       hasPrecipitate: false,
-      colorTheme: '#2563EB'
+      colorTheme: '#2563EB',
+      batches: 3 // yields 3 N2 + 9 H2 -> 6 NH3
     };
   }
 
@@ -369,15 +403,23 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'neutralization',
       name: 'Acid-Base Aqueous Neutralization',
-      reactants: ['HCl', 'NaOH'],
-      products: ['NaCl', 'H2O'],
+      equation: 'HCl + NaOH → NaCl + H₂O',
+      reactants: [
+        { specKey: 'HCl', coeff: 1, formula: 'HCl', name: 'Hydrochloric Acid' },
+        { specKey: 'NaOH', coeff: 1, formula: 'NaOH', name: 'Sodium Hydroxide' }
+      ],
+      products: [
+        { specKey: 'NaCl', coeff: 1, formula: 'NaCl', name: 'Sodium Chloride' },
+        { specKey: 'H2O', coeff: 1, formula: 'H₂O', name: 'Water' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 65,
       hasSparks: false,
       hasBubbles: false,
       hasPrecipitate: false,
-      colorTheme: '#16A34A'
+      colorTheme: '#16A34A',
+      batches: 5 // yields 5 HCl + 5 NaOH -> 5 NaCl + 5 H2O
     };
   }
 
@@ -386,15 +428,23 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'copper-displacement',
       name: 'Single Displacement & Redox Precipitation',
-      reactants: ['Fe', 'CuSO4'],
-      products: ['FeSO4', 'Cu'],
+      equation: 'Fe + CuSO₄ → FeSO₄ + Cu',
+      reactants: [
+        { specKey: 'Fe', coeff: 1, formula: 'Fe', name: 'Iron' },
+        { specKey: 'CuSO4', coeff: 1, formula: 'CuSO₄', name: 'Copper Sulfate' }
+      ],
+      products: [
+        { specKey: 'FeSO4', coeff: 1, formula: 'FeSO₄', name: 'Iron(II) Sulfate' },
+        { specKey: 'Cu', coeff: 1, formula: 'Cu', name: 'Copper Precipitate' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 55,
       hasSparks: true,
       hasBubbles: false,
       hasPrecipitate: true,
-      colorTheme: '#C2410C'
+      colorTheme: '#C2410C',
+      batches: 5 // yields 5 Fe + 5 CuSO4 -> 5 FeSO4 + 5 Cu
     };
   }
 
@@ -403,15 +453,22 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'peroxide-decomposition',
       name: 'Catalytic Effervescent Decomposition',
-      reactants: ['H2O2', 'H2O2'],
-      products: ['H2O', 'H2O', 'O2'],
+      equation: '2H₂O₂ → 2H₂O + O₂',
+      reactants: [
+        { specKey: 'H2O2', coeff: 2, formula: 'H₂O₂', name: 'Hydrogen Peroxide' }
+      ],
+      products: [
+        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' },
+        { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen Gas' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 85,
       hasSparks: false,
       hasBubbles: true,
       hasPrecipitate: false,
-      colorTheme: '#0284C7'
+      colorTheme: '#0284C7',
+      batches: 4 // yields 8 H2O2 -> 8 H2O + 4 O2
     };
   }
 
@@ -420,15 +477,23 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'thermite',
       name: 'Thermite Incandescent Redox',
-      reactants: ['Al', 'Al', 'Fe2O3'],
-      products: ['Al2O3', 'Fe', 'Fe'],
+      equation: '2Al + Fe₂O₃ → Al₂O₃ + 2Fe',
+      reactants: [
+        { specKey: 'Al', coeff: 2, formula: 'Al', name: 'Aluminum' },
+        { specKey: 'Fe2O3', coeff: 1, formula: 'Fe₂O₃', name: 'Iron(III) Oxide' }
+      ],
+      products: [
+        { specKey: 'Al2O3', coeff: 1, formula: 'Al₂O₃', name: 'Aluminum Oxide' },
+        { specKey: 'Fe', coeff: 2, formula: 'Fe', name: 'Molten Iron' }
+      ],
       energyType: 'exothermic',
       tempBase: 25,
       tempPeak: 1450,
       hasSparks: true,
       hasBubbles: false,
       hasPrecipitate: true,
-      colorTheme: '#F59E0B'
+      colorTheme: '#F59E0B',
+      batches: 3 // yields 6 Al + 3 Fe2O3 -> 3 Al2O3 + 6 Fe
     };
   }
 
@@ -437,31 +502,45 @@ function resolveReactionProfile(eq: string): ReactionProfile {
     return {
       id: 'calcination',
       name: 'Limestone Endothermic Calcination',
-      reactants: ['CaCO3'],
-      products: ['CaO', 'CO2'],
+      equation: 'CaCO₃ → CaO + CO₂',
+      reactants: [
+        { specKey: 'CaCO3', coeff: 1, formula: 'CaCO₃', name: 'Calcium Carbonate' }
+      ],
+      products: [
+        { specKey: 'CaO', coeff: 1, formula: 'CaO', name: 'Calcium Oxide' },
+        { specKey: 'CO2', coeff: 1, formula: 'CO₂', name: 'Carbon Dioxide Gas' }
+      ],
       energyType: 'endothermic',
       tempBase: 25,
       tempPeak: 880,
       hasSparks: false,
       hasBubbles: true,
       hasPrecipitate: true,
-      colorTheme: '#4F46E5'
+      colorTheme: '#4F46E5',
+      batches: 5 // yields 5 CaCO3 -> 5 CaO + 5 CO2
     };
   }
 
-  // Default Fallback Reaction
+  // Default Fallback Reaction: Water Synthesis 2H2 + O2 -> 2H2O
   return {
     id: 'general-synthesis',
     name: 'Chemical Recombination & Bond Synthesis',
-    reactants: ['H2', 'O2'],
-    products: ['H2O'],
+    equation: '2H₂ + O₂ → 2H₂O',
+    reactants: [
+      { specKey: 'H2', coeff: 2, formula: 'H₂', name: 'Hydrogen' },
+      { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen' }
+    ],
+    products: [
+      { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
+    ],
     energyType: 'exothermic',
     tempBase: 25,
     tempPeak: 120,
     hasSparks: true,
     hasBubbles: false,
     hasPrecipitate: false,
-    colorTheme: '#4E5B47'
+    colorTheme: '#4E5B47',
+    batches: 4
   };
 }
 
@@ -472,15 +551,56 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
   energyType,
   deltaH,
   reactants,
-  onReset
+  onReset,
+  onComplete
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [showIllustration, setShowIllustration] = useState(false);
   const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
   const [temperature, setTemperature] = useState<number>(25);
 
-  const profile = useMemo(() => resolveReactionProfile(equation), [equation]);
+  const profile = useMemo(() => resolveStoichiometricProfile(equation), [equation]);
 
+  // Live stoichiometric counters for the HUD
+  const [reactantsRemaining, setReactantsRemaining] = useState<Record<string, number>>({});
+  const [productsGenerated, setProductsGenerated] = useState<Record<string, number>>({});
+  const [completedBatchesCount, setCompletedBatchesCount] = useState<number>(0);
+
+  // Setup / reset simulation state ref
+  const simStateRef = useRef<{
+    completedBatches: number;
+    totalBatches: number;
+    lastReactionTime: number;
+  }>({
+    completedBatches: 0,
+    totalBatches: profile.batches,
+    lastReactionTime: 0
+  });
+
+  useEffect(() => {
+    simStateRef.current = {
+      completedBatches: status === 'complete' ? profile.batches : 0,
+      totalBatches: profile.batches,
+      lastReactionTime: 0
+    };
+    setCompletedBatchesCount(status === 'complete' ? profile.batches : 0);
+
+    // Initial counts based on equation stoichiometry
+    const rCounts: Record<string, number> = {};
+    const pCounts: Record<string, number> = {};
+
+    profile.reactants.forEach(r => {
+      rCounts[r.specKey] = status === 'complete' ? 0 : r.coeff * profile.batches;
+    });
+    profile.products.forEach(p => {
+      pCounts[p.specKey] = status === 'complete' ? p.coeff * profile.batches : 0;
+    });
+
+    setReactantsRemaining(rCounts);
+    setProductsGenerated(pCounts);
+  }, [profile, status]);
+
+  // Main Canvas Animation Effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -502,18 +622,16 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       ctx.scale(dpr, dpr);
     };
 
-    // ==========================================
-    // Molecule Simulation Entity
-    // ==========================================
     interface SimMolecule {
       id: number;
+      specKey: string;
+      spec: MoleculeSpec;
       x: number;
       y: number;
       vx: number;
       vy: number;
       angle: number;
       vAngle: number;
-      spec: MoleculeSpec;
       isProduct: boolean;
       flash: number;
       settled: boolean;
@@ -550,14 +668,13 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
     let sparks: Spark[] = [];
     let bubbles: Bubble[] = [];
     let shockwaves: Shockwave[] = [];
-    let currentTemp = 25;
+    let currentTemp = profile.tempBase;
     let nextId = 1;
 
-    // Beaker boundary box
     const getBeakerBounds = () => {
-      const padX = Math.max(30, width * 0.08);
-      const topY = 45;
-      const botY = height - 40;
+      const padX = Math.max(28, width * 0.08);
+      const topY = 46;
+      const botY = height - 38;
       return {
         left: padX,
         right: width - padX,
@@ -568,128 +685,201 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       };
     };
 
-    // Populate initial reactant molecules
-    const initReactants = () => {
+    // Populate initial stoichiometric molecules strictly in accordance with equation!
+    const initSimulation = () => {
       molecules = [];
       sparks = [];
       bubbles = [];
       shockwaves = [];
-      currentTemp = profile.tempBase;
-      setTemperature(profile.tempBase);
+      currentTemp = status === 'complete' ? (profile.energyType === 'exothermic' ? profile.tempPeak * 0.75 : profile.tempPeak) : profile.tempBase;
+      setTemperature(Math.round(currentTemp));
 
       const bounds = getBeakerBounds();
-      const countEach = status === 'complete' ? 0 : 7;
+      const batches = profile.batches;
 
-      profile.reactants.forEach(specKey => {
-        const spec = MOLECULE_SPECS[specKey] || MOLECULE_SPECS['H2'];
-        for (let i = 0; i < countEach; i++) {
+      if (status === 'complete') {
+        // Direct complete state: only product molecules in exact equation stoichiometry!
+        profile.products.forEach(p => {
+          const spec = MOLECULE_SPECS[p.specKey] || MOLECULE_SPECS['H2O'];
+          const totalProducts = p.coeff * batches;
+          for (let i = 0; i < totalProducts; i++) {
+            molecules.push({
+              id: nextId++,
+              specKey: p.specKey,
+              spec,
+              x: bounds.left + 24 + Math.random() * (bounds.width - 48),
+              y: spec.isPrecipitate
+                ? bounds.bottom - 12 - (i % 3) * 6
+                : bounds.top + 30 + Math.random() * (bounds.height - 50),
+              vx: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.9,
+              vy: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.9,
+              angle: Math.random() * Math.PI * 2,
+              vAngle: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.03,
+              isProduct: true,
+              flash: 0,
+              settled: Boolean(spec.isPrecipitate)
+            });
+          }
+        });
+      } else {
+        // Initial state: only reactant molecules in exact equation stoichiometry!
+        profile.reactants.forEach(r => {
+          const spec = MOLECULE_SPECS[r.specKey] || MOLECULE_SPECS['H2'];
+          const totalReactants = r.coeff * batches;
+          for (let i = 0; i < totalReactants; i++) {
+            molecules.push({
+              id: nextId++,
+              specKey: r.specKey,
+              spec,
+              x: bounds.left + 24 + Math.random() * (bounds.width - 48),
+              y: bounds.top + 30 + Math.random() * (bounds.height - 50),
+              vx: (Math.random() - 0.5) * 1.2,
+              vy: (Math.random() - 0.5) * 1.2,
+              angle: Math.random() * Math.PI * 2,
+              vAngle: (Math.random() - 0.5) * 0.04,
+              isProduct: false,
+              flash: 0,
+              settled: false
+            });
+          }
+        });
+      }
+    };
+
+    // Execute one stoichiometric turnover batch strictly according to the equation
+    const executeStoichiometricBatch = () => {
+      if (simStateRef.current.completedBatches >= profile.batches) {
+        return;
+      }
+
+      // Check if we have enough of each reactant species
+      const toRemove: SimMolecule[] = [];
+      let canReact = true;
+
+      for (const r of profile.reactants) {
+        const available = molecules.filter(
+          m => !m.isProduct && m.specKey === r.specKey && !toRemove.some(rem => rem.id === m.id)
+        );
+        if (available.length < r.coeff) {
+          canReact = false;
+          break;
+        }
+        toRemove.push(...available.slice(0, r.coeff));
+      }
+
+      if (!canReact || toRemove.length === 0) {
+        return;
+      }
+
+      // Determine reaction collision epicenter
+      let avgX = 0;
+      let avgY = 0;
+      toRemove.forEach(m => {
+        avgX += m.x;
+        avgY += m.y;
+      });
+      avgX /= toRemove.length;
+      avgY /= toRemove.length;
+
+      // Remove the exact stoichiometric reactant molecules
+      const removeIds = new Set(toRemove.map(m => m.id));
+      molecules = molecules.filter(m => !removeIds.has(m.id));
+
+      // Generate the exact stoichiometric product molecules from the epicenter!
+      const bounds = getBeakerBounds();
+      profile.products.forEach(p => {
+        const spec = MOLECULE_SPECS[p.specKey] || MOLECULE_SPECS['H2O'];
+        for (let i = 0; i < p.coeff; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1.0 + Math.random() * 1.2;
           molecules.push({
             id: nextId++,
-            x: bounds.left + 30 + Math.random() * (bounds.width - 60),
-            y: bounds.top + 30 + Math.random() * (bounds.height - 60),
-            vx: (Math.random() - 0.5) * 1.2,
-            vy: (Math.random() - 0.5) * 1.2,
-            angle: Math.random() * Math.PI * 2,
-            vAngle: (Math.random() - 0.5) * 0.04,
+            specKey: p.specKey,
             spec,
-            isProduct: false,
-            flash: 0,
+            x: avgX + (Math.random() - 0.5) * 20,
+            y: avgY + (Math.random() - 0.5) * 20,
+            vx: spec.isPrecipitate ? (Math.random() - 0.5) * 0.3 : Math.cos(angle) * speed,
+            vy: spec.isPrecipitate ? 1.0 + Math.random() * 0.8 : Math.sin(angle) * speed,
+            angle,
+            vAngle: (Math.random() - 0.5) * 0.05,
+            isProduct: true,
+            flash: 1.0,
             settled: false
           });
         }
       });
 
-      // If initially loaded in complete status, spawn products directly
-      if (status === 'complete') {
-        initProducts();
-      }
-    };
-
-    const initProducts = () => {
-      const bounds = getBeakerBounds();
-      profile.products.forEach(specKey => {
-        const spec = MOLECULE_SPECS[specKey] || MOLECULE_SPECS['H2O'];
-        for (let i = 0; i < 7; i++) {
-          molecules.push({
-            id: nextId++,
-            x: bounds.left + 30 + Math.random() * (bounds.width - 60),
-            y: spec.isPrecipitate ? bounds.bottom - 15 - Math.random() * 20 : bounds.top + 30 + Math.random() * (bounds.height - 60),
-            vx: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.9,
-            vy: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.9,
-            angle: Math.random() * Math.PI * 2,
-            vAngle: spec.isPrecipitate ? 0 : (Math.random() - 0.5) * 0.03,
-            spec,
-            isProduct: true,
-            flash: 0,
-            settled: Boolean(spec.isPrecipitate)
-          });
-        }
-      });
-    };
-
-    // Trigger synthesis of matching reactant collision
-    const triggerSynthesis = (m1: SimMolecule, m2: SimMolecule) => {
-      const productKeys = profile.products;
-      const targetKey = productKeys[Math.floor(Math.random() * productKeys.length)] || 'H2O';
-      const productSpec = MOLECULE_SPECS[targetKey] || MOLECULE_SPECS['H2O'];
-
-      const midX = (m1.x + m2.x) / 2;
-      const midY = (m1.y + m2.y) / 2;
-
-      // Transform m1 into the product molecule
-      m1.spec = productSpec;
-      m1.isProduct = true;
-      m1.flash = 1.0;
-      m1.vx = (Math.random() - 0.5) * 1.5;
-      m1.vy = (Math.random() - 0.5) * 1.5;
-
-      // If precipitate, let it gradually sink
-      if (productSpec.isPrecipitate) {
-        m1.vy = 0.8 + Math.random() * 0.6;
-        m1.vx = (Math.random() - 0.5) * 0.3;
-      }
-
-      // Remove m2
-      molecules = molecules.filter(m => m.id !== m2.id);
-
-      // Thermal shockwave
+      // Visual effects: Thermal shockwave
       shockwaves.push({
-        x: midX,
-        y: midY,
-        r: 4,
-        maxR: profile.energyType === 'exothermic' ? 45 : 30,
-        alpha: 0.8,
-        color: profile.energyType === 'exothermic' ? '255, 120, 40' : '96, 165, 250'
+        x: avgX,
+        y: avgY,
+        r: 6,
+        maxR: profile.energyType === 'exothermic' ? 50 : 35,
+        alpha: 0.85,
+        color: profile.energyType === 'exothermic' ? '255, 120, 30' : '96, 165, 250'
       });
 
-      // Sparks / incandescent particles
+      // Sparks
       if (profile.hasSparks) {
-        for (let s = 0; s < 7; s++) {
+        for (let s = 0; s < 10; s++) {
           sparks.push({
-            x: midX,
-            y: midY,
-            vx: (Math.random() - 0.5) * 4,
-            vy: (Math.random() - 0.5) * 4 - 0.5,
-            alpha: 1,
-            color: Math.random() > 0.5 ? '#F59E0B' : '#DC2626',
-            size: 2 + Math.random() * 2
+            x: avgX,
+            y: avgY,
+            vx: (Math.random() - 0.5) * 5,
+            vy: (Math.random() - 0.5) * 5 - 0.8,
+            alpha: 1.0,
+            color: Math.random() > 0.4 ? '#F59E0B' : '#DC2626',
+            size: 2.2 + Math.random() * 2.5
           });
         }
       }
 
-      // Gas bubbles
-      if (profile.hasBubbles || productSpec.isGas) {
-        bubbles.push({
-          x: midX + (Math.random() - 0.5) * 20,
-          y: midY,
-          r: 3 + Math.random() * 4,
-          vy: -1.2 - Math.random() * 1.2,
-          drift: (Math.random() - 0.5) * 0.4
-        });
+      // Bubbles for gas evolution
+      if (profile.hasBubbles || profile.products.some(p => MOLECULE_SPECS[p.specKey]?.isGas)) {
+        for (let b = 0; b < 4; b++) {
+          bubbles.push({
+            x: avgX + (Math.random() - 0.5) * 30,
+            y: avgY + (Math.random() - 0.5) * 15,
+            r: 3 + Math.random() * 4,
+            vy: -1.3 - Math.random() * 1.5,
+            drift: (Math.random() - 0.5) * 0.5
+          });
+        }
+      }
+
+      simStateRef.current.completedBatches++;
+      const currentCompleted = simStateRef.current.completedBatches;
+      setCompletedBatchesCount(currentCompleted);
+
+      // Update HUD reactant and product counters
+      const remaining: Record<string, number> = {};
+      const generated: Record<string, number> = {};
+
+      profile.reactants.forEach(r => {
+        remaining[r.specKey] = Math.max(0, (profile.batches - currentCompleted) * r.coeff);
+      });
+      profile.products.forEach(p => {
+        generated[p.specKey] = currentCompleted * p.coeff;
+      });
+
+      setReactantsRemaining(remaining);
+      setProductsGenerated(generated);
+
+      // Trigger completion confetti & callback if all batches finished
+      if (currentCompleted >= profile.batches) {
+        setTimeout(() => {
+          confetti({
+            particleCount: 60,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#4E5B47', '#6F7F63', '#8FA882', '#E6E2D3', '#D97706']
+          });
+          onComplete?.();
+        }, 500);
       }
     };
 
-    initReactants();
+    initSimulation();
 
     // ==========================================
     // Render Loop
@@ -700,19 +890,28 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       ctx.clearRect(0, 0, width, height);
 
       const bounds = getBeakerBounds();
-      const speedMult = (status === 'running' ? 2.6 : status === 'complete' ? 1.0 : 0.7) * simSpeed;
+      const speedMult = (status === 'running' ? 2.2 : status === 'complete' ? 1.0 : 0.75) * simSpeed;
 
-      // Dynamically ramp temperature
-      if (status === 'running') {
-        currentTemp += (profile.tempPeak - currentTemp) * 0.02;
-      } else if (status === 'complete') {
-        const eqTemp = profile.energyType === 'exothermic' ? profile.tempPeak * 0.75 : profile.tempPeak;
-        currentTemp += (eqTemp - currentTemp) * 0.03;
+      // Automated stoichiometric reaction timer during 'running'
+      if (status === 'running' && simStateRef.current.completedBatches < profile.batches) {
+        const interval = Math.max(30, Math.floor(65 / simSpeed));
+        if (frame % interval === 0) {
+          executeStoichiometricBatch();
+        }
+      }
+
+      // Dynamic temperature curve
+      if (status === 'running' || status === 'complete') {
+        const target =
+          profile.energyType === 'exothermic'
+            ? profile.tempBase + (profile.tempPeak - profile.tempBase) * (simStateRef.current.completedBatches / profile.batches)
+            : profile.tempBase - (profile.tempBase - 5) * (simStateRef.current.completedBatches / profile.batches);
+        currentTemp += (target - currentTemp) * 0.05;
       } else {
         currentTemp += (profile.tempBase - currentTemp) * 0.05;
       }
 
-      if (frame % 8 === 0) {
+      if (frame % 6 === 0) {
         setTemperature(Math.round(currentTemp));
       }
 
@@ -723,7 +922,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
-      // Top rim of beaker with spout
+      // Rim with spout
       ctx.beginPath();
       ctx.moveTo(bounds.left - 12, bounds.top - 6);
       ctx.lineTo(bounds.left, bounds.top);
@@ -741,10 +940,11 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       ctx.lineTo(bounds.right, bounds.top);
       ctx.stroke();
 
-      // Fluid Meniscus / Liquid fill
-      ctx.fillStyle = profile.energyType === 'exothermic' && status === 'running'
-        ? 'rgba(254, 243, 199, 0.35)'
-        : 'rgba(240, 244, 238, 0.45)';
+      // Fluid Fill
+      ctx.fillStyle =
+        profile.energyType === 'exothermic' && (status === 'running' || status === 'complete')
+          ? 'rgba(254, 243, 199, 0.38)'
+          : 'rgba(235, 242, 232, 0.45)';
       ctx.beginPath();
       ctx.moveTo(bounds.left + 2, bounds.top + 20);
       ctx.lineTo(bounds.left + 2, bounds.bottom - 16);
@@ -755,7 +955,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       ctx.closePath();
       ctx.fill();
 
-      // Glassware Graduations & Volume Ticks
+      // Beaker Graduations
       ctx.strokeStyle = 'rgba(111, 127, 99, 0.45)';
       ctx.fillStyle = '#5F6F5B';
       ctx.font = '10px Inter, sans-serif';
@@ -774,15 +974,15 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
         ctx.moveTo(bounds.left + 2, y);
         ctx.lineTo(bounds.left + 16, y);
         ctx.stroke();
-        ctx.fillText(g.label, bounds.left + 22, y + 3.5);
+        ctx.fillText(g.label, bounds.left + 20, y + 3.5);
       });
       ctx.restore();
 
-      // 2. Active Shockwaves & Heat Waves
+      // 2. Active Shockwaves
       for (let w = shockwaves.length - 1; w >= 0; w--) {
         const wave = shockwaves[w];
-        wave.r += 1.8 * simSpeed;
-        wave.alpha -= 0.025 * simSpeed;
+        wave.r += 2.0 * simSpeed;
+        wave.alpha -= 0.03 * simSpeed;
         if (wave.alpha <= 0 || wave.r >= wave.maxR) {
           shockwaves.splice(w, 1);
           continue;
@@ -794,16 +994,16 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
         ctx.stroke();
       }
 
-      // 3. Bubbles in Gas Evolution Reactions
+      // 3. Bubbles in Gas Evolution
       for (let b = bubbles.length - 1; b >= 0; b--) {
         const bubble = bubbles[b];
         bubble.y += bubble.vy * simSpeed;
         bubble.x += bubble.drift;
-        if (bubble.y <= bounds.top + 20) {
+        if (bubble.y <= bounds.top + 16) {
           bubbles.splice(b, 1);
           continue;
         }
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
         ctx.strokeStyle = 'rgba(111, 127, 99, 0.5)';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -821,10 +1021,10 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
           m.y += m.vy * speedMult;
           m.angle += m.vAngle * speedMult;
 
-          // Precipitate settling down to the bottom
+          // Precipitate settling down to bottom
           if (m.spec.isPrecipitate && m.isProduct) {
             if (m.y >= bounds.bottom - 16) {
-              m.y = bounds.bottom - 14 - (m.id % 4) * 4;
+              m.y = bounds.bottom - 12 - (m.id % 4) * 4;
               m.vx = 0;
               m.vy = 0;
               m.vAngle = 0;
@@ -842,32 +1042,12 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
             m.vx = -Math.abs(m.vx);
           }
 
-          if (m.y < bounds.top + 25) {
-            m.y = bounds.top + 25;
+          if (m.y < bounds.top + 24) {
+            m.y = bounds.top + 24;
             m.vy = Math.abs(m.vy);
           } else if (m.y > bounds.bottom - pad && !m.settled) {
             m.y = bounds.bottom - pad;
             m.vy = -Math.abs(m.vy);
-          }
-        }
-
-        // Inter-molecular collision & synthesis triggers during 'running'
-        if (status === 'running' && !m.isProduct && !m.settled) {
-          for (let j = i + 1; j < molecules.length; j++) {
-            const m2 = molecules[j];
-            if (!m2.isProduct && !m2.settled) {
-              const dx = m.x - m2.x;
-              const dy = m.y - m2.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-
-              if (dist < 26) {
-                // If they are different reactant species, trigger bond rearrangement
-                if (m.spec.formula !== m2.spec.formula || profile.reactants.length === 1) {
-                  triggerSynthesis(m, m2);
-                  break;
-                }
-              }
-            }
           }
         }
 
@@ -878,10 +1058,10 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
 
         // Activation Energy Flash Glow
         if (m.flash > 0) {
-          m.flash -= 0.03 * simSpeed;
+          m.flash -= 0.035 * simSpeed;
           ctx.beginPath();
-          ctx.arc(0, 0, 24, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 230, 150, ${m.flash * 0.7})`;
+          ctx.arc(0, 0, 26, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 235, 160, ${m.flash * 0.75})`;
           ctx.fill();
         }
 
@@ -946,7 +1126,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
         const spark = sparks[s];
         spark.x += spark.vx * simSpeed;
         spark.y += spark.vy * simSpeed;
-        spark.vy += 0.08 * simSpeed; // gravity
+        spark.vy += 0.08 * simSpeed;
         spark.alpha -= 0.03 * simSpeed;
 
         if (spark.alpha <= 0) {
@@ -964,22 +1144,21 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
 
       // 6. Draw HUD: Live Temperature & Reaction Phase Status
       ctx.save();
-      // Vessel Status Pill
       ctx.font = '600 11px Inter, sans-serif';
       const statusText =
         status === 'running'
-          ? '⚡ ACTIVATION & BOND SYNTHESIS'
+          ? `⚡ REACTING EQUATION (${simStateRef.current.completedBatches}/${profile.batches} BATCHES)`
           : status === 'complete'
-          ? '✓ THERMODYNAMIC EQUILIBRIUM'
-          : '● REACTANTS IN SOLUTION';
+          ? '✓ PRODUCTS REACHED EQUILIBRIUM'
+          : '● REACTIVE INPUTS IN VESSEL';
       const statusColor =
         status === 'running' ? '#D97706' : status === 'complete' ? '#16A34A' : '#4E5B47';
 
-      ctx.fillStyle = 'rgba(250, 248, 245, 0.92)';
+      ctx.fillStyle = 'rgba(250, 248, 245, 0.94)';
       ctx.strokeStyle = '#6F7F63';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.roundRect(bounds.left + 2, 12, 230, 24, 12);
+      ctx.roundRect(bounds.left + 2, 12, 260, 24, 12);
       ctx.fill();
       ctx.stroke();
 
@@ -989,7 +1168,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       // Temperature Gauge Badge
       const tempColor =
         currentTemp > 200 ? '#DC2626' : currentTemp > 60 ? '#D97706' : '#2563EB';
-      ctx.fillStyle = 'rgba(250, 248, 245, 0.92)';
+      ctx.fillStyle = 'rgba(250, 248, 245, 0.94)';
       ctx.beginPath();
       ctx.roundRect(bounds.right - 120, 12, 116, 24, 12);
       ctx.fill();
@@ -997,7 +1176,6 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
 
       ctx.fillStyle = tempColor;
       ctx.fillText(`🌡️ ${Math.round(currentTemp)} °C`, bounds.right - 108, 28);
-
       ctx.restore();
 
       animId = requestAnimationFrame(render);
@@ -1011,25 +1189,29 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
     };
-  }, [status, profile, simSpeed]);
+  }, [status, profile, simSpeed, onComplete]);
 
+  // Compute active species for species legend
   const activeSpecs = useMemo(() => {
-    const set = new Set<string>();
-    if (status === 'complete') {
-      profile.products.forEach(p => set.add(p));
-    } else {
-      profile.reactants.forEach(r => set.add(r));
-      if (status === 'running') profile.products.forEach(p => set.add(p));
-    }
-    return Array.from(set).map(k => MOLECULE_SPECS[k]).filter(Boolean);
-  }, [status, profile]);
+    const list: MoleculeSpec[] = [];
+    profile.reactants.forEach(r => {
+      if (MOLECULE_SPECS[r.specKey]) list.push(MOLECULE_SPECS[r.specKey]);
+    });
+    profile.products.forEach(p => {
+      if (MOLECULE_SPECS[p.specKey] && !list.some(s => s.formula === MOLECULE_SPECS[p.specKey].formula)) {
+        list.push(MOLECULE_SPECS[p.specKey]);
+      }
+    });
+    return list;
+  }, [profile]);
 
   return (
     <div
+      className="no-scrollbar"
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '440px',
+        minHeight: '480px',
         height: '100%',
         background: '#FAF8F5',
         borderRadius: '16px',
@@ -1093,11 +1275,12 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
       </div>
 
       {showIllustration ? (
-        <div style={{ width: '100%', height: '100%', position: 'relative', minHeight: '440px', background: '#EDEAE1' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', minHeight: '480px', background: '#EDEAE1' }}>
           <img
-            src="assets/images/lab-studio.png"
-            alt="Chemistry Reaction Studio Apparatus"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
+            src="assets/images/ghibli-botanical-lab.png"
+            alt="Botanical Chemistry Greenhouse Setup generated via Nano Banana"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+            loading="lazy"
           />
           <div
             style={{
@@ -1111,76 +1294,148 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
               fontSize: '0.92rem'
             }}
           >
-            <strong>Reaction Studio Apparatus</strong> — Classical distillation retort bench rendered with botanical parchment aesthetic.
+            <strong>Botanical Reaction Studio</strong> — A harmonious laboratory framed with cascading wisteria blossoms, where molecular reactions strictly respect chemical stoichiometry.
           </div>
         </div>
       ) : (
         <>
+          {/* Reaction Live Equation Ribbon (Strict Equation Respect) */}
+          <div
+            style={{
+              background: 'rgba(220, 224, 207, 0.65)',
+              borderBottom: '1.5px solid #6F7F63',
+              padding: '10px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px'
+            }}
+          >
+            {/* Reactants side */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B' }}>
+                Reactants (In):
+              </span>
+              {profile.reactants.map((r, i) => (
+                <span
+                  key={r.specKey}
+                  style={{
+                    background: status === 'complete' ? '#FAF8F5' : '#4E5B47',
+                    color: status === 'complete' ? '#5F6F5B' : '#FAF8F5',
+                    border: '1px solid #6F7F63',
+                    borderRadius: '8px',
+                    padding: '2px 8px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <span>{r.coeff > 1 ? `${r.coeff} ` : ''}{r.formula}</span>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.85 }}>({reactantsRemaining[r.specKey] ?? (r.coeff * profile.batches)})</span>
+                </span>
+              ))}
+            </div>
+
+            {/* Reaction arrow */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#4E5B47', fontWeight: 700, fontSize: '0.9rem' }}>
+              <span>⟶</span>
+              <span style={{ fontSize: '0.72rem', background: '#FAF8F5', border: '1px solid #6F7F63', padding: '1px 6px', borderRadius: '4px' }}>
+                {status === 'running' ? 'Bond Exchange ⚡' : profile.energyType === 'exothermic' ? 'Exothermic' : 'Endothermic'}
+              </span>
+              <span>⟶</span>
+            </div>
+
+            {/* Products side */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B' }}>
+                Products (Out):
+              </span>
+              {profile.products.map(p => (
+                <span
+                  key={p.specKey}
+                  style={{
+                    background: status === 'complete' ? '#16A34A' : '#FAF8F5',
+                    color: status === 'complete' ? '#FAF8F5' : '#4E5B47',
+                    border: '1px solid #6F7F63',
+                    borderRadius: '8px',
+                    padding: '2px 8px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <span>{p.coeff > 1 ? `${p.coeff} ` : ''}{p.formula}</span>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.85 }}>({productsGenerated[p.specKey] ?? 0})</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
           <canvas
             ref={canvasRef}
             style={{
               width: '100%',
               height: '100%',
-              minHeight: '380px',
+              minHeight: '340px',
               display: 'block',
               flex: 1
             }}
           />
 
-          {/* Bottom Species Legend Bar */}
+          {/* Bottom Live Stoichiometry & Atom Conservation Board */}
           <div
             style={{
-              background: 'rgba(230, 226, 211, 0.92)',
+              background: 'rgba(230, 226, 211, 0.95)',
               borderTop: '1px solid #6F7F63',
-              padding: '8px 16px',
+              padding: '10px 16px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '8px'
+              gap: '10px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B' }}>
-                Active Species:
+                Conservation of Mass:
               </span>
-              {activeSpecs.map(spec => (
-                <div
-                  key={spec.formula}
-                  style={{
-                    background: '#FAF8F5',
-                    border: '1px solid #6F7F63',
-                    borderRadius: '12px',
-                    padding: '2px 8px',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: '#4E5B47'
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '8px',
-                      height: '8px',
-                      borderRadius: '50%',
-                      background: spec.atoms[0]?.color || '#4E5B47',
-                      border: '1px solid #334155'
-                    }}
-                  />
-                  <span>{spec.formula}</span>
-                  <span style={{ opacity: 0.65, fontWeight: 500, fontSize: '0.7rem' }}>({spec.name})</span>
-                </div>
-              ))}
+              <div
+                style={{
+                  background: '#FAF8F5',
+                  border: '1px solid #6F7F63',
+                  borderRadius: '12px',
+                  padding: '3px 10px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '0.76rem',
+                  fontWeight: 600,
+                  color: '#4E5B47'
+                }}
+              >
+                <span>✓ Atoms Balanced & Conserved</span>
+                <span style={{ opacity: 0.6 }}>•</span>
+                <span>{status === 'complete' ? '100% Equation Stoichiometric Yield' : 'Ready to Transform'}</span>
+              </div>
             </div>
 
-            <div style={{ fontSize: '0.75rem', color: '#5F6F5B', fontWeight: 600 }}>
-              {status === 'complete'
-                ? `Reaction Complete • ${deltaH || '-483.6 kJ/mol'}`
-                : status === 'running'
-                ? 'Synthesizing Bonds & Exchanging Enthalpy...'
-                : 'Click [Run Reaction] to Begin'}
+            <div style={{ fontSize: '0.78rem', color: '#4E5B47', fontWeight: 600 }}>
+              {status === 'complete' ? (
+                <span style={{ color: '#16A34A', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span>✓</span> Equation Equilibrium Reached ({deltaH || '-483.6 kJ/mol'})
+                </span>
+              ) : status === 'running' ? (
+                <span style={{ color: '#D97706', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span>⚡</span> Reacting stoichiometric batches ({completedBatchesCount}/{profile.batches})...
+                </span>
+              ) : (
+                <span>Click [Run Reaction] to simulate stoichiometric pathway</span>
+              )}
             </div>
           </div>
         </>

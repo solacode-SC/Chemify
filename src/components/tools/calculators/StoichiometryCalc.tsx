@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { parseEquationInput, balanceChemicalEquation } from '../../../utils/equationBalancer';
 import { calculateMolarMass } from '../../../utils/formulaParser';
 
-export const StoichiometryCalc: React.FC = () => {
-  const [eqInput, setEqInput] = useState('2H2 + O2 -> 2H2O');
+interface StoichiometryCalcProps {
+  initialEquation?: string;
+  initialInputVal?: number;
+}
+
+export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
+  initialEquation = '2H2 + O2 -> 2H2O',
+  initialInputVal = 4.0
+}) => {
+  const [eqInput, setEqInput] = useState(initialEquation);
   const [inputIdx, setInputIdx] = useState(0);
-  const [inputVal, setInputVal] = useState<number>(4.0);
+  const [inputVal, setInputVal] = useState<number>(initialInputVal);
   const [unit, setUnit] = useState<'grams' | 'moles'>('grams');
+
+  useEffect(() => {
+    if (initialEquation) setEqInput(initialEquation);
+    if (initialInputVal !== undefined) setInputVal(initialInputVal);
+  }, [initialEquation, initialInputVal]);
 
   const parsed = parseEquationInput(eqInput);
   const balanced = parsed ? balanceChemicalEquation(parsed.reactants, parsed.products) : null;

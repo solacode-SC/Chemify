@@ -1,19 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { solveIdealGas } from '../../../utils/chemistryCalculations';
 
-export const IdealGasCalc: React.FC = () => {
-  const [solveFor, setSolveFor] = useState<'P' | 'V' | 'n' | 'T'>('P');
+interface IdealGasCalcProps {
+  initialSolveFor?: 'P' | 'V' | 'n' | 'T';
+  initialP?: number;
+  initialV?: number;
+  initialN?: number;
+  initialT?: number;
+}
+
+export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
+  initialSolveFor = 'P',
+  initialP = 1.0,
+  initialV = 22.414,
+  initialN = 1.0,
+  initialT = 273.15
+}) => {
+  const [solveFor, setSolveFor] = useState<'P' | 'V' | 'n' | 'T'>(initialSolveFor);
 
   // Working values in base units: atm, L, mol, K
-  const [pVal, setPVal] = useState<number>(1.0);
+  const [pVal, setPVal] = useState<number>(initialP);
   const [pUnit, setPUnit] = useState<'atm' | 'kPa' | 'bar'>('atm');
 
-  const [vVal, setVVal] = useState<number>(22.414);
+  const [vVal, setVVal] = useState<number>(initialV);
   const [vUnit, setVUnit] = useState<'L' | 'mL'>('L');
 
-  const [nVal, setNVal] = useState<number>(1.0);
-  const [tVal, setTVal] = useState<number>(273.15);
+  const [nVal, setNVal] = useState<number>(initialN);
+  const [tVal, setTVal] = useState<number>(initialT);
   const [tUnit, setTUnit] = useState<'K' | 'C'>('K');
+
+  useEffect(() => {
+    if (initialSolveFor) setSolveFor(initialSolveFor);
+    if (initialP !== undefined) setPVal(initialP);
+    if (initialV !== undefined) setVVal(initialV);
+    if (initialN !== undefined) setNVal(initialN);
+    if (initialT !== undefined) setTVal(initialT);
+  }, [initialSolveFor, initialP, initialV, initialN, initialT]);
 
   // Convert inputs to base units
   const pAtm = pUnit === 'atm' ? pVal : pUnit === 'kPa' ? pVal / 101.325 : pVal / 1.01325;

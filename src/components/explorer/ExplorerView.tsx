@@ -214,6 +214,7 @@ export const ExplorerView: React.FC = () => {
 
             <div
               ref={chipsScrollRef}
+              className="no-scrollbar"
               style={{
                 display: 'flex',
                 gap: '0.5rem',
@@ -384,7 +385,7 @@ export const ExplorerView: React.FC = () => {
       {/* Main Table or Card View */}
       <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 1.5rem' }}>
         {viewMode === 'grid' ? (
-          <div style={{ overflowX: 'auto', paddingBottom: '1rem' }}>
+          <div className="no-scrollbar" style={{ overflowX: 'auto', paddingBottom: '1rem', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <p style={{ textAlign: 'center', fontSize: '0.82rem', color: '#5F6F5B', marginBottom: '0.5rem' }}>
               ← Scroll horizontally to view full 18 columns on smaller screens • Click any element for details →
             </p>

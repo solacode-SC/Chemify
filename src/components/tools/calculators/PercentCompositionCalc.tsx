@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateMolarMass, getElementBreakdown, validateFormula } from '../../../utils/formulaParser';
 
-export const PercentCompositionCalc: React.FC = () => {
-  const [formula, setFormula] = useState('C6H12O6');
+interface PercentCompositionCalcProps {
+  initialFormula?: string;
+}
+
+export const PercentCompositionCalc: React.FC<PercentCompositionCalcProps> = ({
+  initialFormula = 'C6H12O6'
+}) => {
+  const [formula, setFormula] = useState(initialFormula);
+
+  useEffect(() => {
+    if (initialFormula) setFormula(initialFormula);
+  }, [initialFormula]);
 
   const validation = validateFormula(formula);
   const totalMass = validation.valid ? calculateMolarMass(formula) : 0;

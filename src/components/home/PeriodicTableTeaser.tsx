@@ -37,7 +37,7 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
         </div>
 
         {/* Category Selector Tabs */}
-        <div className="ptable-tabs" role="tablist">
+        <div className="ptable-tabs no-scrollbar" role="tablist">
           {SHOWCASE_CATEGORIES.map(cat => (
             <button
               key={cat.id}

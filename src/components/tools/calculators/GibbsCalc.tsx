@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateGibbs } from '../../../utils/chemistryCalculations';
 
-export const GibbsCalc: React.FC = () => {
-  const [deltaH, setDeltaH] = useState<number>(-92.4); // kJ/mol (e.g. Haber process)
-  const [temp, setTemp] = useState<number>(298.15); // K
+interface GibbsCalcProps {
+  initialDeltaH?: number;
+  initialDeltaS?: number;
+  initialTemp?: number;
+}
+
+export const GibbsCalc: React.FC<GibbsCalcProps> = ({
+  initialDeltaH = -92.4,
+  initialDeltaS = -198.2,
+  initialTemp = 298.15
+}) => {
+  const [deltaH, setDeltaH] = useState<number>(initialDeltaH); // kJ/mol
+  const [temp, setTemp] = useState<number>(initialTemp); // K
   const [tempUnit, setTempUnit] = useState<'K' | 'C'>('K');
-  const [deltaS, setDeltaS] = useState<number>(-198.2); // J/(mol·K)
+  const [deltaS, setDeltaS] = useState<number>(initialDeltaS); // J/(mol·K)
+
+  useEffect(() => {
+    if (initialDeltaH !== undefined) setDeltaH(initialDeltaH);
+    if (initialDeltaS !== undefined) setDeltaS(initialDeltaS);
+    if (initialTemp !== undefined) setTemp(initialTemp);
+  }, [initialDeltaH, initialDeltaS, initialTemp]);
 
   const tempK = tempUnit === 'C' ? temp + 273.15 : temp;
   const result = calculateGibbs(deltaH, deltaS, tempK);
