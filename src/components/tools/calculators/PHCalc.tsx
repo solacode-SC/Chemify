@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { calculatePHFromAny } from '../../../utils/chemistryCalculations';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 interface PHCalcProps {
   initialMode?: 'pH' | 'pOH' | 'H' | 'OH';
@@ -7,6 +8,8 @@ interface PHCalcProps {
 }
 
 export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal = 7.0 }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
   const [val, setVal] = useState<number>(initialVal);
   const [mode, setMode] = useState<'pH' | 'pOH' | 'H' | 'OH'>(initialMode);
 
@@ -25,14 +28,23 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
   };
 
   const benchmarks = [
-    { name: 'Battery Acid', ph: 0.5 },
-    { name: 'Lemon Juice', ph: 2.3 },
-    { name: 'Black Coffee', ph: 5.0 },
-    { name: 'Pure Water', ph: 7.0 },
-    { name: 'Baking Soda', ph: 8.4 },
-    { name: 'Ammonia', ph: 11.5 },
-    { name: 'Bleach', ph: 13.0 }
+    { name: l('Battery Acid', 'Acide de batterie', 'حمض البطارية'), ph: 0.5 },
+    { name: l('Lemon Juice', 'Jus de citron', 'عصير الليمون'), ph: 2.3 },
+    { name: l('Black Coffee', 'Café noir', 'قهوة سوداء'), ph: 5.0 },
+    { name: l('Pure Water', 'Eau pure', 'ماء نقي'), ph: 7.0 },
+    { name: l('Baking Soda', 'Bicarbonate de soude', 'بيكربونات الصوديوم'), ph: 8.4 },
+    { name: l('Household Ammonia', 'Ammoniaque', 'أمونيا'), ph: 11.5 },
+    { name: l('Bleach', 'Eau de Javel', 'مبيض (كلور)'), ph: 13.0 }
   ];
+
+  const getClassificationLabel = (cls: string) => {
+    if (cls === 'Strongly Acidic') return l('Strongly Acidic', 'Fortement Acide', 'حمضي قوي');
+    if (cls === 'Weakly Acidic') return l('Weakly Acidic', 'Faiblement Acide', 'حمضي ضعيف');
+    if (cls === 'Neutral') return l('Neutral', 'Neutre', 'متعادل');
+    if (cls === 'Weakly Basic') return l('Weakly Basic', 'Faiblement Basique', 'قاعدي ضعيف');
+    if (cls === 'Strongly Basic') return l('Strongly Basic', 'Fortement Basique', 'قاعدي قوي');
+    return cls;
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -66,7 +78,11 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
         </div>
 
         <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', marginBottom: '0.4rem' }}>
-          {mode === 'pH' ? 'Enter pH (0 – 14)' : mode === 'pOH' ? 'Enter pOH (0 – 14)' : `Enter concentration (e.g. 1e-7)`}
+          {mode === 'pH'
+            ? l('Enter pH value (0 to 14)', 'Entrez le pH (0 à 14)', 'أدخل قيمة pH (من 0 إلى 14)')
+            : mode === 'pOH'
+            ? l('Enter pOH value (0 to 14)', 'Entrez le pOH (0 à 14)', 'أدخل قيمة pOH (من 0 إلى 14)')
+            : l('Enter molar concentration (e.g. 1e-7)', 'Entrez la concentration molaire (ex: 1e-7)', 'أدخل التركيز المولي (مثال: 1e-7)')}
         </label>
         <input
           type="number"
@@ -75,6 +91,7 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
           step={mode === 'H' || mode === 'OH' ? '0.0000001' : '0.1'}
           min="0"
           max={mode === 'pH' || mode === 'pOH' ? 14 : undefined}
+          className="formula-ltr"
           style={{
             width: '100%',
             padding: '0.8rem 1rem',
@@ -92,9 +109,9 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
       {/* Visual pH Spectrum Scale */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-          <span>0 (Strong Acid)</span>
-          <span>7 (Neutral)</span>
-          <span>14 (Strong Base)</span>
+          <span>0 ({l('Strong Acid', 'Acide fort', 'حمض قوي')})</span>
+          <span>7 ({l('Neutral', 'Neutre', 'متعادل')})</span>
+          <span>14 ({l('Strong Base', 'Base forte', 'قاعدة قوية')})</span>
         </div>
         <div
           style={{
@@ -102,7 +119,8 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
             borderRadius: '10px',
             background: 'linear-gradient(to right, #ef4444 0%, #f97316 20%, #eab308 40%, #22c55e 50%, #06b6d4 70%, #3b82f6 85%, #8b5cf6 100%)',
             position: 'relative',
-            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+            direction: 'ltr'
           }}
         >
           {/* Slider Pin */}
@@ -139,28 +157,28 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
       >
         <div>
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>pH</span>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2rem', fontWeight: 700, color: '#4E5B47' }}>
+          <div className="formula-ltr" style={{ fontSize: '2rem', fontWeight: 700, color: '#4E5B47' }}>
             {result.pH.toFixed(2)}
           </div>
         </div>
 
         <div>
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>pOH</span>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2rem', fontWeight: 700, color: '#4E5B47' }}>
+          <div className="formula-ltr" style={{ fontSize: '2rem', fontWeight: 700, color: '#4E5B47' }}>
             {result.pOH.toFixed(2)}
           </div>
         </div>
 
         <div>
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>[H⁺]</span>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47', marginTop: '6px' }}>
+          <div className="formula-ltr" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47', marginTop: '6px' }}>
             {result.hConcentration.toExponential(2)} M
           </div>
         </div>
 
         <div>
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>[OH⁻]</span>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47', marginTop: '6px' }}>
+          <div className="formula-ltr" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47', marginTop: '6px' }}>
             {result.ohConcentration.toExponential(2)} M
           </div>
         </div>
@@ -182,14 +200,16 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
       >
         <div>
           <span style={{ fontSize: '0.75rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 700 }}>
-            Classification
+            {l('Classification', 'Classification', 'التصنيف')}
           </span>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47' }}>{result.classification}</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4E5B47' }}>
+            {getClassificationLabel(result.classification)}
+          </div>
         </div>
 
-        <div style={{ textAlign: 'right' }}>
+        <div style={{ textAlign: language === 'ar' ? 'left' : 'right' }}>
           <span style={{ fontSize: '0.75rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 700 }}>
-            Closest Reference
+            {l('Reference Benchmark', 'Référence', 'المعيار المرجعي')}
           </span>
           <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#5F6F5B' }}>{result.benchmark}</div>
         </div>
@@ -198,7 +218,7 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
       {/* Quick Benchmark buttons */}
       <div>
         <span style={{ fontSize: '0.78rem', color: '#5F6F5B', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>
-          Try common substances:
+          {l('Common Substance Benchmarks:', 'Exemples de substances courantes :', 'أمثلة لمواد شائعة:')}
         </span>
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
           {benchmarks.map(b => (
@@ -218,7 +238,7 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
                 cursor: 'pointer'
               }}
             >
-              {b.name} ({b.ph})
+              {b.name} (<span className="formula-ltr">{b.ph}</span>)
             </button>
           ))}
         </div>
@@ -226,4 +246,3 @@ export const PHCalc: React.FC<PHCalcProps> = ({ initialMode = 'pH', initialVal =
     </div>
   );
 };
-

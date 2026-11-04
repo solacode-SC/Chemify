@@ -142,16 +142,23 @@ export function computeReaction(reactants: ReactantItem[]): Partial<ReactionStat
     const r1 = reactants[0];
     const r2 = reactants[1];
     const mass1 = r1?.massGrams ?? 10;
-    const mass2 = r2?.massGrams ?? 10;
-
     const mw1 = calculateMolarMass(r1.formula) || 1;
-    const mw2 = r2 ? calculateMolarMass(r2.formula) || 1 : 1;
-
     const moles1 = mass1 / mw1;
-    const moles2 = mass2 / mw2;
 
-    const limiting = moles1 < moles2 ? r1.formula : (r2 ? r2.formula : r1.formula);
-    const theoreticalYieldGrams = (Math.min(moles1, moles2) * mw1 * 0.95).toFixed(2);
+    let limiting = r1.formula;
+    let minMoles = moles1;
+
+    if (r2) {
+      const mass2 = r2.massGrams ?? 10;
+      const mw2 = calculateMolarMass(r2.formula) || 1;
+      const moles2 = mass2 / mw2;
+      if (moles2 < moles1) {
+        limiting = r2.formula;
+        minMoles = moles2;
+      }
+    }
+
+    const theoreticalYieldGrams = (minMoles * mw1 * 0.95).toFixed(2);
 
     return {
       equation: matchedPreset.equation,
@@ -164,7 +171,7 @@ export function computeReaction(reactants: ReactantItem[]): Partial<ReactionStat
         catalyst: matchedPreset.catalyst
       },
       calculations: {
-        limitingReagent: `${limiting} (${(Math.min(moles1, moles2)).toFixed(3)} mol)`,
+        limitingReagent: `${limiting} (${minMoles.toFixed(3)} mol)`,
         theoreticalYield: `${theoreticalYieldGrams} g`,
         percentYield: '92.4%'
       },

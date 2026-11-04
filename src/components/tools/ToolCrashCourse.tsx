@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { CrashCourseItem, TOOLS_CRASH_COURSES } from '../../data/toolsCrashCourseData';
+import { CrashCourseItem, getCrashCourse } from '../../data/toolsCrashCourseData';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { MathEquation } from '../common/MathEquation';
 
 interface ToolCrashCourseProps {
   toolId: string;
@@ -10,7 +12,11 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
   toolId,
   onSwitchToCalculator
 }) => {
-  const course: CrashCourseItem | undefined = TOOLS_CRASH_COURSES[toolId];
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
+  const l = (en: string, fr: string, ar: string) => (language === 'ar' ? ar : language === 'fr' ? fr : en);
+
+  const course: CrashCourseItem | undefined = getCrashCourse(toolId, language);
 
   // Tabs
   const [activeTab, setActiveTab] = useState<'concept' | 'formula' | 'worked' | 'quiz' | 'applications' | 'tips'>('concept');
@@ -28,8 +34,10 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
 
   if (!course) {
     return (
-      <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#5F6F5B' }}>
-        <p>Crash course guide for this calculator is being prepared...</p>
+      <div style={{ textAlign: 'center', padding: '3.5rem 1rem', color: '#5F6F5B' }}>
+        <p style={{ fontSize: '1.05rem', marginBottom: '1rem' }}>
+          {l('The crash course for this tool is being prepared...', 'Le cours express pour cette calculatrice est en cours de préparation...', 'يجري تحضير الدورة المكثفة لهذه الأداة...')}
+        </p>
         <button
           onClick={() => onSwitchToCalculator()}
           style={{
@@ -37,12 +45,13 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             color: '#FAF8F5',
             border: 'none',
             borderRadius: '999px',
-            padding: '8px 20px',
-            fontWeight: 600,
-            cursor: 'pointer'
+            padding: '9px 24px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(78, 91, 71, 0.2)'
           }}
         >
-          Open Calculator
+          {l('Open Calculator', 'Ouvrir le calculateur', 'فتح الحاسبة')}
         </button>
       </div>
     );
@@ -67,12 +76,27 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
   const totalSteps = course.workedExample.steps.length;
   const currentStep = course.workedExample.steps[activeStepIndex] || course.workedExample.steps[0];
 
+  const badgeText = course.badge === 'Basic'
+    ? l('Basic Level', 'Niveau Fondamental', 'مستوى أساسي')
+    : course.badge === 'Intermediate'
+    ? l('Intermediate Level', 'Niveau Intermédiaire', 'مستوى متوسط')
+    : l('Advanced Level', 'Niveau Avancé', 'مستوى متقدم');
+
+  const crashCourseTabs = [
+    { key: 'concept', label: l('🌿 Concept & Analogy', '🌿 Concept & Analogie', '🌿 المفهوم والتشبيه') },
+    { key: 'formula', label: l('📐 Master Equation & Variables', '📐 Formule & Variables', '📐 الصيغة والمتغيرات') },
+    { key: 'worked', label: l('📝 Worked Problem (Step-by-Step)', '📝 Problème résolu (Pas à pas)', '📝 مسألة محلولة (خطوة بخطوة)') },
+    { key: 'quiz', label: l('🧠 Knowledge Check', '🧠 Test de connaissances', '🧠 اختبار المفاهيم') },
+    { key: 'applications', label: l('⚗️ Lab Applications', '⚗️ Applications labo', '⚗️ التطبيقات المخبرية') },
+    { key: 'tips', label: l('💡 Pitfalls & Pro Tips', '💡 Pièges & Astuces pro', '💡 فخاخ شائعة ونصائح') }
+  ];
+
   return (
     <div className="tool-crash-course no-scrollbar" style={{ color: '#4E5B47', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      {/* Botanical Header Card with Nano Banana Generated Art */}
+      {/* Botanical Header Card */}
       <div
         style={{
-          background: 'linear-gradient(135deg, rgba(78, 91, 71, 0.09) 0%, rgba(220, 224, 207, 0.55) 100%)',
+          background: 'linear-gradient(135deg, rgba(78, 91, 71, 0.08) 0%, rgba(220, 224, 207, 0.6) 100%)',
           border: '1.5px solid #6F7F63',
           borderRadius: '16px',
           padding: '1.25rem',
@@ -85,7 +109,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
           boxShadow: '0 4px 16px rgba(78, 91, 71, 0.08)'
         }}
       >
-        {/* Nano Banana Botanical Art Thumbnail */}
+        {/* Botanical Art Thumbnail */}
         <div
           style={{
             width: '95px',
@@ -94,13 +118,13 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             overflow: 'hidden',
             flexShrink: 0,
             border: '2px solid #6F7F63',
-            boxShadow: '0 6px 16px rgba(78, 91, 71, 0.22)',
+            boxShadow: '0 6px 16px rgba(78, 91, 71, 0.18)',
             background: '#FAF8F5'
           }}
         >
           <img
             src="assets/images/botanical-tools-guide.png"
-            alt="Botanical Chemistry Study Scene generated via Nano Banana"
+            alt="Botanical Chemistry Guide Scene"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
             loading="lazy"
           />
@@ -120,7 +144,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 borderRadius: '6px'
               }}
             >
-              CRASH COURSE
+              {l('CRASH COURSE', 'COURS EXPRESS', 'دورة مكثفة')}
             </span>
             <span
               style={{
@@ -129,17 +153,18 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 color: '#4E5B47',
                 background: '#DCE0CF',
                 padding: '3px 8px',
-                borderRadius: '6px'
+                borderRadius: '6px',
+                border: '1px solid rgba(111, 127, 99, 0.3)'
               }}
             >
-              {course.badge} Level
+              {badgeText}
             </span>
             <span
               style={{
                 fontSize: '0.72rem',
                 fontWeight: 600,
                 color: '#5F6F5B',
-                background: 'rgba(250, 248, 245, 0.85)',
+                background: 'rgba(250, 248, 245, 0.9)',
                 padding: '3px 8px',
                 borderRadius: '6px',
                 border: '1px solid rgba(111, 127, 99, 0.3)'
@@ -151,7 +176,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
 
           <h3
             style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "var(--font-heading, 'Playfair Display', serif)",
               fontSize: 'clamp(1.2rem, 3vw, 1.45rem)',
               color: '#4E5B47',
               margin: '0 0 4px',
@@ -160,7 +185,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
           >
             {course.title}
           </h3>
-          <p style={{ margin: 0, fontSize: '0.88rem', color: '#5F6F5B', fontStyle: 'italic', lineHeight: 1.4 }}>
+          <p style={{ margin: 0, fontSize: '0.88rem', color: '#5F6F5B', fontStyle: 'italic', lineHeight: 1.45 }}>
             "{course.tagline}"
           </p>
         </div>
@@ -177,14 +202,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
           borderBottom: '1.5px solid rgba(111, 127, 99, 0.25)'
         }}
       >
-        {[
-          { key: 'concept', label: '🌿 Concept & Analogy' },
-          { key: 'formula', label: '📐 Formula & Variables' },
-          { key: 'worked', label: '📝 Worked Problem (Stepper)' },
-          { key: 'quiz', label: '🧠 Knowledge Check' },
-          { key: 'applications', label: '⚗️ Lab Applications' },
-          { key: 'tips', label: '💡 Traps & Pro Tips' }
-        ].map(tab => {
+        {crashCourseTabs.map(tab => {
           const isActive = activeTab === tab.key;
           return (
             <button
@@ -195,7 +213,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 color: isActive ? '#FAF8F5' : '#4E5B47',
                 border: '1px solid #6F7F63',
                 borderRadius: '8px',
-                padding: '7px 13px',
+                padding: '7px 14px',
                 fontSize: '0.82rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -225,11 +243,11 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span style={{ fontSize: '1.35rem' }}>💡</span>
-              <strong style={{ color: '#4E5B47', fontSize: '1.02rem', fontFamily: "'Playfair Display', serif" }}>
+              <strong style={{ color: '#4E5B47', fontSize: '1.04rem', fontFamily: "var(--font-heading, 'Playfair Display', serif)" }}>
                 {course.mentalModelAnalogy.title}
               </strong>
             </div>
-            <p style={{ margin: 0, fontSize: '0.94rem', lineHeight: 1.68, color: '#3f4a39' }}>
+            <p style={{ margin: 0, fontSize: '0.94rem', lineHeight: 1.7, color: '#3f4a39' }}>
               {course.mentalModelAnalogy.analogy}
             </p>
           </div>
@@ -244,7 +262,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             }}
           >
             <h4 style={{ margin: '0 0 0.5rem', color: '#4E5B47', fontSize: '0.98rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>📖</span> What Is It In Plain English?
+              <span>📖</span> {l('What is this concept in plain English?', "De quoi s'agit-il en clair ?", 'ما هو هذا المفهوم ببساطة؟')}
             </h4>
             <p style={{ margin: '0 0 0.85rem', fontSize: '0.9rem', lineHeight: 1.65, color: '#4E5B47' }}>
               {course.plainEnglish}
@@ -255,32 +273,34 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 background: '#EDEAE1',
                 borderRadius: '8px',
                 padding: '10px 14px',
-                borderLeft: '4px solid #4E5B47'
+                borderLeft: isAr ? 'none' : '4px solid #4E5B47',
+                borderRight: isAr ? '4px solid #4E5B47' : 'none'
               }}
             >
               <strong style={{ fontSize: '0.84rem', color: '#4E5B47', display: 'block', marginBottom: '2px' }}>
-                Why Chemists Rely On It:
+                {l('Why chemists rely on it:', "Pourquoi les chimistes l'utilisent :", 'لماذا يعتمد عليه الكيميائيون :')}
               </strong>
-              <span style={{ fontSize: '0.86rem', color: '#5F6F5B', lineHeight: 1.5 }}>
+              <span style={{ fontSize: '0.86rem', color: '#5F6F5B', lineHeight: 1.55 }}>
                 {course.whyItMatters}
               </span>
             </div>
           </div>
 
-          {/* Master Equation Card with Copy Button */}
+          {/* Master Equation Card with KaTeX Rendered Mathematics */}
           <div
             style={{
-              background: '#DCE0CF',
-              border: '1.5px dashed #6F7F63',
-              borderRadius: '12px',
-              padding: '1.15rem',
+              background: 'linear-gradient(135deg, #E6EAD9 0%, #DCE0CF 100%)',
+              border: '1.5px solid #6F7F63',
+              borderRadius: '14px',
+              padding: '1.25rem',
               textAlign: 'center',
-              position: 'relative'
+              position: 'relative',
+              boxShadow: '0 3px 12px rgba(78, 91, 71, 0.08)'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', letterSpacing: '0.06em' }}>
-                Master Equation
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#4E5B47', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>📐</span> {l('Master Equation', 'Équation maîtresse', 'المعادلة الأساسية')}
               </span>
               <button
                 onClick={() => handleCopyFormula(course.primaryEquation)}
@@ -289,38 +309,36 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   color: copiedFormula ? '#FAF8F5' : '#4E5B47',
                   border: '1px solid #6F7F63',
                   borderRadius: '6px',
-                  padding: '3px 8px',
-                  fontSize: '0.72rem',
+                  padding: '4px 10px',
+                  fontSize: '0.74rem',
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
-                title="Copy equation to clipboard"
+                title={l('Copy equation LaTeX', "Copier l'équation", 'نسخ المعادلة')}
               >
-                {copiedFormula ? '✓ Copied!' : 'Copy Formula'}
+                {copiedFormula ? l('✓ Copied!', '✓ Copié !', '✓ تم النسخ!') : l('Copy formula', 'Copier la formule', 'نسخ الصيغة')}
               </button>
             </div>
 
+            {/* KaTeX Math Equation Rendered */}
             <div
               style={{
-                fontFamily: "var(--font-mono, 'JetBrains Mono', Courier, monospace)",
-                fontSize: '1.08rem',
-                fontWeight: 700,
-                color: '#2d3728',
-                padding: '8px 12px',
                 background: '#FAF8F5',
-                borderRadius: '8px',
-                border: '1px solid #6F7F63',
-                margin: '4px 0 8px',
-                overflowX: 'auto',
-                whiteSpace: 'nowrap'
+                borderRadius: '10px',
+                border: '1.5px solid #6F7F63',
+                padding: '14px 16px',
+                margin: '6px 0 10px',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.04)',
+                overflowX: 'auto'
               }}
+              className="no-scrollbar"
             >
-              {course.primaryEquation}
+              <MathEquation equation={course.primaryEquation} displayMode={true} />
             </div>
 
             {course.equationNote && (
-              <span style={{ fontSize: '0.78rem', color: '#5F6F5B', fontStyle: 'italic', display: 'block' }}>
+              <span style={{ fontSize: '0.8rem', color: '#5F6F5B', fontStyle: 'italic', display: 'block', lineHeight: 1.5 }}>
                 {course.equationNote}
               </span>
             )}
@@ -343,10 +361,10 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             >
               <div>
                 <strong style={{ fontSize: '0.9rem', color: '#4E5B47', display: 'block' }}>
-                  Ready to test this concept right now?
+                  {l('Ready to test this concept right now?', 'Prêt à tester ce concept dès maintenant ?', 'جاهز لتجربة هذا المفهوم الآن؟')}
                 </strong>
                 <span style={{ fontSize: '0.8rem', color: '#5F6F5B' }}>
-                  {course.calculatorPresetLabel || 'Jump directly into the live interactive calculator.'}
+                  {course.calculatorPresetLabel || l('Jump directly into the interactive calculator.', 'Accéder directement à la calculatrice interactive.', 'انتقل مباشرة إلى الحاسبة التفاعلية المباشرة.')}
                 </span>
               </div>
               <button
@@ -356,9 +374,9 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   color: '#FAF8F5',
                   border: 'none',
                   borderRadius: '999px',
-                  padding: '7px 18px',
+                  padding: '8px 20px',
                   fontWeight: 700,
-                  fontSize: '0.84rem',
+                  fontSize: '0.86rem',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -366,7 +384,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   boxShadow: '0 2px 8px rgba(78, 91, 71, 0.25)'
                 }}
               >
-                <span>Launch Solver</span>
+                <span>{l('Launch Solver', 'Lancer le solveur', 'تشغيل الحلّال')}</span>
                 <span>⚡</span>
               </button>
             </div>
@@ -386,116 +404,127 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
               boxShadow: '0 4px 14px rgba(78, 91, 71, 0.05)'
             }}
           >
-            {/* Primary Equation Header */}
+            {/* Primary Equation Header with KaTeX */}
             <div
               style={{
-                background: '#DCE0CF',
-                border: '1px solid #6F7F63',
-                borderRadius: '10px',
-                padding: '1rem',
+                background: 'linear-gradient(135deg, #E6EAD9 0%, #DCE0CF 100%)',
+                border: '1.5px solid #6F7F63',
+                borderRadius: '12px',
+                padding: '1.15rem',
                 textAlign: 'center',
                 marginBottom: '1.25rem'
               }}
             >
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '4px' }}>
-                Mathematical Formulation
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '6px', letterSpacing: '0.06em' }}>
+                {l('Mathematical Formulation & Governing Principle', 'Formulation mathématique', 'الصياغة الرياضية')}
               </span>
               <div
                 style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono', Courier, monospace)",
-                  fontSize: '1.15rem',
-                  fontWeight: 700,
-                  color: '#2d3728',
-                  wordBreak: 'break-word'
+                  background: '#FAF8F5',
+                  border: '1px solid #6F7F63',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  overflowX: 'auto'
                 }}
+                className="no-scrollbar"
               >
-                {course.primaryEquation}
+                <MathEquation equation={course.primaryEquation} displayMode={true} />
               </div>
             </div>
 
-            <h4 style={{ margin: '0 0 0.85rem', color: '#4E5B47', fontSize: '0.96rem' }}>
-              Variable Glossary & Standard Units
+            <h4 style={{ margin: '0 0 0.85rem', color: '#4E5B47', fontSize: '0.98rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>🏷️</span> {l('Glossary of Variables & Standard Units', 'Glossaire des variables & Unités standards', 'معجم المتغيرات والوحدات القياسية')}
             </h4>
 
-            {/* Variable Cards List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {course.variables.map((v, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    background: '#EDEAE1',
-                    border: '1px solid rgba(111, 127, 99, 0.3)',
-                    gap: '12px',
-                    flexWrap: 'wrap'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <code
+            {/* Responsive Botanical Variables Table */}
+            <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1.5px solid #6F7F63', background: '#FAF8F5' }} className="no-scrollbar">
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: isAr ? 'right' : 'left', fontSize: '0.88rem' }}>
+                <thead>
+                  <tr style={{ background: '#DCE0CF', color: '#4E5B47', borderBottom: '1.5px solid #6F7F63' }}>
+                    <th style={{ padding: '10px 14px', width: '90px' }}>{l('Symbol', 'Symbole', 'الرمز')}</th>
+                    <th style={{ padding: '10px 14px' }}>{l('Variable Name & Role', 'Nom & Signification', 'اسم المتغير ومعناه')}</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'center', width: '140px' }}>{l('Standard Unit', 'Unité Standard', 'الوحدة القياسية')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {course.variables.map((v, idx) => (
+                    <tr
+                      key={idx}
                       style={{
-                        background: '#FAF8F5',
-                        border: '1px solid #6F7F63',
-                        borderRadius: '6px',
-                        padding: '3px 9px',
-                        fontWeight: 700,
-                        fontSize: '0.98rem',
-                        fontFamily: "var(--font-mono, 'JetBrains Mono', monospace)",
-                        color: '#4E5B47'
+                        borderBottom: '1px solid rgba(111, 127, 99, 0.2)',
+                        background: idx % 2 === 0 ? '#FAF8F5' : '#F5F2EB'
                       }}
                     >
-                      {v.symbol}
-                    </code>
-                    <div>
-                      <strong style={{ fontSize: '0.9rem', color: '#4E5B47' }}>{v.name}</strong>
-                      <div style={{ fontSize: '0.8rem', color: '#5F6F5B' }}>{v.desc}</div>
-                    </div>
-                  </div>
-                  <span
-                    style={{
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      background: '#FAF8F5',
-                      border: '1px solid #6F7F63',
-                      padding: '3px 10px',
-                      borderRadius: '999px',
-                      color: '#4E5B47',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    SI: {v.unit}
-                  </span>
-                </div>
-              ))}
+                      <td style={{ padding: '10px 14px', verticalAlign: 'middle' }}>
+                        <code
+                          style={{
+                            background: '#FAF8F5',
+                            border: '1px solid #6F7F63',
+                            borderRadius: '6px',
+                            padding: '3px 8px',
+                            fontWeight: 700,
+                            fontSize: '0.95rem',
+                            color: '#4E5B47'
+                          }}
+                          className="formula-ltr"
+                        >
+                          {v.symbol}
+                        </code>
+                      </td>
+                      <td style={{ padding: '10px 14px' }}>
+                        <strong style={{ display: 'block', color: '#4E5B47', fontSize: '0.92rem' }}>{v.name}</strong>
+                        <span style={{ fontSize: '0.82rem', color: '#5F6F5B', lineHeight: 1.5 }}>{v.desc}</span>
+                      </td>
+                      <td style={{ padding: '10px 14px', textAlign: 'center', verticalAlign: 'middle' }}>
+                        <span
+                          style={{
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            background: '#EDEAE1',
+                            border: '1px solid #6F7F63',
+                            padding: '3px 10px',
+                            borderRadius: '999px',
+                            color: '#4E5B47',
+                            whiteSpace: 'nowrap'
+                          }}
+                          className="formula-ltr"
+                        >
+                          {v.unit}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-            {/* Unit Conversions Cheat Sheet */}
+            {/* Unit Conversions Table */}
             {course.unitConversions && course.unitConversions.length > 0 && (
               <div style={{ marginTop: '1.25rem', borderTop: '1px solid rgba(111, 127, 99, 0.25)', paddingTop: '1rem' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '8px' }}>
-                  Standard Unit Conversions:
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '8px' }}>
+                  {l('Standard Unit Conversions:', "Conversions d'unités usuelles :", 'تحويلات الوحدات القياسية :')}
                 </span>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px' }}>
-                  {course.unitConversions.map((uc, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        background: '#FAF8F5',
-                        border: '1px solid #6F7F63',
-                        borderRadius: '8px',
-                        padding: '8px 12px',
-                        fontSize: '0.82rem'
-                      }}
-                    >
-                      <strong style={{ color: '#4E5B47' }}>{uc.from} → {uc.to}:</strong>
-                      <div style={{ fontFamily: "var(--font-mono, monospace)", color: '#5F6F5B', marginTop: '2px' }}>
-                        {uc.formula}
-                      </div>
-                    </div>
-                  ))}
+                <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1.5px solid #6F7F63', background: '#FAF8F5' }} className="no-scrollbar">
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
+                    <thead>
+                      <tr style={{ background: '#DCE0CF', color: '#4E5B47', borderBottom: '1.5px solid #6F7F63' }}>
+                        <th style={{ padding: '8px 12px', textAlign: isAr ? 'right' : 'left', width: '160px' }}>{l('Units', 'Unités', 'الوحدات')}</th>
+                        <th style={{ padding: '8px 12px', textAlign: isAr ? 'right' : 'left' }}>{l('Conversion Formula', 'Formule de conversion', 'صيغة التحويل')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {course.unitConversions.map((uc, i) => (
+                        <tr key={i} style={{ borderBottom: '1px solid rgba(111, 127, 99, 0.2)', background: i % 2 === 0 ? '#FAF8F5' : '#F5F2EB' }}>
+                          <td style={{ padding: '8px 12px', fontWeight: 700, color: '#4E5B47' }}>
+                            <span className="formula-ltr">{uc.from} → {uc.to}</span>
+                          </td>
+                          <td style={{ padding: '8px 12px', color: '#2d3728' }} className="formula-ltr">
+                            <code>{uc.formula}</code>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
@@ -518,9 +547,9 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             {/* Header with Mode Toggle */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.2rem' }}>📝</span>
-                <strong style={{ color: '#4E5B47', fontSize: '1.05rem', fontFamily: "'Playfair Display', serif" }}>
-                  Concrete Laboratory Problem:
+                <span style={{ fontSize: '1.25rem' }}>📝</span>
+                <strong style={{ color: '#4E5B47', fontSize: '1.05rem', fontFamily: "var(--font-heading, 'Playfair Display', serif)" }}>
+                  {l('Concrete Laboratory Problem:', 'Problème concret de laboratoire :', 'مسألة مخبرية تطبيقية :')}
                 </strong>
               </div>
 
@@ -529,37 +558,39 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 <button
                   onClick={() => setStepperMode('stepper')}
                   style={{
-                    padding: '3px 10px',
+                    padding: '4px 12px',
                     borderRadius: '6px',
                     border: 'none',
-                    fontSize: '0.74rem',
+                    fontSize: '0.76rem',
                     fontWeight: 700,
                     cursor: 'pointer',
                     background: stepperMode === 'stepper' ? '#4E5B47' : 'transparent',
-                    color: stepperMode === 'stepper' ? '#FAF8F5' : '#4E5B47'
+                    color: stepperMode === 'stepper' ? '#FAF8F5' : '#4E5B47',
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  Step-by-Step
+                  {l('Step by step', 'Pas à pas', 'خطوة بخطوة')}
                 </button>
                 <button
                   onClick={() => setStepperMode('all')}
                   style={{
-                    padding: '3px 10px',
+                    padding: '4px 12px',
                     borderRadius: '6px',
                     border: 'none',
-                    fontSize: '0.74rem',
+                    fontSize: '0.76rem',
                     fontWeight: 700,
                     cursor: 'pointer',
                     background: stepperMode === 'all' ? '#4E5B47' : 'transparent',
-                    color: stepperMode === 'all' ? '#FAF8F5' : '#4E5B47'
+                    color: stepperMode === 'all' ? '#FAF8F5' : '#4E5B47',
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  View All
+                  {l('Show all', 'Tout afficher', 'عرض الكل')}
                 </button>
               </div>
             </div>
 
-            <p style={{ margin: '0 0 1rem', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: 600, color: '#2d3728' }}>
+            <p style={{ margin: '0 0 1rem', fontSize: '0.95rem', lineHeight: 1.65, fontWeight: 600, color: '#2d3728' }}>
               {course.workedExample.problemStatement}
             </p>
 
@@ -574,13 +605,26 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
               }}
             >
               <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '6px' }}>
-                Given Starting Parameters:
+                {l('Given Initial Data:', 'Données initiales :', 'المعطيات الابتدائية :')}
               </span>
-              <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.85rem', color: '#4E5B47', lineHeight: 1.5 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {course.workedExample.given.map((g, idx) => (
-                  <li key={idx} style={{ marginBottom: '3px' }}>{g}</li>
+                  <span
+                    key={idx}
+                    style={{
+                      background: '#FAF8F5',
+                      border: '1px solid #6F7F63',
+                      borderRadius: '6px',
+                      padding: '4px 10px',
+                      fontSize: '0.84rem',
+                      color: '#4E5B47',
+                      fontWeight: 600
+                    }}
+                  >
+                    • {g}
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Interactive Stepper Mode */}
@@ -600,79 +644,79 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                           color: isCurrent ? '#FAF8F5' : '#4E5B47',
                           border: '1px solid #6F7F63',
                           borderRadius: '8px',
-                          padding: '5px 12px',
+                          padding: '6px 12px',
                           fontSize: '0.76rem',
                           fontWeight: 700,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.15s ease'
                         }}
                       >
-                        <span>{isPassed ? '✓' : `Step ${st.stepNumber}`}</span>
+                        <span>{isPassed ? '✓' : l(`Step ${st.stepNumber}`, `Étape ${st.stepNumber}`, `الخطوة ${st.stepNumber}`)}</span>
                         <span>{st.title.split(' ')[0]}</span>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Active Step Card */}
+                {/* Active Step Card with KaTeX Math Rendered */}
                 <div
                   style={{
                     background: '#EDEAE1',
                     borderRadius: '12px',
                     padding: '16px 18px',
-                    borderLeft: '5px solid #4E5B47',
+                    borderLeft: isAr ? 'none' : '5px solid #4E5B47',
+                    borderRight: isAr ? '5px solid #4E5B47' : 'none',
                     boxShadow: '0 2px 8px rgba(78, 91, 71, 0.08)'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span
                         style={{
                           background: '#4E5B47',
                           color: '#FAF8F5',
                           borderRadius: '50%',
-                          width: '24px',
-                          height: '24px',
+                          width: '26px',
+                          height: '26px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '0.82rem',
+                          fontSize: '0.84rem',
                           fontWeight: 700
                         }}
                       >
                         {currentStep.stepNumber}
                       </span>
-                      <strong style={{ fontSize: '0.96rem', color: '#4E5B47' }}>{currentStep.title}</strong>
+                      <strong style={{ fontSize: '1rem', color: '#4E5B47' }}>{currentStep.title}</strong>
                     </div>
-                    <span style={{ fontSize: '0.75rem', color: '#5F6F5B', fontWeight: 600 }}>
-                      Step {activeStepIndex + 1} of {totalSteps}
+                    <span style={{ fontSize: '0.76rem', color: '#5F6F5B', fontWeight: 600 }}>
+                      {l(`Step ${activeStepIndex + 1} of ${totalSteps}`, `Étape ${activeStepIndex + 1} sur ${totalSteps}`, `الخطوة ${activeStepIndex + 1} من ${totalSteps}`)}
                     </span>
                   </div>
 
-                  <p style={{ margin: '0 0 8px', fontSize: '0.9rem', color: '#4E5B47', lineHeight: 1.6 }}>
+                  <p style={{ margin: '0 0 10px', fontSize: '0.92rem', color: '#4E5B47', lineHeight: 1.65 }}>
                     {currentStep.explanation}
                   </p>
 
+                  {/* KaTeX Step Math Equation */}
                   {currentStep.math && (
-                    <code
+                    <div
                       style={{
-                        display: 'block',
                         background: '#FAF8F5',
                         border: '1px solid #6F7F63',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         padding: '10px 14px',
-                        fontFamily: "var(--font-mono, 'JetBrains Mono', Courier, monospace)",
-                        fontSize: '0.92rem',
-                        color: '#4E5B47',
-                        marginTop: '6px',
+                        marginTop: '8px',
                         overflowX: 'auto'
                       }}
+                      className="no-scrollbar"
                     >
-                      {currentStep.math}
-                    </code>
+                      <MathEquation equation={currentStep.math} displayMode={true} />
+                    </div>
                   )}
 
                   {/* Step Navigation Controls */}
@@ -685,13 +729,13 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                         color: activeStepIndex === 0 ? '#A8B3A0' : '#4E5B47',
                         border: '1px solid #6F7F63',
                         borderRadius: '6px',
-                        padding: '5px 14px',
-                        fontSize: '0.8rem',
+                        padding: '6px 14px',
+                        fontSize: '0.82rem',
                         fontWeight: 600,
                         cursor: activeStepIndex === 0 ? 'not-allowed' : 'pointer'
                       }}
                     >
-                      ← Previous
+                      {l('← Previous', '← Précédent', '← السابق')}
                     </button>
 
                     <button
@@ -702,70 +746,68 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                         color: '#FAF8F5',
                         border: 'none',
                         borderRadius: '6px',
-                        padding: '5px 16px',
-                        fontSize: '0.8rem',
+                        padding: '6px 18px',
+                        fontSize: '0.82rem',
                         fontWeight: 700,
                         cursor: activeStepIndex === totalSteps - 1 ? 'not-allowed' : 'pointer',
                         opacity: activeStepIndex === totalSteps - 1 ? 0.6 : 1
                       }}
                     >
-                      Next Step →
+                      {l('Next Step →', 'Étape suivante →', 'الخطوة التالية →')}
                     </button>
                   </div>
                 </div>
               </div>
             ) : (
-              /* View All Mode */
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              /* View All Mode with KaTeX Math */
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {course.workedExample.steps.map(step => (
                   <div
                     key={step.stepNumber}
                     style={{
                       background: '#EDEAE1',
                       borderRadius: '10px',
-                      padding: '12px 16px',
-                      borderLeft: '4px solid #4E5B47'
+                      padding: '14px 16px',
+                      borderLeft: isAr ? 'none' : '4px solid #4E5B47',
+                      borderRight: isAr ? '4px solid #4E5B47' : 'none'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                       <span
                         style={{
                           background: '#4E5B47',
                           color: '#FAF8F5',
                           borderRadius: '50%',
-                          width: '22px',
-                          height: '22px',
+                          width: '24px',
+                          height: '24px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '0.78rem',
+                          fontSize: '0.8rem',
                           fontWeight: 700
                         }}
                       >
                         {step.stepNumber}
                       </span>
-                      <strong style={{ fontSize: '0.92rem', color: '#4E5B47' }}>{step.title}</strong>
+                      <strong style={{ fontSize: '0.94rem', color: '#4E5B47' }}>{step.title}</strong>
                     </div>
-                    <p style={{ margin: '0 0 6px', fontSize: '0.88rem', color: '#4E5B47', lineHeight: 1.55 }}>
+                    <p style={{ margin: '0 0 8px', fontSize: '0.9rem', color: '#4E5B47', lineHeight: 1.6 }}>
                       {step.explanation}
                     </p>
                     {step.math && (
-                      <code
+                      <div
                         style={{
-                          display: 'block',
                           background: '#FAF8F5',
                           border: '1px solid #6F7F63',
-                          borderRadius: '6px',
+                          borderRadius: '8px',
                           padding: '8px 12px',
-                          fontFamily: "var(--font-mono, 'JetBrains Mono', Courier, monospace)",
-                          fontSize: '0.88rem',
-                          color: '#4E5B47',
-                          marginTop: '4px',
+                          marginTop: '6px',
                           overflowX: 'auto'
                         }}
+                        className="no-scrollbar"
                       >
-                        {step.math}
-                      </code>
+                        <MathEquation equation={step.math} displayMode={true} />
+                      </div>
                     )}
                   </div>
                 ))}
@@ -778,8 +820,8 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                 marginTop: '1.25rem',
                 background: 'linear-gradient(135deg, #4E5B47 0%, #3b4536 100%)',
                 color: '#FAF8F5',
-                borderRadius: '10px',
-                padding: '12px 18px',
+                borderRadius: '12px',
+                padding: '14px 20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -789,17 +831,19 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
               }}
             >
               <div>
-                <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.85, display: 'block' }}>
-                  Final Calculated Result:
+                <span style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.85, display: 'block', marginBottom: '2px' }}>
+                  {l('Calculated Final Result:', 'Résultat final calculé :', 'النتيجة النهائية المحسوبة :')}
                 </span>
-                <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02em' }}>{course.workedExample.finalResult}</strong>
+                <strong style={{ fontSize: '1.15rem', letterSpacing: '0.02em' }} className="formula-ltr">
+                  {course.workedExample.finalResult}
+                </strong>
               </div>
-              <span style={{ fontSize: '1.4rem' }}>✓</span>
+              <span style={{ fontSize: '1.6rem', color: '#86efac' }}>✓</span>
             </div>
 
             {course.workedExample.verificationNote && (
-              <p style={{ margin: '10px 0 0', fontSize: '0.82rem', color: '#5F6F5B', fontStyle: 'italic' }}>
-                💡 Tip: {course.workedExample.verificationNote}
+              <p style={{ margin: '10px 0 0', fontSize: '0.84rem', color: '#5F6F5B', fontStyle: 'italic', lineHeight: 1.5 }}>
+                💡 {l('Verification tip:', 'Astuce vérification :', 'نصيحة تحقق :')} {course.workedExample.verificationNote}
               </p>
             )}
 
@@ -814,7 +858,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                     color: '#4E5B47',
                     border: '2px solid #4E5B47',
                     borderRadius: '12px',
-                    padding: '10px 18px',
+                    padding: '11px 18px',
                     fontWeight: 700,
                     fontSize: '0.92rem',
                     cursor: 'pointer',
@@ -827,7 +871,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   }}
                 >
                   <span>⚡</span>
-                  <span>Try This Exact Example In The Live Calculator</span>
+                  <span>{l('Test this example in the live calculator', 'Tester cet exemple dans le calculateur interactif', 'جرّب هذا المثال في الحاسبة المباشرة')}</span>
                 </button>
               </div>
             )}
@@ -862,17 +906,17 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                     borderRadius: '6px'
                   }}
                 >
-                  Concept Check
+                  {l('Knowledge Check', 'Test de connaissances', 'اختبار المفاهيم')}
                 </span>
               </div>
 
               <h4
                 style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "var(--font-heading, 'Playfair Display', serif)",
                   fontSize: '1.18rem',
                   color: '#4E5B47',
                   margin: '0 0 1.25rem',
-                  lineHeight: 1.4
+                  lineHeight: 1.45
                 }}
               >
                 {course.knowledgeCheck.question}
@@ -912,8 +956,8 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                         color: color,
                         borderRadius: '10px',
                         padding: '12px 16px',
-                        textAlign: 'left',
-                        fontSize: '0.9rem',
+                        textAlign: isAr ? 'right' : 'left',
+                        fontSize: '0.92rem',
                         fontWeight: 600,
                         cursor: 'pointer',
                         display: 'flex',
@@ -962,7 +1006,9 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   }}
                 >
                   <div style={{ fontWeight: 700, fontSize: '0.92rem', marginBottom: '4px', color: selectedQuizOption === course.knowledgeCheck.correctIndex ? '#15803d' : '#b45309' }}>
-                    {selectedQuizOption === course.knowledgeCheck.correctIndex ? '🎉 Spot on! Excellent intuition.' : '💡 Not quite — here is how to think about it:'}
+                    {selectedQuizOption === course.knowledgeCheck.correctIndex
+                      ? l('🎉 Spot on! Exact and accurate intuition.', '🎉 Spot on ! Excellente intuition.', '🎉 إجابة دقيقة وصحيحة تماماً!')
+                      : l('💡 Not quite — here is the reasoning:', '💡 Pas tout à fait — voici comment raisonner :', '💡 ليس تماماً — إليك التفسير السليم :')}
                   </div>
                   <p style={{ margin: 0, fontSize: '0.88rem', color: '#4E5B47', lineHeight: 1.6 }}>
                     {course.knowledgeCheck.explanation}
@@ -975,21 +1021,21 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                         background: '#FAF8F5',
                         border: '1px solid #6F7F63',
                         borderRadius: '6px',
-                        padding: '4px 12px',
+                        padding: '5px 14px',
                         fontSize: '0.78rem',
                         fontWeight: 600,
                         cursor: 'pointer',
                         color: '#4E5B47'
                       }}
                     >
-                      ↺ Retry Question
+                      {l('↺ Try Question Again', '↺ Réessayer la question', '↺ إعادة المحاولة')}
                     </button>
                   </div>
                 </div>
               )}
             </div>
           ) : (
-            <p>Knowledge check coming soon.</p>
+            <p>{l('Knowledge check coming soon.', 'Test de connaissances bientôt disponible.', 'يجري تحضير اختبار المفاهيم قريباً.')}</p>
           )}
         </div>
       )}
@@ -1006,7 +1052,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             }}
           >
             <h4 style={{ margin: '0 0 0.85rem', color: '#4E5B47', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>⚗️</span> Real-World Industry & Research Applications
+              <span>⚗️</span> {l('Real-World Industry & Research Applications', 'Applications en industrie et recherche', 'تطبيقات صناعية وبحثية واقعية')}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {course.labApplications.map((app, idx) => (
@@ -1026,7 +1072,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                     style={{
                       background: '#4E5B47',
                       color: '#FAF8F5',
-                      padding: '3px 8px',
+                      padding: '3px 9px',
                       borderRadius: '6px',
                       fontSize: '0.74rem',
                       fontWeight: 700,
@@ -1053,7 +1099,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
               }}
             >
               <strong style={{ fontSize: '0.86rem', color: '#4E5B47', display: 'block', marginBottom: '3px' }}>
-                🎯 Take-Home Practice Challenge:
+                🎯 {l('Hands-on Practice Challenge:', "Défi d'entraînement pratique :", 'تحدي للممارسة والتطبيق :')}
               </strong>
               <span style={{ fontSize: '0.88rem', color: '#5F6F5B', lineHeight: 1.5 }}>
                 {course.recommendedPractice}
@@ -1075,7 +1121,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             }}
           >
             <h4 style={{ margin: '0 0 0.85rem', color: '#b91c1c', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>⚠️</span> Frequent Student & Exam Traps
+              <span>⚠️</span> {l('Common Traps in Exams & Problems', 'Pièges fréquents aux examens', 'فخاخ شائعة في الامتحانات والمسائل')}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '1.5rem' }}>
               {course.commonTraps.map((trap, idx) => (
@@ -1089,19 +1135,19 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
                   }}
                 >
                   <div style={{ fontWeight: 700, color: '#991b1b', fontSize: '0.88rem', marginBottom: '4px' }}>
-                    Trap: {trap.trap}
+                    {l('Trap:', 'Piège :', 'الفخ :')} {trap.trap}
                   </div>
                   <div style={{ color: '#4E5B47', fontSize: '0.86rem', lineHeight: 1.5 }}>
-                    <strong>Solution:</strong> {trap.howToAvoid}
+                    <strong>{l('Solution:', 'Solution :', 'الحل :')}</strong> {trap.howToAvoid}
                   </div>
                 </div>
               ))}
             </div>
 
             <h4 style={{ margin: '0 0 0.75rem', color: '#4E5B47', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>✨</span> Pro Chemist Shortcuts & Mnemonics
+              <span>✨</span> {l('Pro Chemist Tips & Mnemonics', 'Astuces de chimistes & Mnémotechniques', 'حيل وتلميحات كيميائية احترافية')}
             </h4>
-            <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.88rem', color: '#4E5B47', lineHeight: 1.65 }}>
+            <ul style={{ margin: 0, paddingInlineStart: '1.25rem', fontSize: '0.88rem', color: '#4E5B47', lineHeight: 1.65 }}>
               {course.proTips.map((tip, idx) => (
                 <li key={idx} style={{ marginBottom: '6px' }}>{tip}</li>
               ))}
@@ -1127,10 +1173,12 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
       >
         <div>
           <span style={{ fontSize: '0.88rem', color: '#4E5B47', fontWeight: 700, display: 'block' }}>
-            Ready to test your understanding?
+            {l('Ready to test your understanding?', 'Prêt à tester votre compréhension ?', 'هل أنت مستعد لاختبار فهمك؟')}
           </span>
           <span style={{ fontSize: '0.78rem', color: '#5F6F5B' }}>
-            {course.calculatorPresetLabel ? `Click to launch: ${course.calculatorPresetLabel}` : 'Switch to the live interactive calculator with automatic validation.'}
+            {course.calculatorPresetLabel
+              ? l(`Click to run: ${course.calculatorPresetLabel}`, `Cliquer pour lancer : ${course.calculatorPresetLabel}`, `انقر للتشغيل: ${course.calculatorPresetLabel}`)
+              : l('Go to interactive calculator with automatic validation.', 'Passer au calculateur interactif avec validation automatique.', 'انتقل إلى الحاسبة التفاعلية المباشرة مع التحقق الآلي.')}
           </span>
         </div>
         <button
@@ -1151,7 +1199,7 @@ export const ToolCrashCourse: React.FC<ToolCrashCourseProps> = ({
             transition: 'all 0.2s ease'
           }}
         >
-          <span>Open Calculator</span>
+          <span>{l('Open Calculator', 'Ouvrir le calculateur', 'فتح الحاسبة')}</span>
           <span>⚡</span>
         </button>
       </div>

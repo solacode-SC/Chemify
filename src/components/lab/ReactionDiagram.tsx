@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import confetti from 'canvas-confetti';
 import { ReactantItem, ReactionStatus } from '../../types/reaction';
 import { parseFormula } from '../../utils/formulaParser';
+import { LabBenchApparatus } from './LabBenchApparatus';
 
 interface ReactionDiagramProps {
   status: ReactionStatus;
@@ -550,12 +551,13 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
   reactionType,
   energyType,
   deltaH,
-  reactants,
+  conditions,
+  reactants = [],
   onReset,
   onComplete
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [showIllustration, setShowIllustration] = useState(false);
+  const [viewMode, setViewMode] = useState<'bench' | 'molecular'>('bench');
   const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
   const [temperature, setTemperature] = useState<number>(25);
 
@@ -1205,6 +1207,24 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
     return list;
   }, [profile]);
 
+  if (viewMode === 'bench') {
+    return (
+      <LabBenchApparatus
+        status={status}
+        equation={equation}
+        reactionType={reactionType}
+        energyType={energyType}
+        deltaH={deltaH}
+        conditions={conditions}
+        reactants={reactants}
+        onReset={onReset}
+        simSpeed={simSpeed}
+        onToggleSpeed={() => setSimSpeed(simSpeed === 1 ? 2 : 1)}
+        onSwitchToMolecular={() => setViewMode('molecular')}
+      />
+    );
+  }
+
   return (
     <div
       className="no-scrollbar"
@@ -1256,7 +1276,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
 
         {/* View mode toggle */}
         <button
-          onClick={() => setShowIllustration(!showIllustration)}
+          onClick={() => setViewMode('bench')}
           style={{
             background: 'rgba(250, 248, 245, 0.92)',
             backdropFilter: 'blur(6px)',
@@ -1267,39 +1287,19 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
             color: '#4E5B47',
             cursor: 'pointer',
             fontWeight: 700,
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
           }}
         >
-          {showIllustration ? '🔬 View Molecular Field' : '🎨 View Lab Bench'}
+          <span>🧪</span>
+          <span>View Lab Bench</span>
         </button>
       </div>
 
-      {showIllustration ? (
-        <div style={{ width: '100%', height: '100%', position: 'relative', minHeight: '480px', background: '#EDEAE1' }}>
-          <img
-            src="assets/images/ghibli-botanical-lab.png"
-            alt="Botanical Chemistry Greenhouse Setup generated via Nano Banana"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-            loading="lazy"
-          />
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'linear-gradient(transparent, rgba(35, 42, 33, 0.88))',
-              color: '#FAF8F5',
-              padding: '1.5rem',
-              fontSize: '0.92rem'
-            }}
-          >
-            <strong>Botanical Reaction Studio</strong> — A harmonious laboratory framed with cascading wisteria blossoms, where molecular reactions strictly respect chemical stoichiometry.
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Reaction Live Equation Ribbon (Strict Equation Respect) */}
+      <>
+        {/* Reaction Live Equation Ribbon (Strict Equation Respect) */}
           <div
             style={{
               background: 'rgba(220, 224, 207, 0.65)',
@@ -1439,7 +1439,6 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
             </div>
           </div>
         </>
-      )}
     </div>
   );
 };

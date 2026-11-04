@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export type AppView = 'home' | 'elements' | 'lab' | 'tools' | 'about';
 
@@ -8,6 +9,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
+  const { language, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -104,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className={`navbar__link ${currentView === 'elements' ? 'is-active' : ''}`}
                   onClick={() => handleNavClick('elements')}
                 >
-                  <span>Elements</span>
+                  <span>{t.nav.elements}</span>
                 </button>
               </li>
               <li>
@@ -112,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className={`navbar__link ${currentView === 'lab' ? 'is-active' : ''}`}
                   onClick={() => handleNavClick('lab')}
                 >
-                  <span>Reactions</span>
+                  <span>{t.nav.reactions}</span>
                 </button>
               </li>
               <li>
@@ -120,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className={`navbar__link ${currentView === 'tools' ? 'is-active' : ''}`}
                   onClick={() => handleNavClick('tools')}
                 >
-                  <span>Tools</span>
+                  <span>{t.nav.tools}</span>
                 </button>
               </li>
               <li>
@@ -128,25 +130,57 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                   className={`navbar__link ${currentView === 'about' ? 'is-active' : ''}`}
                   onClick={() => handleNavClick('about')}
                 >
-                  <span>About</span>
+                  <span>{t.nav.about}</span>
                 </button>
               </li>
             </ul>
           </nav>
 
-          {/* RIGHT: Call To Action & Mobile Hamburger */}
+          {/* RIGHT: Call To Action & Language Switcher & Mobile Hamburger */}
           <div className="navbar__right">
+            {/* Elegant 3-Way Language Switcher Pill */}
+            <div className="lang-switcher" role="group" aria-label={t.nav.language}>
+              <button
+                type="button"
+                className={`lang-switcher__btn ${language === 'en' ? 'is-active' : ''}`}
+                onClick={() => setLanguage('en')}
+                title="English"
+                aria-pressed={language === 'en'}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                className={`lang-switcher__btn ${language === 'fr' ? 'is-active' : ''}`}
+                onClick={() => setLanguage('fr')}
+                title="Français"
+                aria-pressed={language === 'fr'}
+              >
+                FR
+              </button>
+              <button
+                type="button"
+                className={`lang-switcher__btn ${language === 'ar' ? 'is-active' : ''}`}
+                onClick={() => setLanguage('ar')}
+                title="العربية"
+                aria-pressed={language === 'ar'}
+                style={{ fontFamily: "'Readex Pro', sans-serif" }}
+              >
+                العربية
+              </button>
+            </div>
+
             <button
               onClick={() => handleNavClick('lab')}
               className="navbar__cta"
             >
-              Enter the Lab
+              {t.nav.enterLab}
             </button>
 
             <button
               className={`navbar__hamburger ${isMobileOpen ? 'is-active' : ''}`}
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
+              aria-label={isMobileOpen ? t.nav.closeMenu : t.nav.openMenu}
               aria-expanded={isMobileOpen}
             >
               <span className="navbar__hamburger-line"></span>
@@ -166,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         <button
           className="mobile-overlay__close"
           onClick={() => setIsMobileOpen(false)}
-          aria-label="Close navigation menu"
+          aria-label={t.nav.closeMenu}
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -180,7 +214,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               className={`mobile-overlay__link ${currentView === 'home' ? 'is-active' : ''}`}
               onClick={() => handleNavClick('home')}
             >
-              Home
+              {t.nav.home}
             </button>
           </li>
           <li>
@@ -188,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               className={`mobile-overlay__link ${currentView === 'elements' ? 'is-active' : ''}`}
               onClick={() => handleNavClick('elements')}
             >
-              Elements
+              {t.nav.elements}
             </button>
           </li>
           <li>
@@ -196,7 +230,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               className={`mobile-overlay__link ${currentView === 'lab' ? 'is-active' : ''}`}
               onClick={() => handleNavClick('lab')}
             >
-              Reactions
+              {t.nav.reactions}
             </button>
           </li>
           <li>
@@ -204,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               className={`mobile-overlay__link ${currentView === 'tools' ? 'is-active' : ''}`}
               onClick={() => handleNavClick('tools')}
             >
-              Tools
+              {t.nav.tools}
             </button>
           </li>
           <li>
@@ -212,16 +246,48 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               className={`mobile-overlay__link ${currentView === 'about' ? 'is-active' : ''}`}
               onClick={() => handleNavClick('about')}
             >
-              About
+              {t.nav.about}
             </button>
           </li>
         </ul>
 
+        {/* Mobile Language Switcher */}
+        <div className="mobile-lang-switcher">
+          <span className="mobile-lang-switcher__title">{t.nav.language}</span>
+          <div className="lang-switcher" style={{ width: '100%', justifyContent: 'center' }}>
+            <button
+              type="button"
+              className={`lang-switcher__btn ${language === 'en' ? 'is-active' : ''}`}
+              onClick={() => setLanguage('en')}
+              style={{ flex: 1, padding: '8px 8px' }}
+            >
+              English (EN)
+            </button>
+            <button
+              type="button"
+              className={`lang-switcher__btn ${language === 'fr' ? 'is-active' : ''}`}
+              onClick={() => setLanguage('fr')}
+              style={{ flex: 1, padding: '8px 8px' }}
+            >
+              Français (FR)
+            </button>
+            <button
+              type="button"
+              className={`lang-switcher__btn ${language === 'ar' ? 'is-active' : ''}`}
+              onClick={() => setLanguage('ar')}
+              style={{ flex: 1, padding: '8px 8px', fontFamily: "'Readex Pro', sans-serif" }}
+            >
+              العربية (AR)
+            </button>
+          </div>
+        </div>
+
         <button
           className="mobile-overlay__cta"
           onClick={() => handleNavClick('lab')}
+          style={{ marginTop: '1.25rem' }}
         >
-          Enter the Lab
+          {t.nav.enterLab}
         </button>
       </div>
     </>

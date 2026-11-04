@@ -11,6 +11,8 @@ import { IdealGasCalc } from './calculators/IdealGasCalc';
 import { EmpiricalFormulaCalc } from './calculators/EmpiricalFormulaCalc';
 import { OxidationStateCalc } from './calculators/OxidationStateCalc';
 import { ToolCrashCourse } from './ToolCrashCourse';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { TOOLS_TRANSLATIONS } from '../../i18n/translations/tools';
 
 interface ToolModalProps {
   tool: ToolItem | null;
@@ -19,6 +21,7 @@ interface ToolModalProps {
 }
 
 export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calculator', onClose }) => {
+  const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'calculator' | 'crashcourse'>(initialTab);
   const [calculatorPreset, setCalculatorPreset] = useState<any>(null);
 
@@ -37,6 +40,12 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
   }, [onClose]);
 
   if (!tool) return null;
+
+  const localizedTool = TOOLS_TRANSLATIONS[language]?.[tool.id];
+  const toolTitle = localizedTool?.title || tool.title;
+  const toolSubtitle = localizedTool?.subtitle || tool.subtitle;
+  const toolCategory = t.tools.categories[tool.category] || tool.category;
+  const toolBadge = t.tools.badges[tool.badge] || tool.badge;
 
   const handleSwitchToCalculator = (preset?: any) => {
     if (preset) {
@@ -154,7 +163,8 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
             alignItems: 'flex-start',
             borderBottom: '1px solid rgba(111, 127, 99, 0.3)',
             paddingBottom: '1rem',
-            marginBottom: '1.25rem'
+            marginBottom: '1.25rem',
+            gap: '1rem'
           }}
         >
           <div>
@@ -171,7 +181,7 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
                   color: '#4E5B47'
                 }}
               >
-                {tool.category}
+                {toolCategory}
               </span>
               <span
                 style={{
@@ -184,21 +194,21 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
                   color: '#5F6F5B'
                 }}
               >
-                {tool.badge}
+                {toolBadge}
               </span>
             </div>
             <h2
+              className="section-title"
               style={{
-                fontFamily: "'Playfair Display', serif",
                 fontSize: '1.75rem',
                 color: '#4E5B47',
                 margin: 0,
                 lineHeight: 1.2
               }}
             >
-              {tool.title}
+              {toolTitle}
             </h2>
-            <p style={{ margin: '4px 0 0', color: '#5F6F5B', fontSize: '0.88rem' }}>{tool.subtitle}</p>
+            <p style={{ margin: '4px 0 0', color: '#5F6F5B', fontSize: '0.88rem' }}>{toolSubtitle}</p>
           </div>
 
           <button
@@ -252,7 +262,7 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
             }}
           >
             <span>🧮</span>
-            <span>Interactive Calculator</span>
+            <span>{language === 'ar' ? 'حاسبة تفاعلية' : language === 'fr' ? 'Calculateur Interactif' : 'Interactive Calculator'}</span>
           </button>
 
           <button
@@ -276,7 +286,7 @@ export const ToolModal: React.FC<ToolModalProps> = ({ tool, initialTab = 'calcul
             }}
           >
             <span>📖</span>
-            <span>Crash Course & Guide</span>
+            <span>{language === 'ar' ? 'دليل تعليمي وشرح' : language === 'fr' ? 'Guide & Cours Express' : 'Guide & Crash Course'}</span>
           </button>
         </div>
 

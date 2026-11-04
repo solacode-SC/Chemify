@@ -1,19 +1,22 @@
 import React from 'react';
 import { AppView } from '../common/Navbar';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface FeaturesSectionProps {
   onNavigate: (view: AppView) => void;
 }
 
 export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) => {
+  const { t } = useLanguage();
+
   return (
     <section className="features-section" id="features">
       <div className="features-container">
         <div className="section-header">
-          <span className="section-eyebrow">Comprehensive Capabilities</span>
-          <h2 className="section-title">Everything You Need to Explore Matter</h2>
+          <span className="section-eyebrow">{t.features.badge}</span>
+          <h2 className="section-title">{t.features.title}</h2>
           <p className="section-desc">
-            A cohesive suite of visual discovery and computational tools designed to replace clunky legacy software.
+            {t.features.subtitle}
           </p>
         </div>
 
@@ -43,18 +46,18 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
                   <line x1="66.5" y1="60.5" x2="74" y2="68" stroke="#4E5B47" strokeWidth="2.2" strokeLinecap="round" />
                 </svg>
               </div>
-              <h3 className="feature-card__title">Periodic Table Explorer</h3>
+              <h3 className="feature-card__title">{t.features.card1Title}</h3>
               <p className="feature-card__desc">
-                Navigate through every element with rich detail — electron shell diagrams, electronegativity heatmaps, historical discovery, isotopic abundance, and real-world uses.
+                {t.features.card1Desc}
               </p>
               <ul className="feature-card__list">
-                <li>118 verified elements with IUPAC data</li>
-                <li>Filter by chemical families & phase states</li>
-                <li>Interactive Bohr atom & electron shells</li>
+                <li>{t.features.card1Item1}</li>
+                <li>{t.features.card1Item2}</li>
+                <li>{t.features.card1Item3}</li>
               </ul>
               <div className="feature-card__cta">
-                <span>Explore Catalog</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <span>{t.features.card1Cta}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
@@ -88,18 +91,18 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
                   <circle cx="42" cy="62" r="2" fill="#4E5B47" />
                 </svg>
               </div>
-              <h3 className="feature-card__title">Reaction Studio</h3>
+              <h3 className="feature-card__title">{t.features.card2Title}</h3>
               <p className="feature-card__desc">
-                Combine compounds and witness reactions in real-time. Automatically calculate enthalpy (ΔH), predict limiting reagents, compute theoretical yields, and balance complex chemical systems.
+                {t.features.card2Desc}
               </p>
               <ul className="feature-card__list">
-                <li>Gaussian matrix equation balancer</li>
-                <li>Endothermic & exothermic enthalpy curves</li>
-                <li>50+ preset organic & inorganic reactions</li>
+                <li>{t.features.card2Item1}</li>
+                <li>{t.features.card2Item2}</li>
+                <li>{t.features.card2Item3}</li>
               </ul>
               <div className="feature-card__cta">
-                <span>Enter Studio</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <span>{t.features.card2Cta}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
@@ -133,18 +136,18 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
                   <rect x="49" y="59" width="6" height="6" rx="2" fill="#4E5B47" />
                 </svg>
               </div>
-              <h3 className="feature-card__title">10 Precision Tools</h3>
+              <h3 className="feature-card__title">{t.features.card3Title}</h3>
               <p className="feature-card__desc">
-                From empirical formula solvers to Gibbs free energy and Henderson-Hasselbalch pH calculators — every computational tool is tuned with high precision and step-by-step explanations.
+                {t.features.card3Desc}
               </p>
               <ul className="feature-card__list">
-                <li>Molar Mass & Empirical Formula solvers</li>
-                <li>Thermodynamic spontaneity & Gibbs ΔG</li>
-                <li>Molarity dilution & Ideal Gas Law PV=nRT</li>
+                <li>{t.features.card3Item1}</li>
+                <li>{t.features.card3Item2}</li>
+                <li>{t.features.card3Item3}</li>
               </ul>
               <div className="feature-card__cta">
-                <span>View Calculators</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <span>{t.features.card3Cta}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>

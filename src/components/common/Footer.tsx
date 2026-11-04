@@ -1,11 +1,14 @@
 import React from 'react';
 import { AppView } from './Navbar';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface FooterProps {
   onNavigate: (view: AppView) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer">
       <div className="footer__inner">
@@ -51,29 +54,29 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </svg>
             <span className="footer__logo-text">Chemify</span>
           </button>
-          <p className="footer__tagline">Chemistry, visualized for curious minds.</p>
+          <p className="footer__tagline">{t.footer.tagline}</p>
         </div>
 
         <nav className="footer__nav">
           <ul className="footer__links">
             <li>
               <button className="footer__link" onClick={() => onNavigate('elements')}>
-                Elements
+                {t.nav.elements}
               </button>
             </li>
             <li>
               <button className="footer__link" onClick={() => onNavigate('lab')}>
-                Reactions
+                {t.nav.reactions}
               </button>
             </li>
             <li>
               <button className="footer__link" onClick={() => onNavigate('tools')}>
-                Tools
+                {t.nav.tools}
               </button>
             </li>
             <li>
               <button className="footer__link" onClick={() => onNavigate('about')}>
-                About
+                {t.nav.about}
               </button>
             </li>
           </ul>
@@ -81,7 +84,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       </div>
 
       <div className="footer__bottom">
-        <p>Built with curiosity & precision. © {new Date().getFullYear()} Chemify.</p>
+        <p>{t.footer.copyright} © {new Date().getFullYear()} Chemify.</p>
       </div>
     </footer>
   );

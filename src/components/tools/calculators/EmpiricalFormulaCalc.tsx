@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { calculateEmpiricalFormula, ElementInput } from '../../../utils/chemistryCalculations';
+import { useLanguage } from '../../../i18n/LanguageContext';
+import { getElementName } from '../../../i18n/translations/elements';
 
 interface EmpiricalFormulaCalcProps {
   initialElements?: ElementInput[];
 }
 
 export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ initialElements }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
+
   const [elements, setElements] = useState<ElementInput[]>(
     initialElements && initialElements.length > 0
       ? initialElements
@@ -43,7 +48,7 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>
-            Element Composition (Mass in g or %)
+            {l('Elemental Composition (mass in g or %)', 'Composition élémentaire (masse en g ou %)', 'التركيب العنصري (الكتلة بالغرام أو %)')}
           </label>
           <button
             onClick={handleAdd}
@@ -58,7 +63,7 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
               cursor: 'pointer'
             }}
           >
-            ＋ Add Element
+            {l('＋ Add Element', '＋ Ajouter un élément', '＋ إضافة عنصر')}
           </button>
         </div>
 
@@ -81,6 +86,7 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
                 value={el.symbol}
                 onChange={e => handleChange(i, 'symbol', e.target.value.toUpperCase())}
                 placeholder="Sym"
+                className="formula-ltr"
                 style={{
                   width: '60px',
                   padding: '6px',
@@ -96,7 +102,8 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
                 type="number"
                 value={el.amount}
                 onChange={e => handleChange(i, 'amount', parseFloat(e.target.value) || 0)}
-                placeholder="Amount (% or g)"
+                placeholder={l('Amount (% or g)', 'Quantité (% ou g)', 'الكمية (% أو غ)')}
+                className="math-ltr"
                 style={{
                   flex: 1,
                   padding: '6px 10px',
@@ -118,7 +125,7 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
                     fontSize: '1.2rem',
                     cursor: 'pointer'
                   }}
-                  title="Remove element"
+                  title={l('Remove Element', "Supprimer l'élément", 'حذف العنصر')}
                 >
                   ×
                 </button>
@@ -141,43 +148,48 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
             }}
           >
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>
-              Simplest Empirical Formula
+              {l('Simplest Empirical Formula', 'Formule brute / empirique la plus simple', 'الصيغة الأولية الأبسط')}
             </span>
             <div
               style={{
-                fontFamily: "'Playfair Display', serif",
+                fontFamily: "var(--font-heading, 'Playfair Display', serif)",
                 fontSize: '2.5rem',
                 fontWeight: 700,
                 color: '#4E5B47',
                 margin: '0.25rem 0'
               }}
             >
-              {result.formula}
+              <span className="formula-ltr">{result.formula}</span>
             </div>
           </div>
 
           {/* Mole Ratio Steps */}
           <div>
             <h4 style={{ fontSize: '0.95rem', color: '#4E5B47', marginBottom: '0.5rem' }}>
-              Intermediate Mole Ratios
+              {l('Intermediate Molar Ratios', 'Rapports molaires intermédiaires', 'النسب المولية المرحلية')}
             </h4>
-            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflowX: 'auto' }} className="no-scrollbar">
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.88rem' }}>
                 <thead>
                   <tr style={{ background: '#DCE0CF', color: '#4E5B47' }}>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Element</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Calculated Moles</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Integer Ratio</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Element', 'Élément', 'العنصر')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Calculated Moles', 'Moles calculées', 'المولات المحسوبة')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Integer Ratio', 'Rapport entier', 'النسبة الصحيحة')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {result.moles.map(m => (
-                    <tr key={m.symbol} style={{ borderBottom: '1px solid #e0ddd8', background: '#FAF8F5' }}>
-                      <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{m.symbol}</td>
-                      <td style={{ padding: '8px' }}>{m.moles.toFixed(4)} mol</td>
-                      <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{m.ratio}</td>
-                    </tr>
-                  ))}
+                  {result.moles.map(m => {
+                    const elName = getElementName(m.symbol, language);
+                    return (
+                      <tr key={m.symbol} style={{ borderBottom: '1px solid #e0ddd8', background: '#FAF8F5' }}>
+                        <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>
+                          <span className="formula-ltr">{m.symbol}</span> {elName ? `(${elName})` : ''}
+                        </td>
+                        <td style={{ padding: '8px' }} className="math-ltr">{m.moles.toFixed(4)} mol</td>
+                        <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }} className="math-ltr">{m.ratio}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -185,10 +197,13 @@ export const EmpiricalFormulaCalc: React.FC<EmpiricalFormulaCalcProps> = ({ init
         </>
       ) : (
         <div style={{ textAlign: 'center', color: '#5F6F5B' }}>
-          Enter valid element symbols and mass values.
+          {l(
+            'Please enter valid element symbols and mass values.',
+            "Veuillez saisir des symboles d'éléments et des masses valides.",
+            'يرجى إدخال رموز عناصر وكتل صالحة.'
+          )}
         </div>
       )}
     </div>
   );
 };
-

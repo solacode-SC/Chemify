@@ -1,6 +1,8 @@
 import React from 'react';
 import { HeroCanvas } from '../common/HeroCanvas';
 import { AppView } from '../common/Navbar';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { getElementName } from '../../i18n/translations/elements';
 
 interface HeroSectionProps {
   onNavigate: (view: AppView) => void;
@@ -20,6 +22,8 @@ const HERO_TILES = [
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
+  const { language, t } = useLanguage();
+
   return (
     <section className="hero-section" id="hero">
       {/* Dynamic Background Particle/Pulse Canvas */}
@@ -29,17 +33,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         {/* Eyebrow badge */}
         <div className="hero-eyebrow">
           <span className="hero-eyebrow__dot"></span>
-          <span>Interactive Chemistry Catalog & Simulator</span>
+          <span>{t.hero.badge}</span>
         </div>
 
         {/* Main Heading */}
         <h1 className="hero-title">
-          Where Chemistry<br />Comes Alive
+          {t.hero.titleLine1}<br />{t.hero.titleLine2}
         </h1>
 
         {/* Subtitle */}
         <p className="hero-subtitle">
-          Explore all 118 elements of the periodic table, simulate reactions in real-time with thermodynamic precision, and solve complex stoichiometry equations — all crafted with botanical elegance.
+          {t.hero.subtitle}
         </p>
 
         {/* CTAs */}
@@ -48,8 +52,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             onClick={() => onNavigate('elements')}
             className="hero-btn hero-btn--primary"
           >
-            <span>Explore Elements</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <span>{t.hero.exploreBtn}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
@@ -59,7 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             onClick={() => onNavigate('lab')}
             className="hero-btn hero-btn--ghost"
           >
-            <span>Enter the Lab</span>
+            <span>{t.hero.labBtn}</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"></path>
             </svg>
@@ -69,30 +73,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         {/* Curated Interactive Floating Element Deck */}
         <div className="hero-deck-wrapper">
           <div className="hero-deck-label">
-            <span>Featured Elemental Building Blocks</span>
+            <span>{language === 'ar' ? 'عناصر مميزة من الجدول الدوري' : language === 'fr' ? 'Blocs Élémentaires Fondamentaux' : 'Essential Elementary Blocks'}</span>
           </div>
           <div className="hero-deck no-scrollbar">
-            {HERO_TILES.map(tile => (
-              <div
-                key={tile.sym}
-                onClick={() => onNavigate('elements')}
-                className="hero-element-tile"
-                style={{ '--tile-accent': tile.color } as React.CSSProperties}
-                title={`${tile.name} — Click to view in Elements Catalog`}
-                role="button"
-                tabIndex={0}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' || e.key === ' ') onNavigate('elements');
-                }}
-              >
-                <div className="hero-element-tile__top">
-                  <span className="hero-element-tile__num">{tile.num}</span>
-                  <span className="hero-element-tile__mass">{tile.mass}</span>
+            {HERO_TILES.map(tile => {
+              const localizedName = getElementName(tile.num, language, tile.name);
+              return (
+                <div
+                  key={tile.sym}
+                  onClick={() => onNavigate('elements')}
+                  className="hero-element-tile"
+                  style={{ '--tile-accent': tile.color } as React.CSSProperties}
+                  title={`${localizedName} — Click to view in Elements Catalog`}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') onNavigate('elements');
+                  }}
+                >
+                  <div className="hero-element-tile__top">
+                    <span className="hero-element-tile__num">{tile.num}</span>
+                    <span className="hero-element-tile__mass">{tile.mass}</span>
+                  </div>
+                  <div className="hero-element-tile__sym">{tile.sym}</div>
+                  <div className="hero-element-tile__name">{localizedName}</div>
                 </div>
-                <div className="hero-element-tile__sym">{tile.sym}</div>
-                <div className="hero-element-tile__name">{tile.name}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

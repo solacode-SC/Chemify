@@ -3,6 +3,8 @@ import { ElementItem } from '../../types/element';
 import { ELEMENT_DETAILS } from '../../data/elementDetailsData';
 import { CATEGORIES } from '../../data/elementsData';
 import { ElectronShells } from './ElectronShells';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { getElementName } from '../../i18n/translations/elements';
 
 interface ElementModalProps {
   element: ElementItem | null;
@@ -17,6 +19,8 @@ export const ElementModal: React.FC<ElementModalProps> = ({
   onSelectElement,
   allElements
 }) => {
+  const { language, t, isRTL } = useLanguage();
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!element) return;
@@ -39,6 +43,9 @@ export const ElementModal: React.FC<ElementModalProps> = ({
 
   const detail = ELEMENT_DETAILS[element.atomicNumber];
   const cat = CATEGORIES[element.category];
+  const localizedName = getElementName(element.atomicNumber, language, element.name);
+  const catLabel = t.explorer.categories[element.category] || (cat ? cat.label : element.category);
+  const phaseLabel = detail?.phase ? (t.explorer.states[detail.phase] || detail.phase) : '—';
 
   const currentIndex = allElements.findIndex(el => el.atomicNumber === element.atomicNumber);
   const prevEl = currentIndex > 0 ? allElements[currentIndex - 1] : null;
@@ -94,11 +101,12 @@ export const ElementModal: React.FC<ElementModalProps> = ({
                 padding: '4px 10px',
                 color: '#4E5B47',
                 cursor: prevEl ? 'pointer' : 'not-allowed',
-                opacity: prevEl ? 1 : 0.4
+                opacity: prevEl ? 1 : 0.4,
+                fontSize: '0.85rem'
               }}
-              title="Previous Element (Left Arrow)"
+              title={t.modal.prevElement}
             >
-              ← Prev ({prevEl?.symbol || '—'})
+              {isRTL ? `→ (${prevEl?.symbol || '—'}) ${t.modal.prevElement}` : `← ${t.modal.prevElement} (${prevEl?.symbol || '—'})`}
             </button>
             <button
               disabled={!nextEl}
@@ -110,17 +118,18 @@ export const ElementModal: React.FC<ElementModalProps> = ({
                 padding: '4px 10px',
                 color: '#4E5B47',
                 cursor: nextEl ? 'pointer' : 'not-allowed',
-                opacity: nextEl ? 1 : 0.4
+                opacity: nextEl ? 1 : 0.4,
+                fontSize: '0.85rem'
               }}
-              title="Next Element (Right Arrow)"
+              title={t.modal.nextElement}
             >
-              Next ({nextEl?.symbol || '—'}) →
+              {isRTL ? `${t.modal.nextElement} (${nextEl?.symbol || '—'}) ←` : `${t.modal.nextElement} (${nextEl?.symbol || '—'}) →`}
             </button>
           </div>
 
           <button
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label={t.modal.close}
             style={{
               background: 'none',
               border: 'none',
@@ -163,26 +172,26 @@ export const ElementModal: React.FC<ElementModalProps> = ({
                 marginBottom: '0.5rem'
               }}
             >
-              {cat ? cat.label : element.category} • Period {element.period} • Group {element.group}
+              {catLabel} • {t.modal.period} {element.period} • {t.modal.group} {element.group}
             </span>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', flexWrap: 'wrap' }}>
               <h2
+                className="section-title"
                 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: '2.5rem',
+                  fontSize: '2.4rem',
                   color: '#4E5B47',
                   margin: 0,
-                  lineHeight: 1
+                  lineHeight: 1.2
                 }}
               >
-                {element.name}
+                {localizedName}
               </h2>
-              <span style={{ fontSize: '1.2rem', color: '#5F6F5B', fontWeight: 500 }}>
+              <span className="formula-ltr" style={{ fontSize: '1.2rem', color: '#5F6F5B', fontWeight: 600 }}>
                 ({element.symbol})
               </span>
             </div>
             <div style={{ color: '#5F6F5B', fontSize: '0.9rem', marginTop: '4px' }}>
-              Atomic No. <strong>{element.atomicNumber}</strong> • Atomic Weight: <strong>{element.atomicMass} u</strong>
+              {t.modal.atomicNumber}: <strong>{element.atomicNumber}</strong> • {t.modal.atomicMass}: <strong className="formula-ltr">{element.atomicMass} u</strong>
             </div>
           </div>
 
@@ -203,7 +212,7 @@ export const ElementModal: React.FC<ElementModalProps> = ({
             <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#5F6F5B' }}>
               {element.atomicNumber}
             </span>
-            <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4E5B47', lineHeight: 1 }}>
+            <span className="formula-ltr" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4E5B47', lineHeight: 1 }}>
               {element.symbol}
             </span>
           </div>
@@ -219,28 +228,28 @@ export const ElementModal: React.FC<ElementModalProps> = ({
           }}
         >
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Phase</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.phase || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.phase}</div>
+            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{phaseLabel}</div>
           </div>
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Melting Point</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.mp || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.meltingPoint}</div>
+            <div className="formula-ltr" style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.mp || '—'}</div>
           </div>
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Boiling Point</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.bp || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.boilingPoint}</div>
+            <div className="formula-ltr" style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.bp || '—'}</div>
           </div>
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Density</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.density || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.density}</div>
+            <div className="formula-ltr" style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.density || '—'}</div>
           </div>
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Electronegativity</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.en || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.electronegativity}</div>
+            <div className="formula-ltr" style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.en || '—'}</div>
           </div>
           <div style={{ background: '#DCE0CF', padding: '0.75rem', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>Oxidation States</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.ox || '—'}</div>
+            <div style={{ fontSize: '0.72rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600 }}>{t.modal.oxidationStates}</div>
+            <div className="formula-ltr" style={{ fontSize: '1rem', fontWeight: 600, color: '#4E5B47' }}>{detail?.ox || '—'}</div>
           </div>
         </div>
 
@@ -260,22 +269,22 @@ export const ElementModal: React.FC<ElementModalProps> = ({
         >
           <div>
             <span style={{ fontSize: '0.75rem', color: '#5F6F5B', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
-              Electron Configuration
+              {t.modal.electronConfig}
             </span>
-            <code style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#4E5B47', fontWeight: 'bold' }}>
+            <code className="formula-ltr" style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#4E5B47', fontWeight: 'bold' }}>
               {detail?.ec || '—'}
             </code>
           </div>
           <div style={{ fontSize: '0.85rem', color: '#5F6F5B' }}>
-            Discovered: <strong>{detail?.year || 'Ancient'}</strong> {detail?.by ? `by ${detail.by}` : ''}
+            {t.modal.discoveredYear}: <strong>{detail?.year || (language === 'ar' ? 'العصور القديمة' : language === 'fr' ? 'Antiquité' : 'Antiquity')}</strong> {detail?.by ? `${t.modal.discoveredBy} ${detail.by}` : ''}
           </div>
         </div>
 
         {/* Electron Shell Visualizer */}
         {detail?.shells && detail.shells.length > 0 && (
           <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.75rem' }}>
-              Bohr Atomic Model & Electron Shells
+            <h3 style={{ fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.75rem' }}>
+              {t.modal.electronShells}
             </h3>
             <ElectronShells shells={detail.shells} symbol={element.symbol} size={280} />
           </div>
@@ -284,18 +293,18 @@ export const ElementModal: React.FC<ElementModalProps> = ({
         {/* About & Uses */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.4rem' }}>
-              Overview
+            <h3 style={{ fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.4rem' }}>
+              {t.modal.overview}
             </h3>
-            <p style={{ color: '#4E5B47', lineHeight: 1.6, fontSize: '0.95rem' }}>
-              {detail?.desc || 'Element information details.'}
+            <p style={{ color: '#4E5B47', lineHeight: 1.7, fontSize: '0.95rem' }}>
+              {detail?.desc || (language === 'ar' ? 'معلومات وتفاصيل العنصر.' : language === 'fr' ? 'Détails et informations sur l’élément.' : 'Element details and information.')}
             </p>
           </div>
 
           {detail?.uses && detail.uses.length > 0 && (
             <div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.5rem' }}>
-                Common Real-World Uses
+              <h3 style={{ fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.5rem' }}>
+                {t.modal.commonUses}
               </h3>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                 {detail.uses.map((use, i) => (

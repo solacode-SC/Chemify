@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { parseEquationInput, balanceChemicalEquation } from '../../../utils/equationBalancer';
 import { calculateMolarMass } from '../../../utils/formulaParser';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 interface StoichiometryCalcProps {
   initialEquation?: string;
@@ -11,6 +12,8 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
   initialEquation = '2H2 + O2 -> 2H2O',
   initialInputVal = 4.0
 }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
   const [eqInput, setEqInput] = useState(initialEquation);
   const [inputIdx, setInputIdx] = useState(0);
   const [inputVal, setInputVal] = useState<number>(initialInputVal);
@@ -40,13 +43,14 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', marginBottom: '0.4rem' }}>
-          Balanced Chemical Equation
+          {l('Balanced Chemical Equation', 'Équation Chimique Équilibrée', 'المعادلة الكيميائية الموزونة')}
         </label>
         <input
           type="text"
           value={eqInput}
           onChange={e => setEqInput(e.target.value)}
           placeholder="e.g. 2H2 + O2 -> 2H2O"
+          className="formula-ltr"
           style={{
             width: '100%',
             padding: '0.8rem 1rem',
@@ -54,7 +58,6 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
             border: '1.5px solid #6F7F63',
             background: '#FAF8F5',
             fontSize: '1.1rem',
-            fontFamily: "'DM Sans', sans-serif",
             color: '#4E5B47',
             outline: 'none',
             boxSizing: 'border-box'
@@ -78,12 +81,13 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
             }}
           >
             <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block' }}>
-                Given Reactant
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '4px' }}>
+                {l('Given Reactant', 'Réactif Donné', 'المتفاعل المرجعي')}
               </span>
               <select
                 value={inputIdx}
                 onChange={e => setInputIdx(parseInt(e.target.value, 10))}
+                className="formula-ltr"
                 style={{
                   padding: '6px 12px',
                   borderRadius: '6px',
@@ -102,13 +106,14 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
             </div>
 
             <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block' }}>
-                Quantity
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '4px' }}>
+                {l('Quantity', 'Quantité', 'الكمية')}
               </span>
               <input
                 type="number"
                 value={inputVal}
                 onChange={e => setInputVal(parseFloat(e.target.value) || 0)}
+                className="formula-ltr"
                 style={{
                   padding: '6px 12px',
                   borderRadius: '6px',
@@ -124,8 +129,8 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
             </div>
 
             <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block' }}>
-                Unit
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', display: 'block', marginBottom: '4px' }}>
+                {l('Unit', 'Unité', 'الوحدة')}
               </span>
               <div style={{ display: 'flex', gap: '4px' }}>
                 <button
@@ -141,7 +146,7 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
                     cursor: 'pointer'
                   }}
                 >
-                  Grams (g)
+                  {l('Grams (g)', 'Grammes (g)', 'غرام (g)')}
                 </button>
                 <button
                   type="button"
@@ -156,7 +161,7 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
                     cursor: 'pointer'
                   }}
                 >
-                  Moles (mol)
+                  {l('Moles (mol)', 'Moles (mol)', 'مول (mol)')}
                 </button>
               </div>
             </div>
@@ -165,17 +170,17 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
           {/* Stoichiometric Results Table */}
           <div>
             <h4 style={{ fontSize: '0.95rem', color: '#4E5B47', marginBottom: '0.5rem' }}>
-              Stoichiometric Mass & Mole Relationship
+              {l('Stoichiometric Table: Masses & Moles', 'Bilan Stœchiométrique : Masses & Moles', 'الجدول الستوكيومتري للعلاقات الكتلية والمولية')}
             </h4>
-            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.88rem' }}>
                 <thead>
                   <tr style={{ background: '#DCE0CF', color: '#4E5B47' }}>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Substance</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Role</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Molar Mass</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Moles Required / Produced</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Mass (g)</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Substance', 'Substance', 'المادة')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Role', 'Rôle', 'الدور')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Molar Mass', 'Masse Molaire', 'الكتلة المولية')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Moles', 'Moles', 'المولات')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Mass (g)', 'Masse (g)', 'الكتلة (g)')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -188,11 +193,11 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
 
                     return (
                       <tr key={`r-${r}`} style={{ borderBottom: '1px solid #e0ddd8', background: i === inputIdx ? '#FAF8F5' : '#f5f3ef' }}>
-                        <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{r}</td>
-                        <td style={{ padding: '8px', color: '#5F6F5B' }}>Reactant</td>
-                        <td style={{ padding: '8px' }}>{mw.toFixed(2)} g/mol</td>
-                        <td style={{ padding: '8px', fontWeight: 600 }}>{molesNeeded.toFixed(4)} mol</td>
-                        <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{massNeeded.toFixed(3)} g</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{r}</td>
+                        <td style={{ padding: '8px', color: '#5F6F5B' }}>{l('Reactant', 'Réactif', 'متفاعل')}</td>
+                        <td className="formula-ltr" style={{ padding: '8px' }}>{mw.toFixed(2)} g/mol</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 600 }}>{molesNeeded.toFixed(4)} mol</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{massNeeded.toFixed(3)} g</td>
                       </tr>
                     );
                   })}
@@ -206,11 +211,11 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
 
                     return (
                       <tr key={`p-${p}`} style={{ borderBottom: '1px solid #e0ddd8', background: '#eef4ed' }}>
-                        <td style={{ padding: '8px', fontWeight: 700, color: '#2a5a24' }}>{p}</td>
-                        <td style={{ padding: '8px', color: '#2a5a24' }}>Theoretical Product</td>
-                        <td style={{ padding: '8px' }}>{mw.toFixed(2)} g/mol</td>
-                        <td style={{ padding: '8px', fontWeight: 600, color: '#2a5a24' }}>{molesFormed.toFixed(4)} mol</td>
-                        <td style={{ padding: '8px', fontWeight: 700, color: '#2a5a24' }}>{massFormed.toFixed(3)} g</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 700, color: '#2a5a24' }}>{p}</td>
+                        <td style={{ padding: '8px', color: '#2a5a24' }}>{l('Theoretical Product', 'Produit Théorique', 'ناتج نظري')}</td>
+                        <td className="formula-ltr" style={{ padding: '8px' }}>{mw.toFixed(2)} g/mol</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 600, color: '#2a5a24' }}>{molesFormed.toFixed(4)} mol</td>
+                        <td className="formula-ltr" style={{ padding: '8px', fontWeight: 700, color: '#2a5a24' }}>{massFormed.toFixed(3)} g</td>
                       </tr>
                     );
                   })}
@@ -221,10 +226,13 @@ export const StoichiometryCalc: React.FC<StoichiometryCalcProps> = ({
         </>
       ) : (
         <div style={{ textAlign: 'center', color: '#5F6F5B', padding: '1rem' }}>
-          Enter a valid chemical equation to calculate stoichiometric relationships.
+          {l(
+            'Enter a valid chemical equation to calculate stoichiometric relationships.',
+            'Entrez une équation chimique valide pour calculer les relations stœchiométriques.',
+            'أدخل معادلة كيميائية صحيحة لحساب العلاقات الستوكيومترية.'
+          )}
         </div>
       )}
     </div>
   );
 };
-

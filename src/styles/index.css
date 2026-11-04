@@ -3,7 +3,7 @@
    Theme: Vintage Parchment, Botanical Sage & Deep Olive
    =================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Readex+Pro:wght@300;400;500;600;700&display=swap');
 
 *,
 *::before,
@@ -50,6 +50,160 @@
   /* Transitions */
   --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: 0.15s ease;
+}
+
+/* ===================================================
+   Arabic Typography & RTL Specialization
+   =================================================== */
+html[lang="ar"],
+html[dir="rtl"],
+body.lang-ar {
+  --font-family: 'Readex Pro', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Amiri', 'Playfair Display', Georgia, serif;
+}
+
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Headings and Titles in Arabic with Literary Calligraphic Flourish */
+[lang="ar"] .hero-title,
+[lang="ar"] .section-title,
+[lang="ar"] .features-card__title,
+[lang="ar"] .modal-title,
+[lang="ar"] .footer__logo-text,
+[lang="ar"] .navbar__logo-text,
+[lang="ar"] h1,
+[lang="ar"] h2,
+[lang="ar"] h3,
+[lang="ar"] h4 {
+  font-family: var(--font-heading);
+  letter-spacing: normal !important;
+  line-height: 1.35;
+}
+
+[lang="ar"] .hero-subtitle,
+[lang="ar"] .section-desc,
+[lang="ar"] .about-paragraph,
+[lang="ar"] p {
+  line-height: 1.8;
+}
+
+/* Force standard LTR for chemical formulas, math, units and symbols */
+.formula-ltr,
+.math-ltr,
+.chem-symbol,
+.iupac-formula,
+[data-dir="ltr"],
+.code-ltr {
+  direction: ltr !important;
+  unicode-bidi: isolate;
+  text-align: left;
+  display: inline-block;
+}
+
+/* RTL Arrow & Chevron Flipping */
+[dir="rtl"] .rtl-flip,
+[dir="rtl"] .hero-btn svg,
+[dir="rtl"] .feature-card__cta svg,
+[dir="rtl"] .about-link-btn svg,
+[dir="rtl"] .cta-banner__btn svg {
+  transform: scaleX(-1);
+}
+
+/* RTL positioning adjustments */
+[dir="rtl"] .mobile-overlay__close {
+  right: auto;
+  left: 24px;
+}
+
+[dir="rtl"] .persona-card__badge {
+  left: auto;
+  right: 12px;
+}
+
+[dir="rtl"] .tool-card__badge {
+  right: auto;
+  left: 12px;
+}
+
+[dir="rtl"] .studio-showcase__stamp {
+  left: auto;
+  right: 16px;
+}
+
+/* ===================================================
+   Language Switcher Component (Parchment & Olive Pill)
+   =================================================== */
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(220, 224, 207, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 3px;
+  box-shadow: inset 0 1px 3px rgba(78, 91, 71, 0.12);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.lang-switcher__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  font-family: var(--font-family);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.lang-switcher__btn:hover {
+  color: var(--color-text);
+  background: rgba(250, 248, 245, 0.5);
+}
+
+.lang-switcher__btn.is-active {
+  background: #FAF8F5;
+  color: var(--color-primary);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(78, 91, 71, 0.16);
+}
+
+.mobile-lang-switcher {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1.75rem;
+  padding: 12px 18px;
+  background: rgba(220, 224, 207, 0.65);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  width: 100%;
+  max-width: 280px;
+}
+
+.mobile-lang-switcher__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 html {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { balanceChemicalEquation, parseEquationInput } from '../../../utils/equationBalancer';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 interface EquationBalancerCalcProps {
   initialEquation?: string;
@@ -8,6 +9,8 @@ interface EquationBalancerCalcProps {
 export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
   initialEquation = 'C3H8 + O2 -> CO2 + H2O'
 }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
   const [equationInput, setEquationInput] = useState(initialEquation);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +37,7 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', marginBottom: '0.4rem' }}>
-          Unbalanced Chemical Equation
+          {l('Unbalanced Chemical Equation', 'Équation Chimique Non Équilibrée', 'المعادلة الكيميائية غير الموزونة')}
         </label>
         <input
           type="text"
@@ -44,6 +47,7 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
             setError(null);
           }}
           placeholder="e.g. C3H8 + O2 -> CO2 + H2O"
+          className="formula-ltr"
           style={{
             width: '100%',
             padding: '0.85rem 1rem',
@@ -51,7 +55,6 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
             border: `1.5px solid ${result ? '#6F7F63' : '#b91c1c'}`,
             background: '#FAF8F5',
             fontSize: '1.15rem',
-            fontFamily: "'DM Sans', sans-serif",
             color: '#4E5B47',
             outline: 'none',
             boxSizing: 'border-box'
@@ -64,6 +67,7 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
             <button
               key={p}
               onClick={() => setEquationInput(p)}
+              className="formula-ltr"
               style={{
                 background: '#DCE0CF',
                 border: '1px solid #6F7F63',
@@ -116,12 +120,12 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
                   fontWeight: 700
                 }}
               >
-                Balanced
+                {l('Balanced', 'Équilibrée', 'موزونة بدقة')}
               </span>
             </div>
             <div
+              className="formula-ltr"
               style={{
-                fontFamily: "'Playfair Display', serif",
                 fontSize: '1.8rem',
                 fontWeight: 700,
                 color: '#4E5B47'
@@ -134,26 +138,28 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
           {/* Atom Balance Verification Table */}
           <div>
             <h4 style={{ fontSize: '0.95rem', color: '#4E5B47', marginBottom: '0.5rem' }}>
-              Atomic Conservation Verification
+              {l('Atom Conservation & Mass Balance Check', 'Vérification de la Conservation des Atomes', 'التحقق من قانون حفظ المادة وعدد الذرات')}
             </h4>
-            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ border: '1px solid #6F7F63', borderRadius: '8px', overflowX: 'auto' }} className="no-scrollbar">
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', fontSize: '0.88rem' }}>
                 <thead>
                   <tr style={{ background: '#DCE0CF', color: '#4E5B47' }}>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Element</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Reactants Atoms</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Products Atoms</th>
-                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>Status</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Element', 'Élément', 'العنصر')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Reactant Atoms', 'Atomes Réactifs', 'ذرات المتفاعلات')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Product Atoms', 'Atomes Produits', 'ذرات النواتج')}</th>
+                    <th style={{ padding: '8px', borderBottom: '1px solid #6F7F63' }}>{l('Status', 'Statut', 'الحالة')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {result.atomBalance.map(item => (
                     <tr key={item.element} style={{ borderBottom: '1px solid #e0ddd8', background: '#FAF8F5' }}>
                       <td style={{ padding: '8px', fontWeight: 700, color: '#4E5B47' }}>{item.element}</td>
-                      <td style={{ padding: '8px', color: '#4E5B47' }}>{item.reactantCount}</td>
-                      <td style={{ padding: '8px', color: '#4E5B47' }}>{item.productCount}</td>
-                      <td style={{ padding: '8px', color: item.reactantCount === item.productCount ? '#15803d' : '#b91c1c' }}>
-                        {item.reactantCount === item.productCount ? '✓ Conserved' : 'Mismatch'}
+                      <td className="formula-ltr" style={{ padding: '8px', color: '#4E5B47' }}>{item.reactantCount}</td>
+                      <td className="formula-ltr" style={{ padding: '8px', color: '#4E5B47' }}>{item.productCount}</td>
+                      <td style={{ padding: '8px', color: item.reactantCount === item.productCount ? '#15803d' : '#b91c1c', fontWeight: 600 }}>
+                        {item.reactantCount === item.productCount
+                          ? l('✓ Conserved', '✓ Conservé', '✓ متطابق')
+                          : l('Mismatched', 'Différent', 'غير متطابق')}
                       </td>
                     </tr>
                   ))}
@@ -164,10 +170,14 @@ export const EquationBalancerCalc: React.FC<EquationBalancerCalcProps> = ({
         </>
       ) : (
         <div style={{ textAlign: 'center', padding: '1rem', color: '#5F6F5B', fontSize: '0.9rem' }}>
-          Please input a valid unbalanced equation using &quot;-&gt;&quot; or &quot;=&quot;. Example: <code>H2 + O2 &rarr; H2O</code>
+          {l(
+            'Please enter a valid unbalanced equation using "->" or "=". Example: ',
+            'Veuillez saisir une équation non équilibrée valide avec "->" ou "=". Exemple : ',
+            'يرجى إدخال معادلة غير موزونة صالحة باستخدام "->" أو "=". مثال: '
+          )}
+          <code className="formula-ltr">H2 + O2 &rarr; H2O</code>
         </div>
       )}
     </div>
   );
 };
-

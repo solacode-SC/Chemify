@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { solveIdealGas } from '../../../utils/chemistryCalculations';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 interface IdealGasCalcProps {
   initialSolveFor?: 'P' | 'V' | 'n' | 'T';
@@ -16,6 +17,9 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
   initialN = 1.0,
   initialT = 273.15
 }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
+
   const [solveFor, setSolveFor] = useState<'P' | 'V' | 'n' | 'T'>(initialSolveFor);
 
   // Working values in base units: atm, L, mol, K
@@ -57,11 +61,18 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
     unitLabel = vUnit;
   } else if (solveFor === 'n') {
     displayResult = resultBase;
-    unitLabel = 'moles';
+    unitLabel = l('moles', 'moles', 'مول');
   } else if (solveFor === 'T') {
     displayResult = tUnit === 'K' ? resultBase : resultBase - 273.15;
     unitLabel = `°${tUnit}`;
   }
+
+  const variableOptions = [
+    { id: 'P', label: l('Pressure (P)', 'Pression (P)', 'الضغط (P)') },
+    { id: 'V', label: l('Volume (V)', 'Volume (V)', 'الحجم (V)') },
+    { id: 'n', label: l('Amount of substance (n)', 'Quantité de matière (n)', 'كمية المادة (n)') },
+    { id: 'T', label: l('Temperature (T)', 'Température (T)', 'درجة الحرارة (T)') }
+  ];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -77,21 +88,17 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
           fontWeight: 600
         }}
       >
-        Ideal Gas Law: <strong>P · V = n · R · T</strong> (R = 0.08206 L·atm/(mol·K))
+        {l('Ideal Gas Law:', 'Loi des gaz parfaits :', 'قانون الغاز المثالي :')}{' '}
+        <strong className="formula-ltr">P · V = n · R · T</strong> (R = 0.08206 L·atm/(mol·K))
       </div>
 
       {/* Target Variable Selector */}
       <div>
         <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '6px' }}>
-          Select Variable to Calculate:
+          {l('Select variable to solve for:', 'Sélectionner la variable à calculer :', 'اختر المتغير المراد حسابه :')}
         </label>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-          {[
-            { id: 'P', label: 'Pressure (P)' },
-            { id: 'V', label: 'Volume (V)' },
-            { id: 'n', label: 'Moles (n)' },
-            { id: 'T', label: 'Temperature (T)' }
-          ].map(item => (
+          {variableOptions.map(item => (
             <button
               key={item.id}
               onClick={() => setSolveFor(item.id as any)}
@@ -117,7 +124,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
         {/* Pressure */}
         <div style={{ opacity: solveFor === 'P' ? 0.5 : 1 }}>
           <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-            Pressure (P)
+            {l('Pressure (P)', 'Pression (P)', 'الضغط (P)')}
           </label>
           <div style={{ display: 'flex', gap: '4px' }}>
             <input
@@ -125,6 +132,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
               disabled={solveFor === 'P'}
               value={solveFor === 'P' ? displayResult.toFixed(3) : pVal}
               onChange={e => setPVal(parseFloat(e.target.value) || 0)}
+              className="math-ltr"
               style={{
                 flex: 1,
                 padding: '8px',
@@ -149,7 +157,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
         {/* Volume */}
         <div style={{ opacity: solveFor === 'V' ? 0.5 : 1 }}>
           <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-            Volume (V)
+            {l('Volume (V)', 'Volume (V)', 'الحجم (V)')}
           </label>
           <div style={{ display: 'flex', gap: '4px' }}>
             <input
@@ -157,6 +165,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
               disabled={solveFor === 'V'}
               value={solveFor === 'V' ? displayResult.toFixed(3) : vVal}
               onChange={e => setVVal(parseFloat(e.target.value) || 0)}
+              className="math-ltr"
               style={{
                 flex: 1,
                 padding: '8px',
@@ -180,13 +189,14 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
         {/* Moles */}
         <div style={{ opacity: solveFor === 'n' ? 0.5 : 1 }}>
           <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-            Amount of Substance (n)
+            {l('Amount of substance (n)', 'Quantité de matière (n)', 'كمية المادة (n)')}
           </label>
           <input
             type="number"
             disabled={solveFor === 'n'}
             value={solveFor === 'n' ? displayResult.toFixed(4) : nVal}
             onChange={e => setNVal(parseFloat(e.target.value) || 0)}
+            className="math-ltr"
             style={{
               width: '100%',
               padding: '8px',
@@ -202,7 +212,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
         {/* Temperature */}
         <div style={{ opacity: solveFor === 'T' ? 0.5 : 1 }}>
           <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-            Temperature (T)
+            {l('Temperature (T)', 'Température (T)', 'درجة الحرارة (T)')}
           </label>
           <div style={{ display: 'flex', gap: '4px' }}>
             <input
@@ -210,6 +220,7 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
               disabled={solveFor === 'T'}
               value={solveFor === 'T' ? displayResult.toFixed(2) : tVal}
               onChange={e => setTVal(parseFloat(e.target.value) || 0)}
+              className="math-ltr"
               style={{
                 flex: 1,
                 padding: '8px',
@@ -242,13 +253,13 @@ export const IdealGasCalc: React.FC<IdealGasCalcProps> = ({
         }}
       >
         <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>
-          Calculated {solveFor} Value
+          {l(`Calculated value for ${solveFor}`, `Valeur calculée pour ${solveFor}`, `القيمة المحسوبة لـ (${solveFor})`)}
         </span>
-        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 700, color: '#4E5B47' }}>
-          {displayResult.toFixed(4)} <span style={{ fontSize: '1.2rem', fontFamily: 'sans-serif' }}>{unitLabel}</span>
+        <div style={{ fontFamily: "var(--font-heading, 'Playfair Display', serif)", fontSize: '2.5rem', fontWeight: 700, color: '#4E5B47' }}>
+          <span className="math-ltr">{displayResult.toFixed(4)}</span>{' '}
+          <span style={{ fontSize: '1.2rem', fontFamily: 'sans-serif' }}>{unitLabel}</span>
         </div>
       </div>
     </div>
   );
 };
-

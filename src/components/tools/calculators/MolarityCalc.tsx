@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateDilution, calculateMolarity } from '../../../utils/chemistryCalculations';
 import { calculateMolarMass } from '../../../utils/formulaParser';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 interface MolarityCalcProps {
   initialTab?: 'molarity' | 'dilution';
@@ -25,6 +26,9 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
   initialV2 = 200,
   initialSolveFor = 'V2'
 }) => {
+  const { language } = useLanguage();
+  const l = (en: string, fr: string, ar: string) => language === 'ar' ? ar : language === 'fr' ? fr : en;
+
   const [tab, setTab] = useState<'molarity' | 'dilution'>(initialTab);
 
   // Molarity state
@@ -53,7 +57,6 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
 
   const mw = calculateMolarMass(formula) || 58.44;
   const molarityResult = calculateMolarity(mass, mw, volume);
-
   const dilutionResult = calculateDilution(m1, v1, m2, v2, solveFor);
 
   return (
@@ -74,7 +77,7 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             fontSize: '0.9rem'
           }}
         >
-          1. Molarity from Mass
+          {l('1. Molarity from Mass', '1. Molarité à partir de la masse', '١. المولارية من الكتلة')}
         </button>
         <button
           onClick={() => setTab('dilution')}
@@ -90,7 +93,7 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             fontSize: '0.9rem'
           }}
         >
-          2. Dilution (M₁V₁ = M₂V₂)
+          {l('2. Dilution (M₁V₁ = M₂V₂)', '2. Dilution (M₁V₁ = M₂V₂)', '٢. التخفيف (M₁V₁ = M₂V₂)')}
         </button>
       </div>
 
@@ -99,12 +102,13 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-                Solute Formula
+                {l('Solute Formula', 'Formule du soluté', 'صيغة المذاب')}
               </label>
               <input
                 type="text"
                 value={formula}
                 onChange={e => setFormula(e.target.value)}
+                className="formula-ltr"
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -115,17 +119,20 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
                   boxSizing: 'border-box'
                 }}
               />
-              <span style={{ fontSize: '0.75rem', color: '#5F6F5B' }}>Molar Mass: {mw.toFixed(2)} g/mol</span>
+              <span style={{ fontSize: '0.75rem', color: '#5F6F5B' }}>
+                {l('Molar mass: ', 'Masse molaire : ', 'الكتلة المولية : ')} <span className="formula-ltr">{mw.toFixed(2)} g/mol</span>
+              </span>
             </div>
 
             <div>
               <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-                Mass of Solute (g)
+                {l('Solute Mass (g)', 'Masse du soluté (g)', 'كتلة المذاب (غ)')}
               </label>
               <input
                 type="number"
                 value={mass}
                 onChange={e => setMass(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -142,12 +149,13 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
 
             <div>
               <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-                Solution Volume (L)
+                {l('Solution Volume (L)', 'Volume de la solution (L)', 'حجم المحلول (لتر)')}
               </label>
               <input
                 type="number"
                 value={volume}
                 onChange={e => setVolume(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -174,14 +182,18 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             }}
           >
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>
-              Solution Concentration
+              {l('Solution Concentration', 'Concentration de la solution', 'تركيز المحلول')}
             </span>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 700, color: '#4E5B47' }}>
-              {molarityResult.toFixed(4)}{' '}
+            <div style={{ fontFamily: "var(--font-heading, 'Playfair Display', serif)", fontSize: '2.5rem', fontWeight: 700, color: '#4E5B47' }}>
+              <span className="math-ltr">{molarityResult.toFixed(4)}</span>{' '}
               <span style={{ fontSize: '1.2rem', fontFamily: 'sans-serif' }}>M (mol/L)</span>
             </div>
             <div style={{ fontSize: '0.85rem', color: '#5F6F5B', marginTop: '4px' }}>
-              Moles of solute: {(mass / mw).toFixed(4)} mol in {volume} L of solution.
+              {l(
+                `${(mass / mw).toFixed(4)} mol of solute in ${volume} L of solution.`,
+                `${(mass / mw).toFixed(4)} mol de soluté dans ${volume} L de solution.`,
+                `${(mass / mw).toFixed(4)} مول من المذاب في ${volume} لتر من المحلول.`
+              )}
             </div>
           </div>
         </>
@@ -189,7 +201,7 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
         <>
           <div style={{ marginBottom: '0.5rem' }}>
             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', marginBottom: '4px' }}>
-              Solve For:
+              {l('Solve for:', 'Calculer pour :', 'المجهول المطلوب :')}
             </label>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {(['M1', 'V1', 'M2', 'V2'] as const).map(variable => (
@@ -206,7 +218,7 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
                     cursor: 'pointer'
                   }}
                 >
-                  {variable}
+                  <span className="formula-ltr">{variable}</span>
                 </button>
               ))}
             </div>
@@ -214,12 +226,15 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>Initial Molarity (M₁)</label>
+              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>
+                {l('Initial Molarity (M₁)', 'Molarité initiale (M₁)', 'المولارية الابتدائية (M₁)')}
+              </label>
               <input
                 type="number"
                 disabled={solveFor === 'M1'}
                 value={solveFor === 'M1' ? dilutionResult.toFixed(3) : m1}
                 onChange={e => setM1(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px',
@@ -234,12 +249,15 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>Initial Volume (V₁)</label>
+              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>
+                {l('Initial Volume (V₁)', 'Volume initial (V₁)', 'الحجم الابتدائي (V₁)')}
+              </label>
               <input
                 type="number"
                 disabled={solveFor === 'V1'}
                 value={solveFor === 'V1' ? dilutionResult.toFixed(2) : v1}
                 onChange={e => setV1(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px',
@@ -254,12 +272,15 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>Target Molarity (M₂)</label>
+              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>
+                {l('Target Molarity (M₂)', 'Molarité cible (M₂)', 'المولارية المستهدفة (M₂)')}
+              </label>
               <input
                 type="number"
                 disabled={solveFor === 'M2'}
                 value={solveFor === 'M2' ? dilutionResult.toFixed(3) : m2}
                 onChange={e => setM2(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px',
@@ -274,12 +295,15 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>Target Volume (V₂)</label>
+              <label style={{ fontSize: '0.8rem', color: '#5F6F5B', fontWeight: 600 }}>
+                {l('Target Volume (V₂)', 'Volume cible (V₂)', 'الحجم المستهدف (V₂)')}
+              </label>
               <input
                 type="number"
                 disabled={solveFor === 'V2'}
                 value={solveFor === 'V2' ? dilutionResult.toFixed(2) : v2}
                 onChange={e => setV2(parseFloat(e.target.value) || 0)}
+                className="math-ltr"
                 style={{
                   width: '100%',
                   padding: '8px',
@@ -304,12 +328,12 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
             }}
           >
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5F6F5B', textTransform: 'uppercase' }}>
-              Calculated {solveFor}
+              {l(`Calculated Value (${solveFor})`, `Valeur calculée (${solveFor})`, `القيمة المحسوبة (${solveFor})`)}
             </span>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 700, color: '#4E5B47' }}>
-              {dilutionResult.toFixed(3)}{' '}
+            <div style={{ fontFamily: "var(--font-heading, 'Playfair Display', serif)", fontSize: '2.2rem', fontWeight: 700, color: '#4E5B47' }}>
+              <span className="math-ltr">{dilutionResult.toFixed(3)}</span>{' '}
               <span style={{ fontSize: '1rem', fontFamily: 'sans-serif' }}>
-                {solveFor.startsWith('M') ? 'M' : 'volume units'}
+                {solveFor.startsWith('M') ? 'M' : l('volume units', 'unités de volume', 'وحدات حجم')}
               </span>
             </div>
           </div>
@@ -318,4 +342,3 @@ export const MolarityCalc: React.FC<MolarityCalcProps> = ({
     </div>
   );
 };
-

@@ -1,20 +1,23 @@
 import React from 'react';
 import { AppView } from '../common/Navbar';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface PersonasSectionProps {
   onNavigate: (view: AppView) => void;
 }
 
 export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) => {
+  const { language, t } = useLanguage();
+
   return (
     <section className="personas-section" id="personas">
       <div className="personas-container">
         {/* Section Header */}
         <div className="section-header">
-          <span className="section-eyebrow">Target Personas</span>
-          <h2 className="section-title">Built for Every Kind of Chemist</h2>
+          <span className="section-eyebrow">{t.personas.badge}</span>
+          <h2 className="section-title">{t.personas.title}</h2>
           <p className="section-desc">
-            Whether you are mastering school coursework, publishing thermodynamic research, or discovering the elements for the very first time.
+            {t.personas.subtitle}
           </p>
         </div>
 
@@ -30,12 +33,12 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">Student Learning</span>
+                <span className="persona-card__badge">{t.personas.studentBadge}</span>
               </div>
               <div className="persona-card__content">
-                <h3 className="persona-card__title">The Student</h3>
+                <h3 className="persona-card__title">{t.personas.studentTitle}</h3>
                 <p className="persona-card__text">
-                  Master chemistry with interactive Bohr electron shells, step-by-step reaction balancing, and visual stoichiometry. Study smarter, retain faster, and make atomic concepts click intuitively.
+                  {t.personas.studentDesc}
                 </p>
                 <div className="persona-card__footer">
                   <button
@@ -43,8 +46,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                     className="persona-card__link"
                     aria-label="Start Learning as a student"
                   >
-                    <span>Start Learning</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <span>{t.personas.studentCta}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -64,12 +67,12 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">Research & Analysis</span>
+                <span className="persona-card__badge">{t.personas.researcherBadge}</span>
               </div>
               <div className="persona-card__content">
-                <h3 className="persona-card__title">The Researcher</h3>
+                <h3 className="persona-card__title">{t.personas.researcherTitle}</h3>
                 <p className="persona-card__text">
-                  Access granular isotope tables, Gibbs free energy spontaneity thresholds, Ideal Gas Law constants, and matrix Gaussian equation solvers calibrated for professional accuracy.
+                  {t.personas.researcherDesc}
                 </p>
                 <div className="persona-card__footer">
                   <button
@@ -77,8 +80,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                     className="persona-card__link"
                     aria-label="Open Research Tools"
                   >
-                    <span>Open Research Tools</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <span>{t.personas.researcherCta}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -98,12 +101,12 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">Curious Discovery</span>
+                <span className="persona-card__badge">{t.personas.curiousBadge}</span>
               </div>
               <div className="persona-card__content">
-                <h3 className="persona-card__title">The Curious Mind</h3>
+                <h3 className="persona-card__title">{t.personas.curiousTitle}</h3>
                 <p className="persona-card__text">
-                  No lab coat or prerequisites needed. Discover why gold resists corrosion, how neon signs emit radiance, and what fuels the stars through playful, engaging simulations.
+                  {t.personas.curiousDesc}
                 </p>
                 <div className="persona-card__footer">
                   <button
@@ -111,8 +114,8 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                     className="persona-card__link"
                     aria-label="Step into the Reaction Studio"
                   >
-                    <span>Step into the Lab</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <span>{t.personas.curiousCta}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -133,41 +136,43 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
               loading="lazy"
             />
             <div className="studio-showcase__stamp">
-              <span>Reaction Studio</span>
+              <span>{t.personas.stampText}</span>
             </div>
           </div>
           <div className="studio-showcase__body">
-            <span className="studio-showcase__tag">Interactive Chemistry Engine</span>
-            <h3 className="studio-showcase__title">A Living Reaction Bench In Your Browser</h3>
+            <span className="studio-showcase__tag">
+              {language === 'ar' ? 'محرك كيميائي تفاعلي' : language === 'fr' ? 'Moteur Chimique Interactif' : 'Interactive Chemical Engine'}
+            </span>
+            <h3 className="studio-showcase__title">{t.personas.bannerTitle}</h3>
             <p className="studio-showcase__text">
-              Synthesize chemical reactions with exact stoichiometry. Measure thermodynamic enthalpy emission (ΔH), predict limiting reagents, compute exact product yields, and balance complex systems with our Gaussian solver.
+              {t.personas.bannerDesc}
             </p>
             <div className="studio-showcase__features">
               <div className="studio-feature-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-                <span>Live Enthalpy & Exothermic Heat</span>
+                <span>{language === 'ar' ? 'حرارة التفاعل والإنثالبي المباشر (ΔH)' : language === 'fr' ? 'Enthalpie & Énergie thermique en direct' : 'Live Heat of Reaction & Enthalpy (ΔH)'}</span>
               </div>
               <div className="studio-feature-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-                <span>Automated Gaussian Equation Balancer</span>
+                <span>{language === 'ar' ? 'موازنة المعادلات بمصفوفات غاوس' : language === 'fr' ? 'Équilibrage matriciel gaussien automatique' : 'Gaussian Matrix Automatic Equation Balancing'}</span>
               </div>
               <div className="studio-feature-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-                <span>Limiting Reagent & Gram-Mole Calculators</span>
+                <span>{language === 'ar' ? 'حساب المتفاعل المحدِّد والإنتاجية' : language === 'fr' ? 'Calculateur de réactif limitant et rendement' : 'Limiting Reagent & Theoretical Yield Solver'}</span>
               </div>
             </div>
             <button
               onClick={() => onNavigate('lab')}
               className="studio-showcase__btn"
             >
-              <span>Launch Reaction Studio</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span>{t.personas.bannerCta}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
