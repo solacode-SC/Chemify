@@ -123,6 +123,11 @@ if [[ ! -f "${PROJECT_DIR}/docker-compose.yml" || ! -f "${PROJECT_DIR}/Dockerfil
   fi
 fi
 
+# Ensure .env is present
+if [[ ! -f "${PROJECT_DIR}/.env" && -f "${PROJECT_DIR}/.env.example" ]]; then
+  cp "${PROJECT_DIR}/.env.example" "${PROJECT_DIR}/.env"
+fi
+
 # 4. Build and Start Docker Containers on Ports 4326 & 5467
 echo -e "${GREEN}[4/6] Building and starting Chemify Docker container on ports 4326 & 5467...${NC}"
 if docker compose version &>/dev/null; then
