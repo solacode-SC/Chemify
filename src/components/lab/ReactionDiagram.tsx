@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import confetti from 'canvas-confetti';
 import { ReactantItem, ReactionStatus } from '../../types/reaction';
 import { parseFormula } from '../../utils/formulaParser';
+import {
+  StoichSpecies,
+  StoichiometricReactionProfile,
+  resolveStoichiometricProfile
+} from '../../utils/reactionEngine';
 import { LabBenchApparatus } from './LabBenchApparatus';
+
+export type { StoichSpecies, StoichiometricReactionProfile };
+export { resolveStoichiometricProfile };
 
 interface ReactionDiagramProps {
   status: ReactionStatus;
@@ -14,6 +22,7 @@ interface ReactionDiagramProps {
   reactants?: ReactantItem[];
   onReset?: () => void;
   onComplete?: () => void;
+  onRun?: () => void;
 }
 
 // ==========================================
@@ -297,254 +306,6 @@ export const MOLECULE_SPECS: Record<string, MoleculeSpec> = {
   }
 };
 
-// ==========================================
-// Stoichiometric Item Definition
-// ==========================================
-export interface StoichSpecies {
-  specKey: string;
-  coeff: number;
-  formula: string;
-  name: string;
-}
-
-export interface StoichiometricReactionProfile {
-  id: string;
-  name: string;
-  equation: string;
-  reactants: StoichSpecies[];
-  products: StoichSpecies[];
-  energyType: 'exothermic' | 'endothermic';
-  tempBase: number;
-  tempPeak: number;
-  hasSparks: boolean;
-  hasBubbles: boolean;
-  hasPrecipitate: boolean;
-  colorTheme: string;
-  batches: number; // default number of batches for full visual beaker representation
-}
-
-export function resolveStoichiometricProfile(eq: string): StoichiometricReactionProfile {
-  const clean = eq.toLowerCase();
-
-  // Water Synthesis 2H2 + O2 -> 2H2O
-  if (clean.includes('h₂o') && clean.includes('o₂') && (clean.includes('h₂') || clean.includes('h2'))) {
-    return {
-      id: 'water-synthesis',
-      name: 'Formation of Water (Covalent Synthesis)',
-      equation: '2H₂ + O₂ → 2H₂O',
-      reactants: [
-        { specKey: 'H2', coeff: 2, formula: 'H₂', name: 'Hydrogen' },
-        { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen' }
-      ],
-      products: [
-        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 280,
-      hasSparks: true,
-      hasBubbles: false,
-      hasPrecipitate: false,
-      colorTheme: '#DC2626',
-      batches: 4 // yields 8 H2 + 4 O2 -> 8 H2O
-    };
-  }
-
-  // Methane Combustion CH4 + 2O2 -> CO2 + 2H2O
-  if (clean.includes('ch₄') || clean.includes('ch4')) {
-    return {
-      id: 'methane-combustion',
-      name: 'Hydrocarbon Combustion (High Exothermic)',
-      equation: 'CH₄ + 2O₂ → CO₂ + 2H₂O',
-      reactants: [
-        { specKey: 'CH4', coeff: 1, formula: 'CH₄', name: 'Methane' },
-        { specKey: 'O2', coeff: 2, formula: 'O₂', name: 'Oxygen' }
-      ],
-      products: [
-        { specKey: 'CO2', coeff: 1, formula: 'CO₂', name: 'Carbon Dioxide' },
-        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 620,
-      hasSparks: true,
-      hasBubbles: true,
-      hasPrecipitate: false,
-      colorTheme: '#EA580C',
-      batches: 3 // yields 3 CH4 + 6 O2 -> 3 CO2 + 6 H2O
-    };
-  }
-
-  // Haber-Bosch N2 + 3H2 -> 2NH3
-  if ((clean.includes('nh₃') || clean.includes('nh3')) || (clean.includes('n₂') && clean.includes('h₂'))) {
-    return {
-      id: 'haber-process',
-      name: 'Haber-Bosch Ammonia Synthesis (Catalyzed)',
-      equation: 'N₂ + 3H₂ → 2NH₃',
-      reactants: [
-        { specKey: 'N2', coeff: 1, formula: 'N₂', name: 'Nitrogen' },
-        { specKey: 'H2', coeff: 3, formula: 'H₂', name: 'Hydrogen' }
-      ],
-      products: [
-        { specKey: 'NH3', coeff: 2, formula: 'NH₃', name: 'Ammonia' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 450,
-      hasSparks: true,
-      hasBubbles: true,
-      hasPrecipitate: false,
-      colorTheme: '#2563EB',
-      batches: 3 // yields 3 N2 + 9 H2 -> 6 NH3
-    };
-  }
-
-  // Acid-Base Neutralization HCl + NaOH -> NaCl + H2O
-  if (clean.includes('hcl') || clean.includes('naoh') || clean.includes('neutralization')) {
-    return {
-      id: 'neutralization',
-      name: 'Acid-Base Aqueous Neutralization',
-      equation: 'HCl + NaOH → NaCl + H₂O',
-      reactants: [
-        { specKey: 'HCl', coeff: 1, formula: 'HCl', name: 'Hydrochloric Acid' },
-        { specKey: 'NaOH', coeff: 1, formula: 'NaOH', name: 'Sodium Hydroxide' }
-      ],
-      products: [
-        { specKey: 'NaCl', coeff: 1, formula: 'NaCl', name: 'Sodium Chloride' },
-        { specKey: 'H2O', coeff: 1, formula: 'H₂O', name: 'Water' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 65,
-      hasSparks: false,
-      hasBubbles: false,
-      hasPrecipitate: false,
-      colorTheme: '#16A34A',
-      batches: 5 // yields 5 HCl + 5 NaOH -> 5 NaCl + 5 H2O
-    };
-  }
-
-  // Single Displacement Fe + CuSO4 -> FeSO4 + Cu
-  if (clean.includes('cuso') || (clean.includes('cu') && clean.includes('fe'))) {
-    return {
-      id: 'copper-displacement',
-      name: 'Single Displacement & Redox Precipitation',
-      equation: 'Fe + CuSO₄ → FeSO₄ + Cu',
-      reactants: [
-        { specKey: 'Fe', coeff: 1, formula: 'Fe', name: 'Iron' },
-        { specKey: 'CuSO4', coeff: 1, formula: 'CuSO₄', name: 'Copper Sulfate' }
-      ],
-      products: [
-        { specKey: 'FeSO4', coeff: 1, formula: 'FeSO₄', name: 'Iron(II) Sulfate' },
-        { specKey: 'Cu', coeff: 1, formula: 'Cu', name: 'Copper Precipitate' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 55,
-      hasSparks: true,
-      hasBubbles: false,
-      hasPrecipitate: true,
-      colorTheme: '#C2410C',
-      batches: 5 // yields 5 Fe + 5 CuSO4 -> 5 FeSO4 + 5 Cu
-    };
-  }
-
-  // Catalytic Peroxide Decomposition 2H2O2 -> 2H2O + O2
-  if (clean.includes('h2o2') || clean.includes('h₂o₂')) {
-    return {
-      id: 'peroxide-decomposition',
-      name: 'Catalytic Effervescent Decomposition',
-      equation: '2H₂O₂ → 2H₂O + O₂',
-      reactants: [
-        { specKey: 'H2O2', coeff: 2, formula: 'H₂O₂', name: 'Hydrogen Peroxide' }
-      ],
-      products: [
-        { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' },
-        { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen Gas' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 85,
-      hasSparks: false,
-      hasBubbles: true,
-      hasPrecipitate: false,
-      colorTheme: '#0284C7',
-      batches: 4 // yields 8 H2O2 -> 8 H2O + 4 O2
-    };
-  }
-
-  // Thermite Reaction 2Al + Fe2O3 -> Al2O3 + 2Fe
-  if (clean.includes('al') && clean.includes('fe₂o₃')) {
-    return {
-      id: 'thermite',
-      name: 'Thermite Incandescent Redox',
-      equation: '2Al + Fe₂O₃ → Al₂O₃ + 2Fe',
-      reactants: [
-        { specKey: 'Al', coeff: 2, formula: 'Al', name: 'Aluminum' },
-        { specKey: 'Fe2O3', coeff: 1, formula: 'Fe₂O₃', name: 'Iron(III) Oxide' }
-      ],
-      products: [
-        { specKey: 'Al2O3', coeff: 1, formula: 'Al₂O₃', name: 'Aluminum Oxide' },
-        { specKey: 'Fe', coeff: 2, formula: 'Fe', name: 'Molten Iron' }
-      ],
-      energyType: 'exothermic',
-      tempBase: 25,
-      tempPeak: 1450,
-      hasSparks: true,
-      hasBubbles: false,
-      hasPrecipitate: true,
-      colorTheme: '#F59E0B',
-      batches: 3 // yields 6 Al + 3 Fe2O3 -> 3 Al2O3 + 6 Fe
-    };
-  }
-
-  // Limestone Calcination CaCO3 -> CaO + CO2
-  if (clean.includes('caco3') || clean.includes('caco₃')) {
-    return {
-      id: 'calcination',
-      name: 'Limestone Endothermic Calcination',
-      equation: 'CaCO₃ → CaO + CO₂',
-      reactants: [
-        { specKey: 'CaCO3', coeff: 1, formula: 'CaCO₃', name: 'Calcium Carbonate' }
-      ],
-      products: [
-        { specKey: 'CaO', coeff: 1, formula: 'CaO', name: 'Calcium Oxide' },
-        { specKey: 'CO2', coeff: 1, formula: 'CO₂', name: 'Carbon Dioxide Gas' }
-      ],
-      energyType: 'endothermic',
-      tempBase: 25,
-      tempPeak: 880,
-      hasSparks: false,
-      hasBubbles: true,
-      hasPrecipitate: true,
-      colorTheme: '#4F46E5',
-      batches: 5 // yields 5 CaCO3 -> 5 CaO + 5 CO2
-    };
-  }
-
-  // Default Fallback Reaction: Water Synthesis 2H2 + O2 -> 2H2O
-  return {
-    id: 'general-synthesis',
-    name: 'Chemical Recombination & Bond Synthesis',
-    equation: '2H₂ + O₂ → 2H₂O',
-    reactants: [
-      { specKey: 'H2', coeff: 2, formula: 'H₂', name: 'Hydrogen' },
-      { specKey: 'O2', coeff: 1, formula: 'O₂', name: 'Oxygen' }
-    ],
-    products: [
-      { specKey: 'H2O', coeff: 2, formula: 'H₂O', name: 'Water' }
-    ],
-    energyType: 'exothermic',
-    tempBase: 25,
-    tempPeak: 120,
-    hasSparks: true,
-    hasBubbles: false,
-    hasPrecipitate: false,
-    colorTheme: '#4E5B47',
-    batches: 4
-  };
-}
-
 export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
   status,
   equation,
@@ -554,7 +315,8 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
   conditions,
   reactants = [],
   onReset,
-  onComplete
+  onComplete,
+  onRun
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [viewMode, setViewMode] = useState<'bench' | 'molecular'>('bench');
@@ -1217,7 +979,9 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
         deltaH={deltaH}
         conditions={conditions}
         reactants={reactants}
+        onRun={onRun}
         onReset={onReset}
+        onComplete={onComplete}
         simSpeed={simSpeed}
         onToggleSpeed={() => setSimSpeed(simSpeed === 1 ? 2 : 1)}
         onSwitchToMolecular={() => setViewMode('molecular')}
@@ -1254,6 +1018,31 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
           alignItems: 'center'
         }}
       >
+        {/* Rerun button if complete */}
+        {status === 'complete' && onRun && (
+          <button
+            onClick={onRun}
+            style={{
+              background: '#15803D',
+              color: '#FFFFFF',
+              border: '1.5px solid #166534',
+              borderRadius: '999px',
+              padding: '5px 14px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: 'var(--shadow-sm)'
+            }}
+            title="Rerun Simulation"
+          >
+            <span>↺</span>
+            <span>Rerun Test</span>
+          </button>
+        )}
+
         {/* Speed toggle */}
         <button
           onClick={() => setSimSpeed(simSpeed === 1 ? 2 : 1)}

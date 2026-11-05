@@ -590,8 +590,12 @@ export const LabView: React.FC = () => {
             deltaH={reactionData.deltaH}
             conditions={reactionData.conditions}
             reactants={reactants}
-            onReset={() => setStatus('ready')}
-            onComplete={() => setStatus('complete')}
+            onRun={handleRunReaction}
+            onReset={handleResetReaction}
+            onComplete={() => {
+              setStatus('complete');
+              confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 } });
+            }}
           />
 
           {/* Right Info Panels */}
