@@ -1,8 +1,11 @@
+name: ${PROJECT_NAME:-chemify}
+
 services:
   chemify:
     build:
       context: .
       dockerfile: Dockerfile
+    image: chemify-app:latest
     container_name: chemify-production
     restart: unless-stopped
     ports:
@@ -11,6 +14,9 @@ services:
     environment:
       - NODE_ENV=production
       - DOMAIN=${DOMAIN:-chemify.solaymanbuilds.com}
+      - EMAIL=${EMAIL:-elmouden00den@gmail.com}
+    networks:
+      - chemify-network
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:4326/healthz"]
       interval: 30s
@@ -21,4 +27,10 @@ services:
       - "com.chemify.project=chemify"
       - "com.chemify.description=Modern Chemistry Visualized"
       - "com.chemify.environment=production"
-      - "com.chemify.domain=chemify.solaymanbuilds.com"
+      - "com.chemify.domain=${DOMAIN:-chemify.solaymanbuilds.com}"
+      - "com.chemify.maintainer=${EMAIL:-elmouden00den@gmail.com}"
+
+networks:
+  chemify-network:
+    name: chemify-network
+    driver: bridge

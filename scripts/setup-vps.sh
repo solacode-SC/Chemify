@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Chemify — Automated Single-Command VPS Setup (Docker + Nginx + Let's Encrypt)
+# Chemify — Multi-App Safe VPS Setup (Docker + Nginx + Let's Encrypt)
+# Default Domain: chemify.solaymanbuilds.com
+# Default Email:  elmouden00den@gmail.com
 #
 # Usage:
-#   sudo bash scripts/setup-vps.sh <DOMAIN> <EMAIL>
-# Or via curl:
-#   curl -fsSL https://raw.githubusercontent.com/solacode-SC/Chemify/main/scripts/setup-vps.sh | sudo bash -s -- <DOMAIN> <EMAIL>
+#   sudo bash scripts/setup-vps.sh [DOMAIN] [EMAIL]
+# Or via Make:
+#   sudo make vps-setup
+#   sudo make vps-config
 # ==============================================================================
 
 set -euo pipefail
@@ -20,8 +23,8 @@ NC="\033[0m"
 
 echo -e "${CYAN}${BOLD}"
 echo "  ╔═══════════════════════════════════════════════════════════╗"
-echo "  ║         CHEMIFY — PRODUCTION VPS DEPLOYMENT SYSTEM        ║"
-echo "  ║         Docker Ports: 4326 & 5467  |  Nginx + SSL         ║"
+echo "  ║     CHEMIFY — MULTI-APP SAFE VPS DEPLOYMENT SYSTEM        ║"
+echo "  ║     Domain: chemify.solaymanbuilds.com | Ports: 4326/5467 ║"
 echo "  ╚═══════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -31,11 +34,14 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# Parse Arguments (defaults to chemify.solaymanbuilds.com)
+# Parse positional arguments with production defaults
 DOMAIN="${1:-chemify.solaymanbuilds.com}"
-EMAIL="${2:-admin@solaymanbuilds.com}"
+EMAIL="${2:-elmouden00den@gmail.com}"
+PORT_PRIMARY="${PORT_PRIMARY:-4326}"
+PORT_SECONDARY="${PORT_SECONDARY:-5467}"
+PROJECT_NAME="${PROJECT_NAME:-chemify}"
 
-# Named flag parsing support (--domain / --email)
+# Named flag parsing support (--domain / --email / --port-primary / --port-secondary)
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --domain|-d)
@@ -46,71 +52,70 @@ while [[ $# -gt 0 ]]; do
       EMAIL="$2"
       shift 2
       ;;
+    --port-primary)
+      PORT_PRIMARY="$2"
+      shift 2
+      ;;
+    --port-secondary)
+      PORT_SECONDARY="$2"
+      shift 2
+      ;;
     *)
       shift
       ;;
   esac
 done
 
-# Interactive Prompts if arguments missing
-if [[ -z "$DOMAIN" ]]; then
-  echo -e "${YELLOW}Please enter your production domain name (e.g., chemify.example.com):${NC}"
-  read -r -p "Domain: " DOMAIN
-fi
+echo -e "\n${CYAN}==> Target Domain:      ${BOLD}${DOMAIN}${NC}"
+echo -e "${CYAN}==> Let's Encrypt Email:${BOLD} ${EMAIL}${NC}"
+echo -e "${CYAN}==> App Isolated Ports: ${BOLD}${PORT_PRIMARY} (Primary), ${PORT_SECONDARY} (Backup)${NC}"
+echo -e "${CYAN}==> Docker Project:     ${BOLD}${PROJECT_NAME} (Multi-app isolated)${NC}\n"
 
-if [[ -z "$DOMAIN" ]]; then
-  echo -e "${RED}[ERROR] Domain name is required for Nginx and SSL setup.${NC}"
-  exit 1
-fi
+# 1. Non-Destructive Package Check & Installation
+echo -e "${GREEN}[1/6] Checking system packages (Multi-App Safe)...${NC}"
 
-if [[ -z "$EMAIL" ]]; then
-  echo -e "${YELLOW}Please enter an administrator email address for Let's Encrypt alerts:${NC}"
-  read -r -p "Email: " EMAIL
-fi
+MISSING_PKGS=()
+for cmd_pkg in "curl:curl" "git:git" "nginx:nginx" "certbot:certbot"; do
+  cmd="${cmd_pkg%%:*}"
+  pkg="${cmd_pkg##*:}"
+  if ! command -v "$cmd" &>/dev/null; then
+    MISSING_PKGS+=("$pkg")
+  fi
+done
 
-if [[ -z "$EMAIL" ]]; then
-  EMAIL="admin@${DOMAIN}"
-  echo -e "${YELLOW}[INFO] Using default email: ${EMAIL}${NC}"
-fi
-
-echo -e "\n${CYAN}==> Target Domain: ${BOLD}${DOMAIN}${NC}"
-echo -e "${CYAN}==> Let's Encrypt Email: ${BOLD}${EMAIL}${NC}\n"
-
-# 1. Package Manager Detection & Dependency Installation
-echo -e "${GREEN}[1/6] Detecting OS package manager and installing dependencies...${NC}"
-
-if command -v apt-get &>/dev/null; then
-  export DEBIAN_FRONTEND=noninteractive
-  apt-get update -y
-  apt-get install -y curl git ufw ca-certificates gnupg lsb-release nginx certbot python3-certbot-nginx
-elif command -v dnf &>/dev/null; then
-  dnf install -y curl git nginx certbot python3-certbot-nginx
-elif command -v yum &>/dev/null; then
-  yum install -y epel-release || true
-  yum install -y curl git nginx certbot python3-certbot-nginx
+if [[ ${#MISSING_PKGS[@]} -gt 0 ]]; then
+  echo -e "${CYAN}Installing missing packages: ${MISSING_PKGS[*]}...${NC}"
+  if command -v apt-get &>/dev/null; then
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -y
+    apt-get install -y "${MISSING_PKGS[@]}" python3-certbot-nginx ca-certificates gnupg
+  elif command -v dnf &>/dev/null; then
+    dnf install -y "${MISSING_PKGS[@]}" python3-certbot-nginx
+  elif command -v yum &>/dev/null; then
+    yum install -y epel-release || true
+    yum install -y "${MISSING_PKGS[@]}" python3-certbot-nginx
+  fi
 else
-  echo -e "${YELLOW}[WARN] Unknown package manager. Ensure nginx, certbot, and docker are installed.${NC}"
+  echo -e "${GREEN}✓ Required host packages (curl, git, nginx, certbot) already present.${NC}"
 fi
 
-# 2. Install Docker & Docker Compose if missing
+# 2. Verify Docker & Docker Compose without disrupting existing containers
 echo -e "${GREEN}[2/6] Verifying Docker and Docker Compose installation...${NC}"
 if ! command -v docker &>/dev/null; then
   echo -e "${CYAN}Installing Docker Engine via official get.docker.com script...${NC}"
   curl -fsSL https://get.docker.com | sh
   systemctl enable --now docker
 else
-  echo -e "${CYAN}Docker is already installed ($(docker --version)).${NC}"
+  echo -e "${GREEN}✓ Docker is already installed ($(docker --version)).${NC}"
 fi
 
-# Ensure Docker service is running
-systemctl enable --now docker
+systemctl start docker || true
 
-# 3. Locate or Prepare Chemify Repository Directory
-echo -e "${GREEN}[3/6] Preparing project files and build context...${NC}"
+# 3. Locate or Prepare Chemify Repository Directory & .env
+echo -e "${GREEN}[3/6] Preparing project environment and checking port conflicts...${NC}"
 PROJECT_DIR="$(pwd)"
 
 if [[ ! -f "${PROJECT_DIR}/docker-compose.yml" || ! -f "${PROJECT_DIR}/Dockerfile" ]]; then
-  # If executed remotely via curl outside repo directory
   if [[ -d "/var/www/chemify" ]]; then
     cd /var/www/chemify
     PROJECT_DIR="/var/www/chemify"
@@ -123,52 +128,73 @@ if [[ ! -f "${PROJECT_DIR}/docker-compose.yml" || ! -f "${PROJECT_DIR}/Dockerfil
   fi
 fi
 
-# Ensure .env is present
-if [[ ! -f "${PROJECT_DIR}/.env" && -f "${PROJECT_DIR}/.env.example" ]]; then
-  cp "${PROJECT_DIR}/.env.example" "${PROJECT_DIR}/.env"
-fi
+# Check if ports are occupied by another NON-Chemify application
+for check_port in "$PORT_PRIMARY" "$PORT_SECONDARY"; do
+  if ss -tulpn 2>/dev/null | grep -q ":${check_port} "; then
+    if ! docker ps --format '{{.Names}} {{.Ports}}' 2>/dev/null | grep "chemify" | grep -q ":${check_port}->"; then
+      echo -e "${YELLOW}[NOTICE] Port ${check_port} is already bound on host. Checking owner...${NC}"
+      ss -tulpn | grep ":${check_port} " || true
+    fi
+  fi
+done
 
-# 4. Build and Start Docker Containers on Ports 4326 & 5467
-echo -e "${GREEN}[4/6] Building and starting Chemify Docker container on ports 4326 & 5467...${NC}"
+# Write / update .env file with configured values
+cat <<EOF > "${PROJECT_DIR}/.env"
+PROJECT_NAME=${PROJECT_NAME}
+DOMAIN=${DOMAIN}
+EMAIL=${EMAIL}
+PORT_PRIMARY=${PORT_PRIMARY}
+PORT_SECONDARY=${PORT_SECONDARY}
+EOF
+echo -e "${GREEN}✓ Updated .env for ${DOMAIN} (${EMAIL}).${NC}"
+
+# 4. Build and Start Isolated Chemify Docker Container
+echo -e "${GREEN}[4/6] Building and starting isolated '${PROJECT_NAME}' container on ports ${PORT_PRIMARY} & ${PORT_SECONDARY}...${NC}"
 if docker compose version &>/dev/null; then
-  docker compose down --remove-orphans || true
-  docker compose up -d --build
+  docker compose -p "${PROJECT_NAME}" up -d --build --remove-orphans
 elif command -v docker-compose &>/dev/null; then
-  docker-compose down --remove-orphans || true
-  docker-compose up -d --build
+  docker-compose -p "${PROJECT_NAME}" up -d --build --remove-orphans
 else
   echo -e "${RED}[ERROR] Neither 'docker compose' nor 'docker-compose' found.${NC}"
   exit 1
 fi
 
 # Wait for container healthcheck
-echo -e "${CYAN}Waiting for Chemify container healthcheck on port 4326...${NC}"
-for i in {1..20}; do
-  if curl -sf http://127.0.0.1:4326/healthz &>/dev/null || curl -sf http://127.0.0.1:5467/healthz &>/dev/null; then
+echo -e "${CYAN}Waiting for Chemify container healthcheck on port ${PORT_PRIMARY}...${NC}"
+for i in {1..25}; do
+  if curl -sf "http://127.0.0.1:${PORT_PRIMARY}/healthz" &>/dev/null || curl -sf "http://127.0.0.1:${PORT_SECONDARY}/healthz" &>/dev/null; then
     echo -e "${GREEN}✓ Container is healthy and responding!${NC}"
     break
   fi
   sleep 1
 done
 
-# 5. Configure Host Nginx Reverse Proxy
-echo -e "${GREEN}[5/6] Configuring Host Nginx reverse proxy for ${DOMAIN}...${NC}"
+# 5. Multi-App Safe Host Nginx Virtual Host Configuration
+echo -e "${GREEN}[5/6] Configuring Host Nginx virtual host for ${DOMAIN} (preserving all other apps)...${NC}"
 
 NGINX_CONF_DIR="/etc/nginx/sites-available"
 NGINX_ENABLED_DIR="/etc/nginx/sites-enabled"
 
-if [[ ! -d "$NGINX_CONF_DIR" ]]; then
-  # CentOS / RHEL style
-  NGINX_CONF_PATH="/etc/nginx/conf.d/chemify.conf"
+if [[ -d "$NGINX_CONF_DIR" && -d "$NGINX_ENABLED_DIR" ]]; then
+  NGINX_CONF_PATH="${NGINX_CONF_DIR}/${DOMAIN}"
+  # Remove old legacy 'chemify' symlink if it exists under a different filename to avoid duplicate upstream
+  if [[ "$DOMAIN" != "chemify" && -L "${NGINX_ENABLED_DIR}/chemify" ]]; then
+    rm -f "${NGINX_ENABLED_DIR}/chemify"
+  fi
 else
-  NGINX_CONF_PATH="${NGINX_CONF_DIR}/chemify"
+  NGINX_CONF_PATH="/etc/nginx/conf.d/${DOMAIN}.conf"
 fi
 
-cat <<EOF > "$NGINX_CONF_PATH"
-# Chemify Reverse Proxy with dual container fallback
+if [[ -f "${PROJECT_DIR}/docker/nginx-host.conf.template" ]]; then
+  sed -e "s/\${DOMAIN}/${DOMAIN}/g" \
+      -e "s/\${PORT_PRIMARY}/${PORT_PRIMARY}/g" \
+      -e "s/\${PORT_SECONDARY}/${PORT_SECONDARY}/g" \
+      "${PROJECT_DIR}/docker/nginx-host.conf.template" > "$NGINX_CONF_PATH"
+else
+  cat <<EOF > "$NGINX_CONF_PATH"
 upstream chemify_upstream {
-    server 127.0.0.1:4326 max_fails=3 fail_timeout=10s;
-    server 127.0.0.1:5467 backup;
+    server 127.0.0.1:${PORT_PRIMARY} max_fails=3 fail_timeout=10s;
+    server 127.0.0.1:${PORT_SECONDARY} backup;
     keepalive 32;
 }
 
@@ -179,13 +205,14 @@ server {
 
     client_max_body_size 64M;
 
-    # Security Headers
+    access_log /var/log/nginx/${DOMAIN}.access.log;
+    error_log  /var/log/nginx/${DOMAIN}.error.log warn;
+
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
-    # Gzip Compression
     gzip on;
     gzip_vary on;
     gzip_proxied any;
@@ -196,13 +223,11 @@ server {
         proxy_pass http://chemify_upstream;
         proxy_http_version 1.1;
 
-        # Header forwarding
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
 
-        # WebSocket support
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
 
@@ -212,55 +237,43 @@ server {
     }
 }
 EOF
-
-# Enable site if Debian/Ubuntu
-if [[ -d "$NGINX_ENABLED_DIR" ]]; then
-  ln -sf "$NGINX_CONF_PATH" "${NGINX_ENABLED_DIR}/chemify"
-  # Remove default site if present
-  rm -f "${NGINX_ENABLED_DIR}/default"
 fi
 
-# Test Nginx syntax
-nginx -t
-systemctl enable nginx
-systemctl reload nginx
+if [[ -d "$NGINX_ENABLED_DIR" ]]; then
+  ln -sf "$NGINX_CONF_PATH" "${NGINX_ENABLED_DIR}/${DOMAIN}"
+fi
 
-# 6. Automate Let's Encrypt SSL Certificate Generation
-echo -e "${GREEN}[6/6] Requesting Let's Encrypt SSL certificate for ${DOMAIN}...${NC}"
+# Validate Nginx syntax before reloading (zero downtime for other apps)
+nginx -t
+systemctl enable nginx || true
+systemctl reload nginx
+echo -e "${GREEN}✓ Host Nginx safely reloaded for ${DOMAIN} without disrupting existing sites.${NC}"
+
+# 6. Let's Encrypt SSL Certificate Provisioning for ${DOMAIN}
+echo -e "${GREEN}[6/6] Requesting Let's Encrypt SSL certificate for ${DOMAIN} (${EMAIL})...${NC}"
 
 if certbot --nginx -d "${DOMAIN}" --non-interactive --agree-tos -m "${EMAIL}" --redirect; then
   echo -e "${GREEN}✓ SSL certificate successfully installed and HTTPS redirect enabled!${NC}"
 else
-  echo -e "${YELLOW}[NOTICE] Certbot could not automatically issue certificate.${NC}"
-  echo -e "${YELLOW}Common reason: DNS records for ${DOMAIN} may not be pointed to this server IP yet.${NC}"
-  echo -e "${YELLOW}You can re-run SSL provisioning anytime with:${NC}"
-  echo -e "  sudo certbot --nginx -d ${DOMAIN} -m ${EMAIL} --agree-tos"
+  echo -e "${YELLOW}[NOTICE] Certbot could not automatically issue certificate yet.${NC}"
+  echo -e "${YELLOW}Ensure DNS A/AAAA record for ${DOMAIN} points to this server IP, then run:${NC}"
+  echo -e "  sudo make ssl"
 fi
 
-# Enable Certbot auto-renewal timer
-if systemctl list-unit-files | grep -q certbot.timer; then
-  systemctl enable --now certbot.timer
-fi
-
-# UFW Firewall adjustment if active
-if command -v ufw &>/dev/null && ufw status | grep -q "Status: active"; then
-  echo -e "${CYAN}Adjusting UFW firewall rules...${NC}"
-  ufw allow 'Nginx Full' || true
-  ufw allow 4326/tcp || true
-  ufw allow 5467/tcp || true
+if systemctl list-unit-files 2>/dev/null | grep -q certbot.timer; then
+  systemctl enable --now certbot.timer || true
 fi
 
 # Final Summary
 echo -e "\n${GREEN}${BOLD}═══════════════════════════════════════════════════════════${NC}"
-echo -e "${GREEN}${BOLD}  ✓ CHEMIFY IS SUCCESSFULLY DEPLOYED AND RUNNING!         ${NC}"
+echo -e "${GREEN}${BOLD}  ✓ CHEMIFY MULTI-APP VPS DEPLOYMENT COMPLETE!            ${NC}"
 echo -e "${GREEN}${BOLD}═══════════════════════════════════════════════════════════${NC}\n"
 echo -e "  ${BOLD}Public HTTPS Domain:${NC}    ${CYAN}https://${DOMAIN}${NC}"
-echo -e "  ${BOLD}Direct Container Port 1:${NC} ${CYAN}http://${DOMAIN}:4326${NC}"
-echo -e "  ${BOLD}Direct Container Port 2:${NC} ${CYAN}http://${DOMAIN}:5467${NC}"
-echo -e "  ${BOLD}Local Healthcheck:${NC}       ${CYAN}http://127.0.0.1:4326/healthz${NC}"
+echo -e "  ${BOLD}SSL Admin Email:${NC}        ${CYAN}${EMAIL}${NC}"
+echo -e "  ${BOLD}Isolated App Ports:${NC}     ${CYAN}127.0.0.1:${PORT_PRIMARY} & 127.0.0.1:${PORT_SECONDARY}${NC}"
+echo -e "  ${BOLD}Local Healthcheck:${NC}      ${CYAN}http://127.0.0.1:${PORT_PRIMARY}/healthz${NC}"
 echo -e "\n${BOLD}Useful Operations Commands:${NC}"
-echo -e "  • View container logs:    ${CYAN}docker compose logs -f${NC}"
-echo -e "  • Restart application:    ${CYAN}docker compose restart${NC}"
-echo -e "  • Test SSL auto-renewal:  ${CYAN}sudo certbot renew --dry-run${NC}"
-echo -e "  • Check Nginx status:     ${CYAN}sudo systemctl status nginx${NC}\n"
-
+echo -e "  • Pull & update app:      ${CYAN}make update${NC}"
+echo -e "  • Re-configure VPS/SSL:   ${CYAN}sudo make vps-config${NC}"
+echo -e "  • View container logs:    ${CYAN}make logs${NC}"
+echo -e "  • Check app status:       ${CYAN}make status${NC}\n"

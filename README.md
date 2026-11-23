@@ -262,37 +262,49 @@ curl -s http://localhost:4326/healthz
 
 ## 🛠️ Turnkey Makefile Automation (`chemify.solaymanbuilds.com`)
 
-A dedicated [`Makefile`](file:///wsl.localhost/Ubuntu/home/soel/Desktop/Projects/Chemify/Makefile) provides turnkey orchestration for production containers, host Nginx reverse proxy, and SSL certificates:
+A dedicated [`Makefile`](file:///wsl.localhost/Ubuntu/home/soel/Desktop/Projects/Chemify/Makefile) provides multi-app safe orchestration for production containers, host Nginx reverse proxy, SSL certificates (`elmouden00den@gmail.com`), and zero-downtime updates:
 
 | Target | Description |
 | :--- | :--- |
+| `sudo make vps-config` | Configure `.env`, verify ports, deploy container, configure Nginx vhost & SSL for `chemify.solaymanbuilds.com` (`elmouden00den@gmail.com`) |
+| `sudo make vps-setup` | Run complete end-to-end multi-app safe VPS deployment script |
+| `make update` | Pull latest Git changes, rebuild & update Chemify container, prune old images, and verify health |
+| `make rollback` | Roll back to the previous Git commit and redeploy the container |
+| `make env-setup` | Generate/update `.env` with `chemify.solaymanbuilds.com` and `elmouden00den@gmail.com` |
+| `make check-ports` | Verify ports **4326** & **5467** have no conflict with other apps on the VPS |
+| `make deploy` | Complete Docker build & start isolated container on ports **4326** & **5467** |
 | `make docker-build` | Build production Docker image (Node 22 + Nginx Alpine) |
 | `make up` | Start production container on ports **4326** & **5467** |
-| `make down` | Stop and remove running Chemify container |
+| `make down` | Stop and remove only the Chemify container & isolated network |
 | `make restart` | Gracefully restart Chemify container |
 | `make logs` | Follow live container logs |
 | `make status` | Check container health and probe ports 4326 / 5467 |
-| `make deploy` | Complete Docker build & verify operational ports |
-| `sudo make nginx-config` | Auto-configure host Nginx reverse proxy for `chemify.solaymanbuilds.com` |
-| `sudo make ssl` | Issue and activate Let's Encrypt SSL certificate via Certbot |
-| `make ssl-renew` | Test SSL certificate auto-renewal (dry-run) |
-| `sudo make vps-setup` | Run complete end-to-end VPS deployment script |
+| `make health` | Probe both local container ports and public `https://chemify.solaymanbuilds.com` |
+| `sudo make nginx-config` | Configure isolated host Nginx virtual host for `chemify.solaymanbuilds.com` (preserves all other VPS apps) |
+| `sudo make ssl` | Issue and activate Let's Encrypt SSL certificate via Certbot (`elmouden00den@gmail.com`) |
+| `sudo make ssl-renew` | Test SSL certificate auto-renewal (dry-run) |
 
 ---
 
-## ⚡ Single-Command VPS Setup
+## ⚡ Single-Command VPS Setup & Updates
 
-Deploy Chemify on a fresh Ubuntu/Debian VPS with automated Docker, Host Nginx reverse proxy, and Let's Encrypt SSL in **one single command**:
+Deploy Chemify on a multi-app Ubuntu/Debian VPS with automated Docker isolation, Host Nginx reverse proxy, and Let's Encrypt SSL:
 
 ```bash
-# Inside the cloned repository on your VPS:
+# 1. Configure & deploy on VPS for chemify.solaymanbuilds.com (elmouden00den@gmail.com):
+sudo make vps-config
+
+# Or run the full system setup script:
 sudo make vps-setup
+
+# 2. Pull latest changes and update the live app anytime:
+make update
 ```
 
-Or execute directly via `curl` on a fresh VPS terminal without cloning first:
+Or execute directly via `curl` on a VPS terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/solacode-SC/Chemify/main/scripts/setup-vps.sh | sudo bash -s -- chemify.solaymanbuilds.com admin@solaymanbuilds.com
+curl -fsSL https://raw.githubusercontent.com/solacode-SC/Chemify/main/scripts/setup-vps.sh | sudo bash -s -- chemify.solaymanbuilds.com elmouden00den@gmail.com
 ```
 
 ---
