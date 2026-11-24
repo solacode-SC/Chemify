@@ -214,6 +214,7 @@ export const CategoryDropSide: React.FC<CategoryDropSideProps> = ({
       {/* Drop-Side Multi-Level Flyout Container */}
       {isOpen && (
         <div
+          className="category-dropside-flyout"
           style={{
             position: 'absolute',
             top: 'calc(100% + 8px)',
@@ -223,10 +224,6 @@ export const CategoryDropSide: React.FC<CategoryDropSideProps> = ({
             border: '2px solid #6F7F63',
             borderRadius: '16px',
             boxShadow: '0 16px 38px rgba(78, 91, 71, 0.22)',
-            display: 'grid',
-            gridTemplateColumns: '230px 370px',
-            minWidth: '600px',
-            maxWidth: '92vw',
             overflow: 'hidden',
             animation: 'fadeIn 0.2s ease'
           }}
@@ -504,12 +501,12 @@ export const CategoryChipItem: React.FC<CategoryChipItemProps> = ({
   const updatePosition = () => {
     if (!buttonRef.current) return;
     const rect = buttonRef.current.getBoundingClientRect();
-    const popoverWidth = 320;
+    const popoverWidth = Math.min(320, window.innerWidth - 24);
     let left: number;
     if (isRTL) {
-      left = Math.max(16, Math.min(window.innerWidth - popoverWidth - 16, rect.right - popoverWidth));
+      left = Math.max(12, Math.min(window.innerWidth - popoverWidth - 12, rect.right - popoverWidth));
     } else {
-      left = Math.max(16, Math.min(window.innerWidth - popoverWidth - 16, rect.left));
+      left = Math.max(12, Math.min(window.innerWidth - popoverWidth - 12, rect.left));
     }
     setCoords({
       top: rect.bottom + 8,
@@ -600,7 +597,7 @@ export const CategoryChipItem: React.FC<CategoryChipItemProps> = ({
             borderRadius: '14px',
             padding: '14px 16px',
             boxShadow: '0 14px 34px rgba(78, 91, 71, 0.22)',
-            width: '320px',
+            width: 'min(320px, calc(100vw - 24px))',
             animation: 'fadeIn 0.18s ease'
           }}
         >

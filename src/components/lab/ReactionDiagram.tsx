@@ -23,6 +23,8 @@ interface ReactionDiagramProps {
   onReset?: () => void;
   onComplete?: () => void;
   onRun?: () => void;
+  onPauseToggle?: () => void;
+  onAutoBalance?: () => void;
 }
 
 // ==========================================
@@ -316,14 +318,20 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
   reactants = [],
   onReset,
   onComplete,
-  onRun
+  onRun,
+  onPauseToggle,
+  onAutoBalance
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [viewMode, setViewMode] = useState<'bench' | 'molecular'>('bench');
-  const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
+  const [simSpeed, setSimSpeed] = useState<0.5 | 1 | 2>(1);
   const [temperature, setTemperature] = useState<number>(25);
 
-  const profile = useMemo(() => resolveStoichiometricProfile(equation), [equation]);
+  const cycleSpeed = () => {
+    setSimSpeed(prev => (prev === 1 ? 2 : prev === 2 ? 0.5 : 1));
+  };
+
+  const profile = useMemo(() => resolveStoichiometricProfile(equation, reactants), [equation, reactants]);
 
   // Live stoichiometric counters for the HUD
   const [reactantsRemaining, setReactantsRemaining] = useState<Record<string, number>>({});
@@ -980,10 +988,12 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
         conditions={conditions}
         reactants={reactants}
         onRun={onRun}
+        onPauseToggle={onPauseToggle}
         onReset={onReset}
         onComplete={onComplete}
+        onAutoBalance={onAutoBalance}
         simSpeed={simSpeed}
-        onToggleSpeed={() => setSimSpeed(simSpeed === 1 ? 2 : 1)}
+        onToggleSpeed={cycleSpeed}
         onSwitchToMolecular={() => setViewMode('molecular')}
       />
     );
@@ -1045,7 +1055,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
 
         {/* Speed toggle */}
         <button
-          onClick={() => setSimSpeed(simSpeed === 1 ? 2 : 1)}
+          onClick={cycleSpeed}
           style={{
             background: 'rgba(250, 248, 245, 0.92)',
             backdropFilter: 'blur(6px)',
@@ -1060,7 +1070,7 @@ export const ReactionDiagram: React.FC<ReactionDiagramProps> = ({
           }}
           title="Toggle Simulation Speed"
         >
-          {simSpeed}x Speed
+          ⚡ {simSpeed}x Speed
         </button>
 
         {/* View mode toggle */}
