@@ -228,67 +228,66 @@ export const CategoryDropSide: React.FC<CategoryDropSideProps> = ({
             animation: 'fadeIn 0.2s ease'
           }}
         >
-          {/* Side Menu (Column 1): List of Categories with Hover */}
-          <div
-            style={{
-              background: '#EDEAE1',
-              borderRight: isRTL ? 'none' : '1.5px solid rgba(111, 127, 99, 0.3)',
-              borderLeft: isRTL ? '1.5px solid rgba(111, 127, 99, 0.3)' : 'none',
-              padding: '10px 8px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px'
-            }}
-          >
-            <div style={{ padding: '6px 10px', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#5F6F5B', letterSpacing: '0.06em' }}>
-              {l('Chemistry Branches', 'Branches Chimiques', 'فروع الكيمياء')}
+          {/* Side Menu (Column 1): List of Categories with Tap & Hover */}
+          <div className="category-dropside-sidebar">
+            <div style={{ padding: '6px 10px', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: '#5F6F5B', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>{l('Chemistry Branches', 'Branches Chimiques', 'فروع الكيمياء')}</span>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4E5B47',
+                  fontSize: '1.1rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  lineHeight: 1,
+                  padding: '0 4px'
+                }}
+                aria-label="Close categories menu"
+              >
+                ×
+              </button>
             </div>
 
-            {categories.map(cat => {
-              const info = CATEGORY_DETAILS[cat] || CATEGORY_DETAILS.All;
-              const title = info.titles[language] || info.titles.en;
-              const isHovered = hoveredCategory === cat;
-              const isCurrent = selectedCategory === cat;
+            <div className="category-dropside-list no-scrollbar">
+              {categories.map(cat => {
+                const info = CATEGORY_DETAILS[cat] || CATEGORY_DETAILS.All;
+                const title = info.titles[language] || info.titles.en;
+                const isHovered = hoveredCategory === cat;
+                const isCurrent = selectedCategory === cat;
 
-              return (
-                <div
-                  key={cat}
-                  onMouseEnter={() => setHoveredCategory(cat)}
-                  onClick={() => {
-                    onSelectCategory(cat);
-                    setIsOpen(false);
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    background: isHovered ? '#4E5B47' : isCurrent ? 'rgba(78, 91, 71, 0.12)' : 'transparent',
-                    color: isHovered ? '#FAF8F5' : '#4E5B47',
-                    fontWeight: isHovered || isCurrent ? 700 : 600,
-                    fontSize: '0.86rem',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
-                    <span style={{ fontSize: '1.05rem', flexShrink: 0 }}>{info.icon}</span>
-                    <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{title}</span>
-                  </div>
-                  <span
-                    style={{
-                      fontSize: '0.72rem',
-                      opacity: isHovered ? 0.9 : 0.65,
-                      flexShrink: 0,
-                      transform: isRTL ? 'rotate(180deg)' : 'none'
+                return (
+                  <button
+                    type="button"
+                    key={cat}
+                    onMouseEnter={() => setHoveredCategory(cat)}
+                    onClick={() => {
+                      setHoveredCategory(cat);
+                      onSelectCategory(cat);
                     }}
+                    className={`category-dropside-item ${isHovered ? 'is-hovered' : ''} ${isCurrent ? 'is-current' : ''}`}
                   >
-                    →
-                  </span>
-                </div>
-              );
-            })}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                      <span style={{ fontSize: '1.05rem', flexShrink: 0 }}>{info.icon}</span>
+                      <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{title}</span>
+                    </div>
+                    <span
+                      className="category-dropside-arrow"
+                      style={{
+                        fontSize: '0.72rem',
+                        opacity: isHovered ? 0.95 : 0.6,
+                        flexShrink: 0,
+                        transform: isRTL ? 'rotate(180deg)' : 'none'
+                      }}
+                    >
+                      →
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Drop-Side Preview Panel (Column 2): Dynamic Tools Preview */}
