@@ -280,13 +280,19 @@ export const ElementModal: React.FC<ElementModalProps> = ({
           </div>
         </div>
 
-        {/* Electron Shell Visualizer */}
+        {/* 3D Interactive Electron Shell Visualizer */}
         {detail?.shells && detail.shells.length > 0 && (
-          <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-            <h3 style={{ fontSize: '1.15rem', color: '#4E5B47', marginBottom: '0.75rem' }}>
+          <div style={{ marginBottom: '1.75rem' }}>
+            <h3 style={{ fontSize: '1.15rem', color: '#253224', marginBottom: '0.75rem', textAlign: 'center' }}>
               {t.modal.electronShells}
             </h3>
-            <ElectronShells shells={detail.shells} symbol={element.symbol} size={280} />
+            <ElectronShells
+              shells={detail.shells}
+              symbol={element.symbol}
+              atomicNumber={element.atomicNumber}
+              electronConfig={detail.ec}
+              size={340}
+            />
           </div>
         )}
 
