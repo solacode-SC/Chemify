@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HeroCanvas } from '../common/HeroCanvas';
 import { AppView } from '../common/Navbar';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -15,6 +15,7 @@ interface HeroTileItem {
   mass: string;
   config: string;
   shells: number[];
+  electronegativity: string;
   phase: { en: string; fr: string; ar: string };
   catLabel: { en: string; fr: string; ar: string };
   color: string;
@@ -29,10 +30,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '1.008',
     config: '1s¹',
     shells: [1],
+    electronegativity: '2.20',
     phase: { en: 'Gas', fr: 'Gaz', ar: 'غاز' },
     catLabel: { en: 'Nonmetal', fr: 'Non-métal', ar: 'لافلز' },
     color: '#2E7D5B',
-    soft: 'rgba(46, 125, 91, 0.14)'
+    soft: '#E6F3EC'
   },
   {
     num: 6,
@@ -41,10 +43,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '12.011',
     config: '[He] 2s² 2p²',
     shells: [2, 4],
+    electronegativity: '2.55',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Nonmetal', fr: 'Non-métal', ar: 'لافلز' },
-    color: '#3A6B54',
-    soft: 'rgba(58, 107, 84, 0.14)'
+    color: '#34634D',
+    soft: '#E7F1EC'
   },
   {
     num: 7,
@@ -53,10 +56,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '14.007',
     config: '[He] 2s² 2p³',
     shells: [2, 5],
+    electronegativity: '3.04',
     phase: { en: 'Gas', fr: 'Gaz', ar: 'غاز' },
     catLabel: { en: 'Nonmetal', fr: 'Non-métal', ar: 'لافلز' },
     color: '#2C7A7B',
-    soft: 'rgba(44, 122, 123, 0.14)'
+    soft: '#E5F3F3'
   },
   {
     num: 8,
@@ -65,10 +69,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '15.999',
     config: '[He] 2s² 2p⁴',
     shells: [2, 6],
+    electronegativity: '3.44',
     phase: { en: 'Gas', fr: 'Gaz', ar: 'غاز' },
     catLabel: { en: 'Nonmetal', fr: 'Non-métal', ar: 'لافلز' },
-    color: '#3B8471',
-    soft: 'rgba(59, 132, 113, 0.14)'
+    color: '#367A68',
+    soft: '#E6F2EE'
   },
   {
     num: 11,
@@ -77,10 +82,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '22.990',
     config: '[Ne] 3s¹',
     shells: [2, 8, 1],
+    electronegativity: '0.93',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Alkali Metal', fr: 'Métal alcalin', ar: 'فلز قلوي' },
-    color: '#C26D4A',
-    soft: 'rgba(194, 109, 74, 0.15)'
+    color: '#B85D3B',
+    soft: '#F9ECE6'
   },
   {
     num: 26,
@@ -89,10 +95,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '55.845',
     config: '[Ar] 3d⁶ 4s²',
     shells: [2, 8, 14, 2],
+    electronegativity: '1.83',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Transition Metal', fr: 'Métal de transition', ar: 'فلز انتقالي' },
-    color: '#567189',
-    soft: 'rgba(86, 113, 137, 0.15)'
+    color: '#4D6782',
+    soft: '#EBF0F5'
   },
   {
     num: 29,
@@ -101,10 +108,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '63.546',
     config: '[Ar] 3d¹⁰ 4s¹',
     shells: [2, 8, 18, 1],
+    electronegativity: '1.90',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Transition Metal', fr: 'Métal de transition', ar: 'فلز انتقالي' },
-    color: '#B8653E',
-    soft: 'rgba(184, 101, 62, 0.15)'
+    color: '#AE5C35',
+    soft: '#F8ECE5'
   },
   {
     num: 47,
@@ -113,10 +121,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '107.87',
     config: '[Kr] 4d¹⁰ 5s¹',
     shells: [2, 8, 18, 18, 1],
+    electronegativity: '1.93',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Noble Metal', fr: 'Métal noble', ar: 'فلز نفيس' },
-    color: '#64765C',
-    soft: 'rgba(100, 118, 92, 0.15)'
+    color: '#5B6D55',
+    soft: '#ECF1EA'
   },
   {
     num: 79,
@@ -125,10 +134,11 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '196.97',
     config: '[Xe] 4f¹⁴ 5d¹⁰ 6s¹',
     shells: [2, 8, 18, 32, 18, 1],
+    electronegativity: '2.54',
     phase: { en: 'Solid', fr: 'Solide', ar: 'صلب' },
     catLabel: { en: 'Noble Metal', fr: 'Métal noble', ar: 'فلز نفيس' },
-    color: '#B9852E',
-    soft: 'rgba(185, 133, 46, 0.16)'
+    color: '#A97822',
+    soft: '#F8F1E1'
   },
   {
     num: 80,
@@ -137,17 +147,20 @@ const HERO_TILES: HeroTileItem[] = [
     mass: '200.59',
     config: '[Xe] 4f¹⁴ 5d¹⁰ 6s²',
     shells: [2, 8, 18, 32, 18, 2],
+    electronegativity: '2.00',
     phase: { en: 'Liquid', fr: 'Liquide', ar: 'سائل' },
     catLabel: { en: 'Transition Metal', fr: 'Métal de transition', ar: 'فلز انتقالي' },
-    color: '#467476',
-    soft: 'rgba(70, 116, 118, 0.15)'
+    color: '#3F6D6F',
+    soft: '#E7F1F1'
   }
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
   const { language, t } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState(1); // Start on Carbon (C)
+  const [activeIndex, setActiveIndex] = useState(1); // Carbon (C)
   const [isAutoPaused, setIsAutoPaused] = useState(false);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, gx: 50, gy: 50 });
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const l = (en: string, fr: string, ar: string) =>
     language === 'ar' ? ar : language === 'fr' ? fr : en;
@@ -156,9 +169,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
     if (isAutoPaused) return;
     const timer = window.setInterval(() => {
       setActiveIndex(prev => (prev + 1) % HERO_TILES.length);
-    }, 4200);
+    }, 4500);
     return () => window.clearInterval(timer);
   }, [isAutoPaused]);
+
+  const handleCardPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse' || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    setTilt({
+      rx: (0.5 - py) * 7,
+      ry: (px - 0.5) * 8,
+      gx: Math.round(px * 100),
+      gy: Math.round(py * 100)
+    });
+  };
+
+  const resetCardTilt = () => {
+    setTilt({ rx: 0, ry: 0, gx: 50, gy: 50 });
+  };
 
   const activeTile = HERO_TILES[activeIndex];
   const activeLocalizedName = getElementName(activeTile.num, language, activeTile.name);
@@ -170,7 +200,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
       id="hero"
       style={{ '--active-el-color': activeTile.color, '--active-el-soft': activeTile.soft } as React.CSSProperties}
     >
-      {/* Multi-Layer Sunlit Botanical Atmosphere */}
+      {/* Sunlit Botanical Atmosphere */}
       <div className="hero-ambient" aria-hidden="true">
         <div className="hero-orb hero-orb--sage" />
         <div className="hero-orb hero-orb--gold" />
@@ -233,107 +263,139 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <span>{l('Real-Time Lab Bench', 'Paillasse en Direct', 'مختبر تفاعلات حي')}</span>
               </button>
               <button type="button" className="hero-highlight-pill" onClick={() => onNavigate('tools')}>
-                <span className="hero-highlight-pill__dot" style={{ background: '#C6923A' }} />
+                <span className="hero-highlight-pill__dot" style={{ background: '#A97822' }} />
                 <span>{l('10 Precision Solvers', '10 Calculateurs Précis', '10 حاسبات علمية')}</span>
               </button>
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Interactive Live Botanical Quantum Showcase */}
+          {/* RIGHT COLUMN: Precision Tactile Specimen Instrument Card */}
           <div
             className="hero-showcase hero-animate hero-animate--4"
             onMouseEnter={() => setIsAutoPaused(true)}
-            onMouseLeave={() => setIsAutoPaused(false)}
+            onMouseLeave={() => {
+              setIsAutoPaused(false);
+              resetCardTilt();
+            }}
           >
-            {/* Floating Reaction Telemetry Satellite */}
-            <div className="hero-satellite hero-satellite--top formula-ltr" aria-hidden="true">
-              <span className="hero-satellite__dot" />
-              <span className="hero-satellite__eq">2H₂ + O₂ → 2H₂O</span>
-              <span className="hero-satellite__tag">−483.6 kJ</span>
-            </div>
+            <div
+              ref={cardRef}
+              className="specimen-plate"
+              onPointerMove={handleCardPointerMove}
+              onPointerLeave={resetCardTilt}
+              style={
+                {
+                  '--tilt-x': `${tilt.rx}deg`,
+                  '--tilt-y': `${tilt.ry}deg`,
+                  '--glare-x': `${tilt.gx}%`,
+                  '--glare-y': `${tilt.gy}%`
+                } as React.CSSProperties
+              }
+            >
+              {/* Subtle Paper Specular Glare on Pointer Move */}
+              <div className="specimen-plate__glare" aria-hidden="true" />
 
-            {/* Central Interactive Specimen Observatory Card */}
-            <div className="hero-orb-card">
-              <div className="hero-orb-card__header">
-                <span className="hero-orb-card__cat">
+              {/* Top Ruled Instrument Header */}
+              <div className="specimen-plate__bar">
+                <div className="specimen-plate__id formula-ltr">
+                  <span className="specimen-plate__led" />
+                  <span>SPECIMEN // Z={String(activeTile.num).padStart(2, '0')}</span>
+                </div>
+                <span className="specimen-plate__cat">
                   {activeTile.catLabel[language]}
                 </span>
-                <span className="hero-orb-card__num formula-ltr">
-                  № {String(activeTile.num).padStart(2, '0')}
-                </span>
               </div>
 
-              {/* Animated Orbital Stage */}
-              <div className="hero-orb-stage" key={activeTile.sym}>
-                <div className="hero-orb-stage__glow" aria-hidden="true" />
+              {/* Auto-Cycle Precision Progress Hairline */}
+              <div className="specimen-plate__progress" aria-hidden="true">
+                <span
+                  key={`${activeTile.sym}-${isAutoPaused ? 'p' : 'r'}`}
+                  className={`specimen-plate__progress-fill ${isAutoPaused ? 'is-paused' : ''}`}
+                />
+              </div>
 
-                {/* Rotating Quantum Rings */}
-                <div className="hero-ring hero-ring--1" aria-hidden="true">
-                  <span className="hero-ring__electron" />
-                </div>
-                {visibleRings >= 2 && (
-                  <div className="hero-ring hero-ring--2" aria-hidden="true">
-                    <span className="hero-ring__electron" />
+              {/* Center Precision Orbital & Medallion Viewport */}
+              <div className="specimen-plate__viewport" key={activeTile.sym}>
+                {/* Registration Corner Crosshairs */}
+                <span className="reg-mark reg-mark--tl" aria-hidden="true" />
+                <span className="reg-mark reg-mark--tr" aria-hidden="true" />
+                <span className="reg-mark reg-mark--bl" aria-hidden="true" />
+                <span className="reg-mark reg-mark--br" aria-hidden="true" />
+
+                {/* Sharp Concentric SVG Orbital Instrument */}
+                <div className="specimen-orbital">
+                  <svg className="specimen-orbital__ticks" viewBox="0 0 240 240" aria-hidden="true">
+                    <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(78,91,71,0.16)" strokeWidth="1" strokeDasharray="2 6" />
+                    <line x1="120" y1="6" x2="120" y2="18" stroke="rgba(78,91,71,0.35)" strokeWidth="1.2" />
+                    <line x1="120" y1="222" x2="120" y2="234" stroke="rgba(78,91,71,0.35)" strokeWidth="1.2" />
+                    <line x1="6" y1="120" x2="18" y2="120" stroke="rgba(78,91,71,0.35)" strokeWidth="1.2" />
+                    <line x1="222" y1="120" x2="234" y2="120" stroke="rgba(78,91,71,0.35)" strokeWidth="1.2" />
+                  </svg>
+
+                  <div className="specimen-ring specimen-ring--1" aria-hidden="true">
+                    <span className="specimen-ring__dot" />
                   </div>
-                )}
-                {visibleRings >= 3 && (
-                  <div className="hero-ring hero-ring--3" aria-hidden="true">
-                    <span className="hero-ring__electron" />
-                  </div>
-                )}
+                  {visibleRings >= 2 && (
+                    <div className="specimen-ring specimen-ring--2" aria-hidden="true">
+                      <span className="specimen-ring__dot" />
+                    </div>
+                  )}
+                  {visibleRings >= 3 && (
+                    <div className="specimen-ring specimen-ring--3" aria-hidden="true">
+                      <span className="specimen-ring__dot" />
+                    </div>
+                  )}
 
-                {/* Center Element Medallion */}
-                <button
-                  type="button"
-                  onClick={() => onNavigate('elements')}
-                  className="hero-medallion"
-                  title={`${activeLocalizedName} — ${l('Open in Periodic Table', 'Ouvrir dans le Tableau', 'فتح في الجدول الدوري')}`}
-                >
-                  <span className="hero-medallion__sym">{activeTile.sym}</span>
-                  <span className="hero-medallion__name">{activeLocalizedName}</span>
-                  <span className="hero-medallion__mass formula-ltr">{activeTile.mass} u</span>
-                </button>
-              </div>
-
-              {/* Live Atomic Readout Strip */}
-              <div className="hero-orb-card__meta">
-                <div className="hero-meta-box">
-                  <span className="hero-meta-box__label">{l('Config', 'Config.', 'التوزيع')}</span>
-                  <span className="hero-meta-box__val formula-ltr">{activeTile.config}</span>
-                </div>
-                <div className="hero-meta-box">
-                  <span className="hero-meta-box__label">{l('Shells', 'Couches', 'المدارات')}</span>
-                  <span className="hero-meta-box__val formula-ltr">{activeTile.shells.join(' · ')}</span>
-                </div>
-                <div className="hero-meta-box">
-                  <span className="hero-meta-box__label">{l('State', 'État', 'الحالة')}</span>
-                  <span className="hero-meta-box__val">{activeTile.phase[language]}</span>
+                  {/* Tactile Central Element Block */}
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('elements')}
+                    className="specimen-core"
+                    title={`${activeLocalizedName} — ${l('Open in Periodic Table', 'Ouvrir dans le Tableau', 'فتح في الجدول الدوري')}`}
+                  >
+                    <span className="specimen-core__num formula-ltr">{activeTile.num}</span>
+                    <span className="specimen-core__sym">{activeTile.sym}</span>
+                    <span className="specimen-core__name">{activeLocalizedName}</span>
+                  </button>
                 </div>
               </div>
 
+              {/* Ruled IUPAC Datasheet Grid */}
+              <div className="specimen-ledger">
+                <div className="specimen-ledger__cell">
+                  <span className="specimen-ledger__label">{l('Atomic Mass', 'Masse atom.', 'الكتلة الذرية')}</span>
+                  <span className="specimen-ledger__val formula-ltr">{activeTile.mass} u</span>
+                </div>
+                <div className="specimen-ledger__cell">
+                  <span className="specimen-ledger__label">{l('Electroneg.', 'Électronég.', 'الكهروسالبية')}</span>
+                  <span className="specimen-ledger__val formula-ltr">χ {activeTile.electronegativity}</span>
+                </div>
+                <div className="specimen-ledger__cell">
+                  <span className="specimen-ledger__label">{l('Config', 'Config.', 'التوزيع')}</span>
+                  <span className="specimen-ledger__val formula-ltr">{activeTile.config}</span>
+                </div>
+                <div className="specimen-ledger__cell">
+                  <span className="specimen-ledger__label">{l('State (STP)', 'État (25°C)', 'الحالة')}</span>
+                  <span className="specimen-ledger__val">{activeTile.phase[language]}</span>
+                </div>
+              </div>
+
+              {/* Tactile Ink-Slide Footer CTA */}
               <button
                 type="button"
-                className="hero-orb-card__inspect"
+                className="specimen-plate__action"
                 onClick={() => onNavigate('elements')}
               >
-                <span>{l(`Inspect ${activeLocalizedName}`, `Explorer ${activeLocalizedName}`, `استكشف ${activeLocalizedName}`)}</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
+                <span className="specimen-plate__action-text">
+                  {l(`Open ${activeLocalizedName} Dossier`, `Ouvrir la fiche ${activeLocalizedName}`, `فتح ملف ${activeLocalizedName}`)}
+                </span>
+                <span className="specimen-plate__action-arrow rtl-flip" aria-hidden="true">→</span>
               </button>
-            </div>
-
-            {/* Floating Bottom Quantum Formula Satellite */}
-            <div className="hero-satellite hero-satellite--bottom formula-ltr" aria-hidden="true">
-              <span className="hero-satellite__formula">PV = nRT</span>
-              <span className="hero-satellite__sep">•</span>
-              <span className="hero-satellite__formula">ΔG = ΔH − TΔS</span>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM INTERACTIVE ELEMENT DOCK */}
+        {/* BOTTOM INTERACTIVE ENAMEL PERIODIC TILE DOCK */}
         <div
           className="hero-deck-wrapper hero-animate hero-animate--6"
           onMouseEnter={() => setIsAutoPaused(true)}
@@ -341,14 +403,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         >
           <div className="hero-deck-header">
             <span className="hero-deck-label">
-              {l('Interactive Specimen Dock — Select an element', 'Sélecteur d’Éléments — Choisissez un spécimen', 'شريط العناصر التفاعلي — اختر عنصراً لمعاينته')}
+              {l('Specimen Index — Hover or select to inspect', 'Index des Spécimens — Survolez ou sélectionnez', 'فهرس العناصر — اختر عنصراً لمعاينته')}
             </span>
             <button
               type="button"
               className="hero-deck-all-link"
               onClick={() => onNavigate('elements')}
             >
-              <span>{l('View all 118', 'Voir les 118', 'عرض الـ 118')}</span>
+              <span>{l('Full 118 Catalog', 'Catalogue des 118', 'كتالوج الـ 118')}</span>
               <span className="rtl-flip">→</span>
             </button>
           </div>
@@ -373,10 +435,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   style={
                     {
                       '--tile-accent': tile.color,
-                      '--tile-delay': `${idx * 45}ms`
+                      '--tile-soft': tile.soft,
+                      '--tile-delay': `${idx * 40}ms`
                     } as React.CSSProperties
                   }
-                  title={`${localizedName} — ${l('Click to preview or open catalog', 'Cliquez pour explorer', 'انقر للمعاينة أو فتح الكتالوج')}`}
+                  title={`${localizedName} — ${l('Select or click again to open', 'Sélectionnez pour inspecter', 'انقر للمعاينة أو الفتح')}`}
                 >
                   <div className="hero-element-tile__top">
                     <span className="hero-element-tile__num">{tile.num}</span>
@@ -391,7 +454,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Animated Scroll Down Indicator */}
+      {/* Minimal Scroll Cue */}
       <a
         href="#about"
         className="hero-scroll-cue"

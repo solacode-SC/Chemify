@@ -21,11 +21,23 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           </p>
         </div>
 
-        {/* 3 Personas Cards Grid */}
+        {/* 3 Personas Exhibition Cards Grid */}
         <div className="personas-grid">
           {/* Card 1: Student */}
-          <article className="persona-card persona-card--emerald reveal-on-scroll">
+          <article
+            className="persona-card persona-card--emerald reveal-on-scroll"
+            onClick={() => onNavigate('elements')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') onNavigate('elements');
+            }}
+          >
             <div className="persona-card__frame">
+              <div className="persona-card__top-strip">
+                <span className="persona-card__plate-no formula-ltr">PLATE 01</span>
+                <span className="persona-card__badge-inline">{t.personas.studentBadge}</span>
+              </div>
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-student-chemist.png"
@@ -33,33 +45,35 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">{t.personas.studentBadge}</span>
               </div>
               <div className="persona-card__content">
                 <h3 className="persona-card__title">{t.personas.studentTitle}</h3>
                 <p className="persona-card__text">
                   {t.personas.studentDesc}
                 </p>
-                <div className="persona-card__footer">
-                  <button
-                    onClick={() => onNavigate('elements')}
-                    className="persona-card__link"
-                    aria-label="Start Learning as a student"
-                  >
-                    <span>{t.personas.studentCta}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
-                </div>
+              </div>
+              <div className="persona-card__action-bar">
+                <span>{t.personas.studentCta}</span>
+                <span className="persona-card__action-arrow rtl-flip" aria-hidden="true">→</span>
               </div>
             </div>
           </article>
 
           {/* Card 2: Researcher */}
-          <article className="persona-card persona-card--teal reveal-on-scroll reveal-delay-1">
+          <article
+            className="persona-card persona-card--teal reveal-on-scroll reveal-delay-1"
+            onClick={() => onNavigate('tools')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') onNavigate('tools');
+            }}
+          >
             <div className="persona-card__frame">
+              <div className="persona-card__top-strip">
+                <span className="persona-card__plate-no formula-ltr">PLATE 02</span>
+                <span className="persona-card__badge-inline">{t.personas.researcherBadge}</span>
+              </div>
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-researcher-chemist.png"
@@ -67,33 +81,35 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">{t.personas.researcherBadge}</span>
               </div>
               <div className="persona-card__content">
                 <h3 className="persona-card__title">{t.personas.researcherTitle}</h3>
                 <p className="persona-card__text">
                   {t.personas.researcherDesc}
                 </p>
-                <div className="persona-card__footer">
-                  <button
-                    onClick={() => onNavigate('tools')}
-                    className="persona-card__link"
-                    aria-label="Open Research Tools"
-                  >
-                    <span>{t.personas.researcherCta}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
-                </div>
+              </div>
+              <div className="persona-card__action-bar">
+                <span>{t.personas.researcherCta}</span>
+                <span className="persona-card__action-arrow rtl-flip" aria-hidden="true">→</span>
               </div>
             </div>
           </article>
 
           {/* Card 3: Curious Mind */}
-          <article className="persona-card persona-card--gold reveal-on-scroll reveal-delay-2">
+          <article
+            className="persona-card persona-card--gold reveal-on-scroll reveal-delay-2"
+            onClick={() => onNavigate('lab')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') onNavigate('lab');
+            }}
+          >
             <div className="persona-card__frame">
+              <div className="persona-card__top-strip">
+                <span className="persona-card__plate-no formula-ltr">PLATE 03</span>
+                <span className="persona-card__badge-inline">{t.personas.curiousBadge}</span>
+              </div>
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-tools-guide.png"
@@ -101,26 +117,16 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <span className="persona-card__badge">{t.personas.curiousBadge}</span>
               </div>
               <div className="persona-card__content">
                 <h3 className="persona-card__title">{t.personas.curiousTitle}</h3>
                 <p className="persona-card__text">
                   {t.personas.curiousDesc}
                 </p>
-                <div className="persona-card__footer">
-                  <button
-                    onClick={() => onNavigate('lab')}
-                    className="persona-card__link"
-                    aria-label="Step into the Reaction Studio"
-                  >
-                    <span>{t.personas.curiousCta}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
-                </div>
+              </div>
+              <div className="persona-card__action-bar">
+                <span>{t.personas.curiousCta}</span>
+                <span className="persona-card__action-arrow rtl-flip" aria-hidden="true">→</span>
               </div>
             </div>
           </article>
@@ -155,21 +161,15 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             </p>
             <div className="studio-showcase__features">
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E7D5B" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+                <span className="studio-feature-item__mark" style={{ background: '#2E7D5B' }} />
                 <span>{language === 'ar' ? 'حرارة التفاعل والإنثالبي المباشر (ΔH)' : language === 'fr' ? 'Enthalpie & Énergie thermique en direct' : 'Live Heat of Reaction & Enthalpy (ΔH)'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C7A7B" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+                <span className="studio-feature-item__mark" style={{ background: '#2C7A7B' }} />
                 <span>{language === 'ar' ? 'موازنة المعادلات بمصفوفات غاوس' : language === 'fr' ? 'Équilibrage matriciel gaussien automatique' : 'Gaussian Matrix Automatic Equation Balancing'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6923A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+                <span className="studio-feature-item__mark" style={{ background: '#A97822' }} />
                 <span>{language === 'ar' ? 'حساب المتفاعل المحدِّد والإنتاجية' : language === 'fr' ? 'Calculateur de réactif limitant et rendement' : 'Limiting Reagent & Theoretical Yield Solver'}</span>
               </div>
             </div>

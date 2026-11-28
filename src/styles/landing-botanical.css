@@ -1,22 +1,24 @@
 /* ===================================================
-   Chemify — Elevated Botanical Observatory Landing Theme
-   Preserves Signature Warm Parchment, Sage & Deep Olive
-   Enriched with Emerald, Verdigris Teal & Alchemical Gold
-   Fluid Animations, Micro-Interactions & Full Responsive
+   Chemify — Tactile Scientific Editorial Landing System
+   Swiss Monograph + Laboratory Instrument Precision
+   Botanical Parchment, Forest Ink, Emerald, Teal & Brass
    =================================================== */
 
 .theme-botanical-enhanced {
+  --bot-ink: #253224;
   --bot-forest: #2d3b29;
   --bot-olive: #4e5b47;
   --bot-sage: #6f7f63;
   --bot-emerald: #2e7d5b;
   --bot-teal: #2c7a7b;
-  --bot-gold: #c6923a;
-  --bot-copper: #c26d4a;
+  --bot-gold: #a97822;
+  --bot-copper: #b85d3b;
   --bot-ivory: #fcfbf7;
-  --bot-cream: #faf8f5;
+  --bot-cream: #faf8f4;
   --bot-parchment: #e6e2d3;
   --bot-sage-mist: #dce2d2;
+  --bot-rule: rgba(78, 91, 71, 0.24);
+  --bot-rule-strong: rgba(45, 59, 41, 0.48);
   overflow-x: clip;
 }
 
@@ -25,162 +27,56 @@
   min-height: 82vh;
 }
 
-/* Standalone About page should never stay hidden */
 .about-standalone-view .reveal-on-scroll {
   opacity: 1 !important;
   transform: none !important;
 }
 
 /* ===================================================
-   Scroll Reveal & Entrance Keyframes
+   Precision Keyframes & Motion System
    =================================================== */
 @keyframes heroFadeUp {
   0% {
     opacity: 0;
-    transform: translateY(22px) scale(0.985);
+    transform: translateY(18px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 @keyframes orbDrift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  100% {
-    transform: translate3d(32px, -26px, 0) scale(1.1);
-  }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(28px, -22px, 0) scale(1.08); }
 }
 
-@keyframes pulseLiveDot {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(46, 125, 91, 0.55);
-  }
-  50% {
-    transform: scale(1.22);
-    box-shadow: 0 0 0 8px rgba(46, 125, 91, 0);
-  }
+@keyframes sunbeamSway {
+  0% { transform: rotate(-18deg) translateX(-4%); opacity: 0.36; }
+  50% { transform: rotate(-14deg) translateX(4%); opacity: 0.56; }
+  100% { transform: rotate(-18deg) translateX(-4%); opacity: 0.36; }
 }
 
-@keyframes atomFloat {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-9px);
-  }
-}
-
-@keyframes specimenPop {
-  0% {
-    opacity: 0;
-    transform: translateY(16px) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes shimmerSweep {
-  0% {
-    transform: translateX(-140%) skewX(-24deg);
-  }
-  100% {
-    transform: translateX(260%) skewX(-24deg);
-  }
-}
-
-.hero-animate {
-  opacity: 0;
-  animation: heroFadeUp 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.hero-animate--1 { animation-delay: 0.05s; }
-.hero-animate--2 { animation-delay: 0.14s; }
-.hero-animate--3 { animation-delay: 0.24s; }
-.hero-animate--4 { animation-delay: 0.34s; }
-.hero-animate--5 { animation-delay: 0.44s; }
-.hero-animate--6 { animation-delay: 0.54s; }
-
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal-on-scroll.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 {
-  transition-delay: 0.12s;
-}
-
-.reveal-delay-2 {
-  transition-delay: 0.24s;
-}
-
-/* ===================================================
-   Elevated Botanical Navbar Polish
-   =================================================== */
-.navbar__cta {
-  background: linear-gradient(135deg, #3c533c 0%, #2e7d5b 100%);
-  border: 1px solid rgba(45, 59, 41, 0.35);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 5px 16px rgba(46, 125, 91, 0.24);
-}
-
-.navbar__cta:hover {
-  background: linear-gradient(135deg, #2d3b29 0%, #24684b 100%);
-  box-shadow: 0 8px 22px rgba(46, 125, 91, 0.34);
-}
-
-/* ===================================================
-   Shared Botanical Typography & Accents
-   =================================================== */
-.theme-botanical-enhanced .section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--bot-emerald);
-  background: rgba(46, 125, 91, 0.1);
-  border: 1px solid rgba(46, 125, 91, 0.28);
-  padding: 5px 16px;
-  box-shadow: 0 2px 10px rgba(46, 125, 91, 0.08);
-}
-
-.theme-botanical-enhanced .section-title {
-  color: var(--bot-forest);
-}
-
-.text-gradient-accent {
-  background: linear-gradient(125deg, #2d3b29 0%, #2e7d5b 52%, #2c7a7b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* ===================================================
-   Hero Section — Redesigned Botanical Quantum Stage
-   =================================================== */
 @keyframes gradientFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@keyframes sunbeamSway {
-  0% { transform: rotate(-18deg) translateX(-4%); opacity: 0.42; }
-  50% { transform: rotate(-14deg) translateX(4%); opacity: 0.62; }
-  100% { transform: rotate(-18deg) translateX(-4%); opacity: 0.42; }
+@keyframes pulseLiveDot {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46, 125, 91, 0.5);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 7px rgba(46, 125, 91, 0);
+  }
+}
+
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @keyframes ringSpinCW {
@@ -193,19 +89,19 @@
   to { transform: translate(-50%, -50%) rotate(0deg); }
 }
 
-@keyframes medallionPop {
-  0% { opacity: 0; transform: scale(0.86) translateY(8px); }
+@keyframes coreReveal {
+  0% { opacity: 0; transform: scale(0.9) translateY(6px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes satelliteFloatA {
+@keyframes atomFloat {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-7px); }
 }
 
-@keyframes satelliteFloatB {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(7px); }
+@keyframes specimenPop {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scrollWheel {
@@ -214,17 +110,104 @@
   100% { opacity: 0; transform: translateY(0); }
 }
 
+@keyframes bubbleRise {
+  0% { transform: translateY(0); opacity: 0.9; }
+  50% { transform: translateY(-5px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0.9; }
+}
+
+@keyframes cellBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero-animate {
+  opacity: 0;
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-animate--1 { animation-delay: 0.04s; }
+.hero-animate--2 { animation-delay: 0.12s; }
+.hero-animate--3 { animation-delay: 0.2s; }
+.hero-animate--4 { animation-delay: 0.28s; }
+.hero-animate--5 { animation-delay: 0.36s; }
+.hero-animate--6 { animation-delay: 0.44s; }
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+
+/* ===================================================
+   Shared Botanical Editorial Controls & Typography
+   =================================================== */
+.navbar__cta {
+  background: #2d3b29;
+  border: 1.5px solid #253224;
+  box-shadow: 0 3px 0 rgba(37, 50, 36, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.navbar__cta:hover {
+  background: #2e7d5b;
+  border-color: #24684b;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 rgba(37, 50, 36, 0.22);
+}
+
+.theme-botanical-enhanced .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--bot-ink);
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-rule-strong);
+  border-radius: 6px;
+  padding: 5px 12px;
+  box-shadow: 2px 2px 0 rgba(78, 91, 71, 0.2);
+}
+
+.theme-botanical-enhanced .section-title {
+  color: var(--bot-ink);
+  letter-spacing: -0.02em;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(120deg, #253224 0%, #2e7d5b 55%, #2c7a7b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===================================================
+   Hero Section — Botanical Precision Stage
+   =================================================== */
 .theme-botanical-enhanced .hero-section--redesigned {
   min-height: 100vh;
-  padding: calc(var(--navbar-height) + 46px) 24px 68px;
+  padding: calc(var(--navbar-height) + 46px) 24px 62px;
   text-align: start;
   justify-content: space-between;
   background:
-    radial-gradient(ellipse 68% 58% at 14% 18%, rgba(46, 125, 91, 0.16) 0%, transparent 56%),
-    radial-gradient(ellipse 56% 52% at 88% 18%, rgba(212, 161, 71, 0.22) 0%, transparent 55%),
-    radial-gradient(ellipse 58% 46% at 72% 84%, rgba(44, 122, 123, 0.14) 0%, transparent 58%),
-    linear-gradient(180deg, #f0ecdf 0%, #e6e2d3 52%, #dce2d1 100%);
-  border-bottom: 1.5px solid rgba(111, 127, 99, 0.3);
+    radial-gradient(ellipse 68% 56% at 14% 18%, rgba(46, 125, 91, 0.14) 0%, transparent 56%),
+    radial-gradient(ellipse 56% 50% at 88% 18%, rgba(198, 146, 58, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 56% 46% at 72% 84%, rgba(44, 122, 123, 0.12) 0%, transparent 58%),
+    linear-gradient(180deg, #f0ecdf 0%, #e6e2d3 54%, #dde2d2 100%);
+  border-bottom: 1.5px solid var(--bot-rule-strong);
 }
 
 .hero-ambient {
@@ -239,33 +222,33 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(78px);
-  opacity: 0.72;
+  opacity: 0.65;
   animation: orbDrift 15s ease-in-out infinite alternate;
 }
 
 .hero-orb--sage {
-  width: 460px;
-  height: 460px;
-  top: -130px;
+  width: 440px;
+  height: 440px;
+  top: -120px;
   left: -100px;
-  background: radial-gradient(circle, rgba(46, 125, 91, 0.28) 0%, rgba(111, 127, 99, 0) 70%);
+  background: radial-gradient(circle, rgba(46, 125, 91, 0.25) 0%, transparent 70%);
 }
 
 .hero-orb--gold {
-  width: 480px;
-  height: 480px;
-  top: 10px;
+  width: 460px;
+  height: 460px;
+  top: 12px;
   right: -130px;
-  background: radial-gradient(circle, rgba(212, 161, 71, 0.3) 0%, rgba(198, 146, 58, 0) 70%);
+  background: radial-gradient(circle, rgba(212, 161, 71, 0.26) 0%, transparent 70%);
   animation-delay: -5s;
 }
 
 .hero-orb--verdigris {
-  width: 420px;
-  height: 420px;
+  width: 400px;
+  height: 400px;
   bottom: -120px;
   left: 34%;
-  background: radial-gradient(circle, rgba(44, 122, 123, 0.22) 0%, rgba(44, 122, 123, 0) 70%);
+  background: radial-gradient(circle, rgba(44, 122, 123, 0.2) 0%, transparent 70%);
   animation-delay: -10s;
 }
 
@@ -273,13 +256,13 @@
   position: absolute;
   top: -30%;
   left: 22%;
-  width: 56%;
+  width: 54%;
   height: 145%;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 252, 240, 0.26) 45%,
-    rgba(232, 201, 126, 0.14) 55%,
+    rgba(255, 252, 240, 0.24) 45%,
+    rgba(232, 201, 126, 0.12) 55%,
     transparent 100%
   );
   filter: blur(36px);
@@ -294,7 +277,7 @@
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 2.75rem;
+  gap: 2.5rem;
 }
 
 .hero-split {
@@ -311,25 +294,27 @@
 }
 
 .theme-botanical-enhanced .hero-eyebrow {
-  background: rgba(252, 251, 247, 0.9);
-  border: 1px solid rgba(46, 125, 91, 0.38);
-  color: var(--bot-forest);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 7px 18px;
-  margin-bottom: 1.3rem;
-  box-shadow: 0 6px 20px rgba(78, 91, 71, 0.1), inset 0 1px 0 #ffffff;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-rule-strong);
+  border-radius: 8px;
+  color: var(--bot-ink);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  margin-bottom: 1.35rem;
+  box-shadow: 3px 3px 0 rgba(78, 91, 71, 0.22);
 }
 
 .theme-botanical-enhanced .hero-eyebrow__dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   background-color: var(--bot-emerald);
   animation: pulseLiveDot 2.3s ease-in-out infinite;
 }
 
 .theme-botanical-enhanced .hero-title {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
   font-size: clamp(2.65rem, 5.4vw, 4.75rem);
   line-height: 1.07;
   margin-bottom: 1.25rem;
@@ -337,11 +322,11 @@
 }
 
 .hero-title__line1 {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
 }
 
 .hero-title__gradient {
-  background: linear-gradient(120deg, #2d3b29 0%, #2e7d5b 35%, #2c7a7b 65%, #b6822e 100%);
+  background: linear-gradient(120deg, #253224 0%, #2e7d5b 38%, #2c7a7b 70%, #a97822 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -351,61 +336,54 @@
 
 .theme-botanical-enhanced .hero-subtitle {
   color: #465543;
-  font-size: clamp(1rem, 1.45vw, 1.18rem);
+  font-size: clamp(1rem, 1.45vw, 1.16rem);
   line-height: 1.7;
-  max-width: 580px;
+  max-width: 570px;
   margin: 0 0 2rem;
 }
 
 .theme-botanical-enhanced .hero-actions {
   justify-content: flex-start;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.5rem;
   gap: 0.9rem;
 }
 
 .theme-botanical-enhanced .hero-btn--primary {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #3a523b 0%, #2e7d5b 100%);
-  color: #faf8f5;
-  border: 1.5px solid rgba(45, 59, 41, 0.25);
-  box-shadow: 0 10px 26px rgba(46, 125, 91, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.24);
-}
-
-.theme-botanical-enhanced .hero-btn--primary::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: translateX(-140%) skewX(-24deg);
-}
-
-.theme-botanical-enhanced .hero-btn--primary:hover::after {
-  animation: shimmerSweep 0.8s ease;
+  background: var(--bot-ink);
+  color: #faf8f4;
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 12px;
+  padding: 14px 28px;
+  box-shadow: 4px 4px 0 #2e7d5b;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .theme-botanical-enhanced .hero-btn--primary:hover {
-  background: linear-gradient(135deg, #2d3b29 0%, #24684b 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(46, 125, 91, 0.38);
+  background: #2e7d5b;
+  border-color: #253224;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #253224;
+}
+
+.theme-botanical-enhanced .hero-btn--primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 #253224;
 }
 
 .theme-botanical-enhanced .hero-btn--ghost {
-  background: rgba(252, 251, 247, 0.82);
-  color: var(--bot-forest);
-  border: 1.5px solid rgba(78, 91, 71, 0.45);
-  box-shadow: 0 6px 18px rgba(78, 91, 71, 0.08);
+  background: var(--bot-ivory);
+  color: var(--bot-ink);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 12px;
+  padding: 14px 26px;
+  box-shadow: 4px 4px 0 rgba(78, 91, 71, 0.28);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .theme-botanical-enhanced .hero-btn--ghost:hover {
   background: #ffffff;
-  border-color: var(--bot-emerald);
-  color: var(--bot-emerald);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(46, 125, 91, 0.16);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(46, 125, 91, 0.35);
 }
 
 /* Quick Live Capability Pills */
@@ -420,357 +398,385 @@
 .hero-highlight-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(252, 251, 247, 0.84);
-  border: 1px solid rgba(111, 127, 99, 0.34);
-  color: var(--bot-forest);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+  gap: 7px;
+  background: rgba(252, 251, 247, 0.88);
+  border: 1px solid var(--bot-rule-strong);
+  color: var(--bot-ink);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
   font-weight: 600;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 3px 10px rgba(78, 91, 71, 0.07);
-  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .hero-highlight-pill:hover {
   background: #ffffff;
-  border-color: var(--bot-emerald);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(46, 125, 91, 0.15);
+  transform: translate(-1px, -2px);
+  box-shadow: 2px 3px 0 rgba(78, 91, 71, 0.28);
 }
 
 .hero-highlight-pill__dot {
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: 2px;
 }
 
 /* ===================================================
-   Right Column: Interactive Live Quantum Specimen Stage
+   Hero Right Column: Tactile Precision Specimen Instrument Plate
    =================================================== */
 .hero-showcase {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 10px;
+  perspective: 1100px;
 }
 
-.hero-orb-card {
+.specimen-plate {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  background: rgba(252, 251, 247, 0.84);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1.5px solid rgba(111, 127, 99, 0.45);
-  border-radius: 28px;
-  padding: 22px 22px 20px;
+  max-width: 446px;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 16px;
+  overflow: hidden;
   box-shadow:
-    0 24px 54px rgba(45, 59, 41, 0.14),
-    0 4px 16px rgba(45, 59, 41, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    6px 6px 0 rgba(45, 59, 41, 0.85),
+    0 24px 44px -16px rgba(37, 50, 36, 0.24);
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
 }
 
-.hero-orb-card::before {
-  content: '';
+.specimen-plate:hover {
+  box-shadow:
+    8px 8px 0 var(--active-el-color, #2e7d5b),
+    0 28px 50px -14px rgba(37, 50, 36, 0.28);
+}
+
+.specimen-plate__glare {
   position: absolute;
-  inset: 8px;
-  border-radius: 21px;
-  border: 1px solid rgba(111, 127, 99, 0.18);
+  inset: 0;
   pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  background: radial-gradient(
+    circle 220px at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.45),
+    transparent 68%
+  );
+  transition: opacity 0.25s ease;
 }
 
-.hero-orb-card:hover {
-  border-color: var(--active-el-color, #2e7d5b);
-  box-shadow:
-    0 28px 60px rgba(45, 59, 41, 0.18),
-    0 0 0 4px var(--active-el-soft, rgba(46, 125, 91, 0.12));
+.specimen-plate:hover .specimen-plate__glare {
+  opacity: 1;
 }
 
-.hero-orb-card__header {
+/* Top Ruled Instrument Bar */
+.specimen-plate__bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  padding: 11px 16px;
+  background: #f2eee2;
+  border-bottom: 1.5px solid var(--bot-ink);
+}
+
+.specimen-plate__id {
+  display: inline-flex !important;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 6px;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-orb-card__cat {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--active-el-color, #2e7d5b);
-  background: var(--active-el-soft, rgba(46, 125, 91, 0.12));
-  border: 1px solid color-mix(in srgb, var(--active-el-color, #2e7d5b) 35%, transparent);
-  padding: 4px 12px;
-  border-radius: 999px;
-  transition: all 0.3s ease;
-}
-
-.hero-orb-card__num {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--bot-olive);
+  letter-spacing: 0.06em;
+  color: var(--bot-ink);
 }
 
-/* Orbital Animation Arena */
-.hero-orb-stage {
+.specimen-plate__led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--active-el-color, #2e7d5b);
+  box-shadow: 0 0 0 2px rgba(37, 50, 36, 0.14);
+  transition: background 0.3s ease;
+}
+
+.specimen-plate__cat {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--active-el-color, #2e7d5b);
+  background: var(--active-el-soft, #e6f3ec);
+  border: 1px solid var(--active-el-color, #2e7d5b);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Thin Auto-Cycle Progress Hairline */
+.specimen-plate__progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(78, 91, 71, 0.12);
+  overflow: hidden;
+}
+
+.specimen-plate__progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--active-el-color, #2e7d5b);
+  transform-origin: left center;
+  animation: progressFill 4.5s linear forwards;
+}
+
+.specimen-plate__progress-fill.is-paused {
+  animation-play-state: paused;
+}
+
+/* Center Precision Orbital Viewport */
+.specimen-plate__viewport {
   position: relative;
-  height: 236px;
+  height: 244px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 6px 0 12px;
+  background-color: var(--bot-ivory);
+  background-image: radial-gradient(rgba(78, 91, 71, 0.16) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border-bottom: 1.5px solid var(--bot-ink);
 }
 
-.hero-orb-stage__glow {
+/* Laboratory Corner Registration Marks */
+.reg-mark {
   position: absolute;
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--active-el-soft, rgba(46, 125, 91, 0.22)) 0%, transparent 70%);
-  filter: blur(10px);
-  transition: background 0.4s ease;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(37, 50, 36, 0.45);
+  border-style: solid;
+  pointer-events: none;
 }
 
-.hero-ring {
+.reg-mark--tl { top: 10px; left: 10px; border-width: 1.5px 0 0 1.5px; }
+.reg-mark--tr { top: 10px; right: 10px; border-width: 1.5px 1.5px 0 0; }
+.reg-mark--bl { bottom: 10px; left: 10px; border-width: 0 0 1.5px 1.5px; }
+.reg-mark--br { bottom: 10px; right: 10px; border-width: 0 1.5px 1.5px 0; }
+
+.specimen-orbital {
+  position: relative;
+  width: 226px;
+  height: 226px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.specimen-orbital__ticks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.specimen-ring {
   position: absolute;
   top: 50%;
   left: 50%;
   border-radius: 50%;
-  border: 1.4px dashed color-mix(in srgb, var(--active-el-color, #2e7d5b) 42%, transparent);
+  border: 1.25px solid color-mix(in srgb, var(--active-el-color, #2e7d5b) 38%, transparent);
   pointer-events: none;
-  transition: border-color 0.35s ease;
 }
 
-.hero-ring--1 {
-  width: 158px;
-  height: 158px;
-  border-style: solid;
-  border-color: color-mix(in srgb, var(--active-el-color, #2e7d5b) 34%, transparent);
+.specimen-ring--1 {
+  width: 146px;
+  height: 146px;
   animation: ringSpinCW 11s linear infinite;
 }
 
-.hero-ring--2 {
-  width: 196px;
-  height: 196px;
-  border-color: rgba(44, 122, 123, 0.35);
+.specimen-ring--2 {
+  width: 180px;
+  height: 180px;
+  border-style: dashed;
+  border-color: rgba(44, 122, 123, 0.42);
   animation: ringSpinCCW 16s linear infinite;
 }
 
-.hero-ring--3 {
-  width: 232px;
-  height: 232px;
-  border-color: rgba(198, 146, 58, 0.34);
+.specimen-ring--3 {
+  width: 212px;
+  height: 212px;
+  border-color: rgba(169, 120, 34, 0.36);
   animation: ringSpinCW 22s linear infinite;
 }
 
-.hero-ring__electron {
+.specimen-ring__dot {
   position: absolute;
-  top: -4.5px;
+  top: -4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--active-el-color, #2e7d5b);
-  box-shadow: 0 0 10px var(--active-el-color, #2e7d5b);
+  border: 1.5px solid var(--bot-ivory);
 }
 
-.hero-ring--2 .hero-ring__electron {
-  background: #2c7a7b;
-  box-shadow: 0 0 10px rgba(44, 122, 123, 0.75);
-}
+.specimen-ring--2 .specimen-ring__dot { background: #2c7a7b; }
+.specimen-ring--3 .specimen-ring__dot { background: #a97822; }
 
-.hero-ring--3 .hero-ring__electron {
-  background: #c6923a;
-  box-shadow: 0 0 10px rgba(198, 146, 58, 0.8);
-}
-
-.hero-medallion {
+/* Central Tactile Periodic Core Block */
+.specimen-core {
   position: relative;
   z-index: 3;
-  width: 118px;
-  height: 118px;
-  border-radius: 50%;
-  background: linear-gradient(155deg, #ffffff 0%, #f5f2e8 100%);
-  border: 2px solid var(--active-el-color, #2e7d5b);
-  box-shadow:
-    0 14px 30px rgba(45, 59, 41, 0.16),
-    inset 0 2px 6px rgba(255, 255, 255, 0.9);
+  width: 104px;
+  height: 104px;
+  border-radius: 12px;
+  background: var(--bot-ivory);
+  border: 2px solid var(--bot-ink);
+  box-shadow: 4px 4px 0 var(--active-el-color, #2e7d5b);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  animation: medallionPop 0.42s cubic-bezier(0.22, 1, 0.36, 1);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 6px;
+  animation: coreReveal 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
 }
 
-.hero-medallion:hover {
-  transform: scale(1.06);
-  box-shadow: 0 18px 36px rgba(45, 59, 41, 0.22);
+.specimen-core:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--active-el-color, #2e7d5b);
 }
 
-.hero-medallion__sym {
-  font-family: var(--font-heading);
-  font-size: 2.35rem;
-  font-weight: 800;
-  color: var(--bot-forest);
-  line-height: 1;
-}
-
-.hero-medallion__name {
-  font-size: 0.74rem;
+.specimen-core__num {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
   font-weight: 700;
   color: var(--active-el-color, #2e7d5b);
+}
+
+.specimen-core__sym {
+  font-family: var(--font-heading);
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: var(--bot-ink);
+  line-height: 1;
+  margin-top: 6px;
+}
+
+.specimen-core__name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--bot-olive);
   margin-top: 2px;
 }
 
-.hero-medallion__mass {
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  color: var(--bot-olive);
-  opacity: 0.85;
-}
-
-/* Live Atomic Readout Strip */
-.hero-orb-card__meta {
+/* Ruled 2x2 IUPAC Datasheet Ledger */
+.specimen-ledger {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 14px;
-  position: relative;
-  z-index: 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--bot-ivory);
 }
 
-.hero-meta-box {
-  background: rgba(236, 233, 222, 0.65);
-  border: 1px solid rgba(111, 127, 99, 0.24);
-  border-radius: 12px;
-  padding: 8px 6px;
-  text-align: center;
+.specimen-ledger__cell {
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  border-bottom: 1px solid var(--bot-rule);
 }
 
-.hero-meta-box__label {
-  font-size: 0.64rem;
+.specimen-ledger__cell:nth-child(odd) {
+  border-inline-end: 1px solid var(--bot-rule);
+}
+
+.specimen-ledger__label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--color-text-muted);
 }
 
-.hero-meta-box__val {
-  font-size: 0.74rem;
+.specimen-ledger__val {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
   font-weight: 700;
-  color: var(--bot-forest);
+  color: var(--bot-ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.hero-orb-card__inspect {
+/* Tactile Ink-Slide Bottom Action Bar */
+.specimen-plate__action {
   position: relative;
-  z-index: 2;
   width: 100%;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--active-el-color, #2e7d5b), #3b533c);
-  color: #faf8f5;
+  justify-content: space-between;
+  padding: 13px 16px;
+  background: #f2eee2;
+  color: var(--bot-ink);
   border: none;
-  border-radius: 12px;
-  padding: 10px 16px;
   font-family: var(--font-family);
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(45, 59, 41, 0.16);
-  transition: transform 0.22s ease, filter 0.22s ease, box-shadow 0.22s ease;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.25s ease;
 }
 
-.hero-orb-card__inspect:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-  box-shadow: 0 12px 24px rgba(45, 59, 41, 0.24);
-}
-
-/* Floating Satellite Glass Pills */
-.hero-satellite {
+.specimen-plate__action::before {
+  content: '';
   position: absolute;
-  z-index: 4;
-  display: inline-flex !important;
-  align-items: center;
-  gap: 8px;
-  background: rgba(252, 251, 247, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(111, 127, 99, 0.42);
-  border-radius: 999px;
-  padding: 7px 14px;
+  inset: 0;
+  background: var(--bot-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+
+[dir="rtl"] .specimen-plate__action::before {
+  transform-origin: right center;
+}
+
+.specimen-plate__action:hover {
+  color: #faf8f4;
+}
+
+.specimen-plate__action:hover::before {
+  transform: scaleX(1);
+}
+
+.specimen-plate__action-arrow {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--bot-forest);
-  box-shadow: 0 10px 24px rgba(45, 59, 41, 0.13);
-  pointer-events: none;
+  font-size: 1rem;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.hero-satellite--top {
-  top: -4px;
-  right: -6px;
-  animation: satelliteFloatA 5.2s ease-in-out infinite;
+.specimen-plate__action:hover .specimen-plate__action-arrow {
+  transform: translateX(4px);
 }
 
-.hero-satellite--bottom {
-  bottom: -4px;
-  left: -6px;
-  animation: satelliteFloatB 6s ease-in-out infinite;
+[dir="rtl"] .specimen-plate__action:hover .specimen-plate__action-arrow {
+  transform: scaleX(-1) translateX(4px);
 }
 
-[dir="rtl"] .hero-satellite--top {
-  right: auto;
-  left: -6px;
-}
-
-[dir="rtl"] .hero-satellite--bottom {
-  left: auto;
-  right: -6px;
-}
-
-.hero-satellite__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #2e7d5b;
-  box-shadow: 0 0 8px rgba(46, 125, 91, 0.6);
-}
-
-.hero-satellite__tag {
-  color: #2e7d5b;
-  background: rgba(46, 125, 91, 0.12);
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 0.68rem;
-}
-
-.hero-satellite__sep {
-  color: #c6923a;
-}
-
-/* Bottom Full-Width Interactive Element Dock */
+/* ===================================================
+   Hero Bottom Dock: Tactile Enamel Periodic Tiles
+   =================================================== */
 .theme-botanical-enhanced .hero-deck-wrapper {
   width: 100%;
   margin-top: 0;
@@ -781,15 +787,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.85rem;
 }
 
 .theme-botanical-enhanced .hero-deck-label {
+  font-family: var(--font-mono);
   color: var(--bot-olive);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   margin-bottom: 0;
 }
 
@@ -797,21 +804,24 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(252, 251, 247, 0.75);
-  border: 1px solid rgba(111, 127, 99, 0.36);
-  border-radius: 999px;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 8px;
   padding: 4px 12px;
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
   font-weight: 700;
-  color: var(--bot-emerald);
+  color: var(--bot-ink);
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0 rgba(37, 50, 36, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .hero-deck-all-link:hover {
-  background: #ffffff;
-  border-color: var(--bot-emerald);
-  transform: translateY(-1px);
+  background: var(--bot-ink);
+  color: #faf8f4;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #2e7d5b;
 }
 
 .theme-botanical-enhanced .hero-deck {
@@ -823,49 +833,48 @@
 }
 
 .theme-botanical-enhanced .hero-element-tile {
-  background: rgba(252, 251, 247, 0.9);
-  border: 1px solid rgba(111, 127, 99, 0.34);
-  border-radius: 14px;
-  padding: 10px 8px;
+  background: var(--bot-ivory);
+  border: 1.5px solid rgba(37, 50, 36, 0.42);
+  border-bottom: 3.5px solid rgba(37, 50, 36, 0.52);
+  border-radius: 10px;
+  padding: 9px 8px 8px;
   min-width: 0;
   font-family: var(--font-family);
-  box-shadow: 0 5px 15px rgba(78, 91, 71, 0.07), inset 0 1px 0 #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 50, 36, 0.06);
   transition:
-    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.26s ease,
-    border-color 0.24s ease,
-    background 0.24s ease;
-  animation: specimenPop 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-  animation-delay: calc(0.45s + var(--tile-delay, 0ms));
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+  animation: specimenPop 0.48s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.4s + var(--tile-delay, 0ms));
 }
 
 .theme-botanical-enhanced .hero-element-tile::before {
-  height: 3.5px;
-  background: var(--tile-accent, #4e5b47);
-  transition: height 0.22s ease;
+  display: none;
 }
 
 .theme-botanical-enhanced .hero-element-tile:hover,
 .theme-botanical-enhanced .hero-element-tile.is-selected {
-  transform: translateY(-6px);
-  border-color: var(--tile-accent, #2e7d5b);
+  transform: translate(-2px, -5px);
+  border-color: var(--bot-ink);
+  border-bottom-color: var(--tile-accent, #2e7d5b);
   background: #ffffff;
-  box-shadow:
-    0 12px 24px rgba(45, 59, 41, 0.14),
-    0 0 0 3px color-mix(in srgb, var(--tile-accent, #2e7d5b) 18%, transparent);
+  box-shadow: 3px 4px 0 var(--tile-accent, #2e7d5b);
 }
 
-.theme-botanical-enhanced .hero-element-tile.is-selected::before,
-.theme-botanical-enhanced .hero-element-tile:hover::before {
-  height: 5px;
+.theme-botanical-enhanced .hero-element-tile:active {
+  transform: translate(0px, -1px);
+  box-shadow: 1px 1px 0 var(--tile-accent, #2e7d5b);
 }
 
 .theme-botanical-enhanced .hero-element-tile__num {
-  color: var(--tile-accent, #4e5b47);
+  color: var(--tile-accent, #2e7d5b);
+  font-weight: 800;
 }
 
 .theme-botanical-enhanced .hero-element-tile__sym {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
   font-size: 1.5rem;
   margin: 4px 0 2px;
 }
@@ -876,11 +885,11 @@
   text-overflow: ellipsis;
 }
 
-/* Animated Scroll Down Cue */
+/* Minimal Scroll Cue */
 .hero-scroll-cue {
   position: relative;
   z-index: 2;
-  margin-top: 22px;
+  margin-top: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -894,93 +903,97 @@
 }
 
 .hero-scroll-cue__mouse {
-  width: 24px;
-  height: 38px;
+  width: 22px;
+  height: 36px;
   border-radius: 999px;
-  border: 1.8px solid rgba(78, 91, 71, 0.58);
-  background: rgba(252, 251, 247, 0.65);
+  border: 1.5px solid var(--bot-ink);
+  background: var(--bot-ivory);
   display: flex;
   justify-content: center;
   padding-top: 7px;
 }
 
 .hero-scroll-cue__wheel {
-  width: 4px;
+  width: 3.5px;
   height: 7px;
   border-radius: 999px;
-  background: #2e7d5b;
+  background: var(--bot-emerald);
   animation: scrollWheel 1.9s ease-in-out infinite;
 }
 
 /* ===================================================
-   About Section — Elevated Botanical Observatory
+   About Section — Precision Telemetry Cards & Observatory
    =================================================== */
 .theme-botanical-enhanced .about-section {
   background: linear-gradient(180deg, rgba(230, 226, 211, 0.55) 0%, rgba(238, 235, 224, 0.72) 100%);
-  border-bottom: 1px solid rgba(111, 127, 99, 0.22);
+  border-bottom: 1.5px solid var(--bot-rule);
 }
 
 .theme-botanical-enhanced .about-metric {
   background: var(--bot-ivory);
-  border: 1px solid rgba(111, 127, 99, 0.32);
-  border-radius: 16px;
-  padding: 1.35rem 1rem;
-  box-shadow: 0 6px 18px rgba(78, 91, 71, 0.07);
-  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.26s ease, border-color 0.26s ease;
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 12px;
+  padding: 1rem 0.9rem 1.15rem;
+  text-align: start;
+  box-shadow: 4px 4px 0 rgba(37, 50, 36, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease;
 }
 
 .theme-botanical-enhanced .about-metric:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 26px rgba(78, 91, 71, 0.13);
+  transform: translate(-2px, -4px);
 }
 
-.about-metric--emerald {
-  border-top: 3px solid #2e7d5b !important;
-}
-.about-metric--emerald .about-metric__value {
-  color: #2e7d5b;
-}
-
-.about-metric--teal {
-  border-top: 3px solid #2c7a7b !important;
-}
-.about-metric--teal .about-metric__value {
-  color: #2c7a7b;
+.about-metric__code {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--bot-rule);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
 }
 
-.about-metric--gold {
-  border-top: 3px solid #c6923a !important;
-}
-.about-metric--gold .about-metric__value {
-  color: #9e6f22;
-}
+.about-metric--emerald:hover { box-shadow: 5px 5px 0 #2e7d5b; }
+.about-metric--emerald .about-metric__value { color: #2e7d5b; }
+
+.about-metric--teal:hover { box-shadow: 5px 5px 0 #2c7a7b; }
+.about-metric--teal .about-metric__value { color: #2c7a7b; }
+
+.about-metric--gold:hover { box-shadow: 5px 5px 0 #a97822; }
+.about-metric--gold .about-metric__value { color: #a97822; }
 
 .theme-botanical-enhanced .about-link-btn {
   background: var(--bot-ivory);
-  color: var(--bot-forest);
-  border: 1.5px solid var(--bot-emerald);
-  box-shadow: 0 6px 18px rgba(46, 125, 91, 0.1);
+  color: var(--bot-ink);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 rgba(45, 59, 41, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .theme-botanical-enhanced .about-link-btn:hover {
-  background: linear-gradient(135deg, #3c533c 0%, #2e7d5b 100%);
-  color: #faf8f5;
-  border-color: transparent;
-  box-shadow: 0 10px 24px rgba(46, 125, 91, 0.26);
+  background: var(--bot-ink);
+  color: #faf8f4;
+  border-color: var(--bot-ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #2e7d5b;
 }
 
-/* Arched Greenhouse Observatory Frame */
+/* Arched Botanical Observatory Frame */
 .theme-botanical-enhanced .about-atom-observatory {
-  background:
-    radial-gradient(circle at 50% 42%, rgba(46, 125, 91, 0.09) 0%, rgba(198, 146, 58, 0.07) 48%, #fcfbf7 82%);
-  border: 2px solid rgba(111, 127, 99, 0.55);
-  box-shadow: 0 18px 42px rgba(78, 91, 71, 0.13), inset 0 1px 0 #ffffff;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  box-shadow: 7px 7px 0 rgba(45, 59, 41, 0.22);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
 }
 
 .theme-botanical-enhanced .about-atom-observatory:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 50px rgba(78, 91, 71, 0.18);
+  transform: translate(-2px, -4px);
+  box-shadow: 9px 10px 0 rgba(46, 125, 91, 0.28);
 }
 
 .theme-botanical-enhanced .about-atom-observatory__dot {
@@ -994,10 +1007,10 @@
 
 .about__atom-halo {
   position: absolute;
-  inset: 16%;
+  inset: 18%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(46, 125, 91, 0.18) 0%, rgba(198, 146, 58, 0.12) 52%, transparent 74%);
-  filter: blur(18px);
+  background: radial-gradient(circle, rgba(46, 125, 91, 0.14) 0%, rgba(169, 120, 34, 0.1) 52%, transparent 74%);
+  filter: blur(16px);
   pointer-events: none;
 }
 
@@ -1011,278 +1024,483 @@
 
 .shell-chip {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 4px 11px;
-  border-radius: 999px;
+  padding: 4px 10px;
+  border-radius: 6px;
   border: 1px solid;
 }
 
-.shell-chip--emerald {
-  color: #24684b;
-  background: rgba(46, 125, 91, 0.1);
-  border-color: rgba(46, 125, 91, 0.35);
-}
-
-.shell-chip--teal {
-  color: #226263;
-  background: rgba(44, 122, 123, 0.1);
-  border-color: rgba(44, 122, 123, 0.35);
-}
-
-.shell-chip--gold {
-  color: #96681d;
-  background: rgba(198, 146, 58, 0.12);
-  border-color: rgba(198, 146, 58, 0.38);
-}
+.shell-chip--emerald { color: #24684b; background: #e6f3ec; border-color: #2e7d5b; }
+.shell-chip--teal { color: #226263; background: #e5f3f3; border-color: #2c7a7b; }
+.shell-chip--gold { color: #8c6118; background: #f8f1e1; border-color: #a97822; }
 
 /* ===================================================
-   Features Section — Tactile Botanical Cards
+   Features Section — Architectural Lab Module Plates
    =================================================== */
 .theme-botanical-enhanced .features-section {
-  background:
-    radial-gradient(ellipse 75% 45% at 50% 0%, rgba(46, 125, 91, 0.08), transparent 65%),
-    rgba(220, 224, 207, 0.56);
+  background: rgba(220, 224, 207, 0.56);
+  border-bottom: 1.5px solid var(--bot-rule);
 }
 
 .theme-botanical-enhanced .feature-card {
-  background: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
-  border: 1.5px solid rgba(111, 127, 99, 0.42);
-  border-radius: 22px;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 14px;
+  padding: 0;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(78, 91, 71, 0.08);
+  box-shadow: 5px 5px 0 rgba(37, 50, 36, 0.18);
   transition:
-    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.32s ease,
-    border-color 0.25s ease;
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.24s ease;
 }
 
 .theme-botanical-enhanced .feature-card::before {
-  inset: 0;
-  bottom: auto;
-  height: 4px;
-  border: none;
-  border-radius: 0;
-  background: var(--card-accent, #2e7d5b);
-  transform-origin: left center;
-  transition: height 0.25s ease;
+  display: none;
 }
 
-.feature-card--emerald {
-  --card-accent: #2e7d5b;
-  --card-soft: rgba(46, 125, 91, 0.1);
-}
-.feature-card--teal {
-  --card-accent: #2c7a7b;
-  --card-soft: rgba(44, 122, 123, 0.1);
-}
-.feature-card--gold {
-  --card-accent: #b6822e;
-  --card-soft: rgba(198, 146, 58, 0.13);
-}
+.feature-card--emerald { --card-accent: #2e7d5b; --card-soft: #e6f3ec; }
+.feature-card--teal { --card-accent: #2c7a7b; --card-soft: #e5f3f3; }
+.feature-card--gold { --card-accent: #a97822; --card-soft: #f8f1e1; }
 
 .theme-botanical-enhanced .feature-card:hover {
-  transform: translateY(-9px);
-  border-color: var(--card-accent);
-  box-shadow: 0 20px 40px rgba(45, 59, 41, 0.14);
+  transform: translate(-3px, -6px);
+  border-color: var(--bot-ink);
+  box-shadow: 8px 9px 0 var(--card-accent);
 }
 
-.theme-botanical-enhanced .feature-card:hover::before {
-  height: 6px;
-}
-
-.feature-card__top-row {
+/* Ruled Module Top Header Bar */
+.feature-card__header-bar {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  padding: 10px 18px;
+  background: #f2eee2;
+  border-bottom: 1.5px solid var(--bot-ink);
 }
 
-.theme-botanical-enhanced .feature-card__icon-box {
-  width: 68px;
-  height: 68px;
-  margin-bottom: 0;
-  padding: 8px;
-  border-radius: 16px;
+.feature-card__module {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--bot-ink);
+}
+
+.feature-card__tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--card-accent);
   background: var(--card-soft);
-  border: 1px solid color-mix(in srgb, var(--card-accent) 26%, transparent);
+  border: 1px solid var(--card-accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Dot-Matrix Blueprint Illustration Viewport */
+.feature-card__blueprint {
+  height: 118px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faf7ee;
+  background-image: radial-gradient(rgba(78, 91, 71, 0.2) 1px, transparent 1px);
+  background-size: 12px 12px;
+  border-bottom: 1px solid var(--bot-rule);
+}
+
+.theme-botanical-enhanced .feature-card__icon {
+  width: 66px;
+  height: 66px;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.theme-botanical-enhanced .feature-card:hover .feature-card__icon-box {
-  transform: scale(1.07) rotate(-3deg);
+.theme-botanical-enhanced .feature-card:hover .feature-card__icon {
+  transform: scale(1.08);
 }
 
-.feature-card__index {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--card-accent);
-  background: var(--card-soft);
-  border: 1px solid color-mix(in srgb, var(--card-accent) 28%, transparent);
-  padding: 4px 10px;
-  border-radius: 999px;
+.theme-botanical-enhanced .feature-card:hover .svg-bubble--1 {
+  animation: bubbleRise 1.1s ease-in-out infinite;
+}
+.theme-botanical-enhanced .feature-card:hover .svg-bubble--2 {
+  animation: bubbleRise 1.1s ease-in-out 0.25s infinite;
+}
+.theme-botanical-enhanced .feature-card:hover .svg-bubble--3 {
+  animation: bubbleRise 1.1s ease-in-out 0.5s infinite;
+}
+
+.theme-botanical-enhanced .feature-card:hover .svg-cell--1 {
+  animation: cellBlink 1.2s ease-in-out infinite;
+}
+.theme-botanical-enhanced .feature-card:hover .svg-cell--2 {
+  animation: cellBlink 1.2s ease-in-out 0.3s infinite;
+}
+.theme-botanical-enhanced .feature-card:hover .svg-cell--3 {
+  animation: cellBlink 1.2s ease-in-out 0.6s infinite;
+}
+
+.theme-botanical-enhanced .feature-card__inner {
+  padding: 1.5rem 1.5rem 1.25rem;
+  flex: 1;
 }
 
 .theme-botanical-enhanced .feature-card__title {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
+  font-size: 1.48rem;
+}
+
+.theme-botanical-enhanced .feature-card__list {
+  margin-bottom: 0;
 }
 
 .theme-botanical-enhanced .feature-card__list li::before {
-  color: var(--card-accent);
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 1.5px;
+  background: var(--card-accent);
+  flex-shrink: 0;
 }
 
-.theme-botanical-enhanced .feature-card__cta {
-  color: var(--card-accent);
+/* Ink-Slide Bottom Action Bar */
+.feature-card__action-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: #f2eee2;
+  border-top: 1.5px solid var(--bot-ink);
+  color: var(--bot-ink);
+  font-weight: 700;
+  font-size: 0.9rem;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.25s ease;
+}
+
+.feature-card__action-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bot-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+
+[dir="rtl"] .feature-card__action-bar::before {
+  transform-origin: right center;
+}
+
+.theme-botanical-enhanced .feature-card:hover .feature-card__action-bar {
+  color: #faf8f4;
+}
+
+.theme-botanical-enhanced .feature-card:hover .feature-card__action-bar::before {
+  transform: scaleX(1);
+}
+
+.feature-card__action-arrow {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-botanical-enhanced .feature-card:hover .feature-card__action-arrow {
+  transform: translateX(5px);
+}
+
+[dir="rtl"] .theme-botanical-enhanced .feature-card:hover .feature-card__action-arrow {
+  transform: scaleX(-1) translateX(5px);
 }
 
 /* ===================================================
-   Periodic Table Teaser — Botanical Specimen Cabinet
+   Periodic Table Teaser — Archival Periodic Specimen Plates
    =================================================== */
 .theme-botanical-enhanced .ptable-section {
   background: linear-gradient(180deg, rgba(235, 232, 220, 0.65) 0%, rgba(230, 226, 211, 0.75) 100%);
+  border-bottom: 1.5px solid var(--bot-rule);
 }
 
 .theme-botanical-enhanced .ptable-tab {
   background: var(--bot-ivory);
-  border: 1px solid rgba(111, 127, 99, 0.4);
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1.5px solid rgba(37, 50, 36, 0.38);
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 rgba(37, 50, 36, 0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
 .theme-botanical-enhanced .ptable-tab:hover {
-  transform: translateY(-2px);
-  border-color: var(--tab-accent, #2e7d5b);
+  transform: translate(-1px, -2px);
+  border-color: var(--bot-ink);
+  box-shadow: 3px 3px 0 var(--tab-accent, #2e7d5b);
   background: #ffffff;
 }
 
 .theme-botanical-enhanced .ptable-tab.is-active {
-  background: var(--tab-accent, #2e7d5b);
-  border-color: var(--tab-accent, #2e7d5b);
-  color: #faf8f5;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--tab-accent, #2e7d5b) 32%, transparent);
+  background: var(--bot-ink);
+  border-color: var(--bot-ink);
+  color: #faf8f4;
+  transform: translate(-1px, -2px);
+  box-shadow: 3px 3px 0 var(--tab-accent, #2e7d5b);
+}
+
+.theme-botanical-enhanced .ptable-tab.is-active .ptable-tab__dot {
+  background-color: var(--tab-accent, #8ee5b8) !important;
 }
 
 .theme-botanical-enhanced .element-specimen-card {
-  background: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
-  border: 1.5px solid rgba(111, 127, 99, 0.38);
-  border-top: 3px solid var(--spec-accent, #2e7d5b);
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(78, 91, 71, 0.07);
-  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.26s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-bottom: 3.5px solid var(--spec-accent, #2e7d5b);
+  border-radius: 12px;
+  padding: 1.15rem 1.15rem 1rem;
+  box-shadow: 4px 4px 0 rgba(37, 50, 36, 0.14);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease, background 0.2s ease;
+}
+
+.element-specimen-card__watermark {
+  position: absolute;
+  right: 10px;
+  bottom: 24px;
+  font-family: var(--font-heading);
+  font-size: 3.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--spec-accent, #2e7d5b);
+  opacity: 0.08;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+[dir="rtl"] .element-specimen-card__watermark {
+  right: auto;
+  left: 10px;
 }
 
 .specimen-pop {
-  animation: specimenPop 0.44s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation: specimenPop 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: var(--spec-delay, 0ms);
 }
 
 .theme-botanical-enhanced .element-specimen-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--spec-accent, #2e7d5b);
-  box-shadow: 0 14px 30px rgba(45, 59, 41, 0.13);
+  transform: translate(-3px, -5px);
+  background: #ffffff;
+  border-color: var(--bot-ink);
+  box-shadow: 6px 6px 0 var(--spec-accent, #2e7d5b);
+}
+
+.theme-botanical-enhanced .element-specimen-card:hover .element-specimen-card__watermark {
+  opacity: 0.15;
+  transform: scale(1.06);
 }
 
 .theme-botanical-enhanced .element-specimen-card__num {
-  color: var(--spec-accent, #4e5b47);
+  color: var(--spec-accent, #2e7d5b);
+  font-weight: 800;
+}
+
+.theme-botanical-enhanced .element-specimen-card__badge {
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
 }
 
 .theme-botanical-enhanced .element-specimen-card__symbol {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
+  position: relative;
+  z-index: 2;
+}
+
+.theme-botanical-enhanced .element-specimen-card__name {
+  position: relative;
+  z-index: 2;
 }
 
 .theme-botanical-enhanced .ptable-preview-wrap {
-  background: rgba(252, 251, 247, 0.92);
-  border: 1.5px solid rgba(111, 127, 99, 0.42);
-  border-radius: 22px;
-  box-shadow: 0 12px 30px rgba(78, 91, 71, 0.08);
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 rgba(37, 50, 36, 0.15);
 }
 
 .theme-botanical-enhanced .ptable-mini-cell.is-highlighted {
-  transform: scale(1.04);
-  box-shadow: 0 3px 10px rgba(78, 91, 71, 0.18);
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(37, 50, 36, 0.18);
 }
 
 .theme-botanical-enhanced .ptable-explore-btn {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #3c533c 0%, #2e7d5b 100%);
-  border: none;
-  box-shadow: 0 10px 26px rgba(46, 125, 91, 0.28);
+  background: var(--bot-ink);
+  color: #faf8f4;
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 #2e7d5b;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .theme-botanical-enhanced .ptable-explore-btn:hover {
-  background: linear-gradient(135deg, #2d3b29 0%, #24684b 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(46, 125, 91, 0.36);
+  background: #2e7d5b;
+  border-color: var(--bot-ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--bot-ink);
 }
 
 /* ===================================================
-   Personas & Reaction Studio Showcase
+   Personas Section — Gallery Exhibition Plates
    =================================================== */
 .theme-botanical-enhanced .personas-section {
-  background: linear-gradient(180deg, rgba(220, 224, 207, 0.48) 0%, rgba(230, 226, 211, 0.6) 100%);
+  background: rgba(220, 224, 207, 0.48);
+  border-bottom: 1.5px solid var(--bot-rule);
 }
 
 .theme-botanical-enhanced .persona-card {
-  background: linear-gradient(180deg, #ffffff 0%, #faf8f5 100%);
-  border: 1.5px solid rgba(111, 127, 99, 0.42);
-  border-radius: 22px;
-  box-shadow: 0 8px 24px rgba(78, 91, 71, 0.08);
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 rgba(37, 50, 36, 0.18);
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s ease;
 }
 
-.persona-card--emerald {
-  --persona-accent: #2e7d5b;
-  --persona-grad: linear-gradient(135deg, #3c533c, #2e7d5b);
-}
-.persona-card--teal {
-  --persona-accent: #2c7a7b;
-  --persona-grad: linear-gradient(135deg, #385b5e, #2c7a7b);
-}
-.persona-card--gold {
-  --persona-accent: #a67624;
-  --persona-grad: linear-gradient(135deg, #5a4e36, #b6822e);
-}
+.persona-card--emerald { --persona-accent: #2e7d5b; --persona-soft: #e6f3ec; }
+.persona-card--teal { --persona-accent: #2c7a7b; --persona-soft: #e5f3f3; }
+.persona-card--gold { --persona-accent: #a97822; --persona-soft: #f8f1e1; }
 
 .theme-botanical-enhanced .persona-card:hover {
-  transform: translateY(-9px);
-  border-color: var(--persona-accent);
-  box-shadow: 0 20px 42px rgba(45, 59, 41, 0.14);
+  transform: translate(-3px, -6px);
+  border-color: var(--bot-ink);
+  box-shadow: 8px 9px 0 var(--persona-accent);
 }
 
-.theme-botanical-enhanced .persona-card__badge {
+.persona-card__top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #f2eee2;
+  border-bottom: 1.5px solid var(--bot-ink);
+}
+
+.persona-card__plate-no {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--bot-ink);
+}
+
+.persona-card__badge-inline {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--persona-accent);
-  border-color: color-mix(in srgb, var(--persona-accent) 45%, transparent);
+  background: var(--persona-soft);
+  border: 1px solid var(--persona-accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.theme-botanical-enhanced .persona-card__image-container {
+  width: calc(100% - 24px);
+  margin: 12px 12px 0;
+  border-radius: 8px;
+  border: 1.5px solid rgba(37, 50, 36, 0.3);
+}
+
+.theme-botanical-enhanced .persona-card__content {
+  padding: 1.25rem 1.35rem 1.35rem;
 }
 
 .theme-botanical-enhanced .persona-card__title {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
+  font-size: 1.45rem;
 }
 
-.theme-botanical-enhanced .persona-card__link {
-  background: var(--persona-grad);
-  color: #faf8f5;
-  box-shadow: 0 5px 14px rgba(45, 59, 41, 0.2);
+.theme-botanical-enhanced .persona-card__text {
+  margin-bottom: 0;
 }
 
-.theme-botanical-enhanced .persona-card__link:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(45, 59, 41, 0.28);
+/* Ink-Slide Bottom Action Bar on Persona Cards */
+.persona-card__action-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  margin-top: auto;
+  background: #f2eee2;
+  border-top: 1.5px solid var(--bot-ink);
+  color: var(--bot-ink);
+  font-weight: 700;
+  font-size: 0.88rem;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.25s ease;
+}
+
+.persona-card__action-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bot-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+
+[dir="rtl"] .persona-card__action-bar::before {
+  transform-origin: right center;
+}
+
+.theme-botanical-enhanced .persona-card:hover .persona-card__action-bar {
+  color: #faf8f4;
+}
+
+.theme-botanical-enhanced .persona-card:hover .persona-card__action-bar::before {
+  transform: scaleX(1);
+}
+
+.persona-card__action-arrow {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-botanical-enhanced .persona-card:hover .persona-card__action-arrow {
+  transform: translateX(5px);
+}
+
+[dir="rtl"] .theme-botanical-enhanced .persona-card:hover .persona-card__action-arrow {
+  transform: scaleX(-1) translateX(5px);
 }
 
 /* Reaction Studio Showcase Banner */
 .theme-botanical-enhanced .studio-showcase {
-  background: linear-gradient(135deg, #fcfbf7 0%, #f4f1e6 100%);
-  border: 2px solid rgba(78, 91, 71, 0.48);
-  border-radius: 26px;
-  box-shadow: 0 18px 44px rgba(78, 91, 71, 0.13);
+  background: var(--bot-ivory);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 16px;
+  box-shadow: 7px 7px 0 rgba(37, 50, 36, 0.2);
+}
+
+.theme-botanical-enhanced .studio-showcase::before {
+  display: none;
 }
 
 .studio-showcase__image-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(28, 39, 26, 0.06) 35%, rgba(28, 39, 26, 0.62) 100%);
+  background: linear-gradient(180deg, rgba(28, 39, 26, 0.04) 40%, rgba(28, 39, 26, 0.65) 100%);
   pointer-events: none;
 }
 
@@ -1295,16 +1513,17 @@
 }
 
 .theme-botanical-enhanced .studio-showcase__stamp {
-  top: 16px;
+  top: 14px;
   bottom: auto;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(252, 251, 247, 0.92);
-  color: var(--bot-forest);
-  border: 1px solid rgba(46, 125, 91, 0.4);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 6px 18px rgba(28, 39, 26, 0.18);
+  background: var(--bot-ivory);
+  color: var(--bot-ink);
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  box-shadow: 3px 3px 0 rgba(37, 50, 36, 0.35);
 }
 
 .studio-showcase__stamp-dot {
@@ -1317,23 +1536,22 @@
 
 .studio-showcase__telemetry {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
   display: flex !important;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
-  background: rgba(29, 41, 28, 0.86);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(250, 248, 245, 0.25);
-  border-radius: 12px;
-  padding: 10px 14px;
+  background: rgba(31, 43, 30, 0.92);
+  border: 1px solid rgba(250, 248, 244, 0.28);
+  border-radius: 8px;
+  padding: 9px 12px;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #faf8f5;
+  color: #faf8f4;
 }
 
 .studio-showcase__delta {
@@ -1341,78 +1559,92 @@
 }
 
 .theme-botanical-enhanced .studio-showcase__tag {
+  font-family: var(--font-mono);
   color: var(--bot-emerald);
 }
 
 .theme-botanical-enhanced .studio-showcase__title {
-  color: var(--bot-forest);
+  color: var(--bot-ink);
+}
+
+.studio-feature-item__mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .theme-botanical-enhanced .studio-showcase__btn {
-  background: linear-gradient(135deg, #3c533c 0%, #2e7d5b 100%);
-  border: none;
-  box-shadow: 0 8px 22px rgba(46, 125, 91, 0.28);
+  background: var(--bot-ink);
+  color: #faf8f4;
+  border: 1.5px solid var(--bot-ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 #2e7d5b;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .theme-botanical-enhanced .studio-showcase__btn:hover {
-  background: linear-gradient(135deg, #2d3b29 0%, #24684b 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(46, 125, 91, 0.36);
+  background: #2e7d5b;
+  border-color: var(--bot-ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--bot-ink);
 }
 
 /* ===================================================
-   CTA Banner — Deep Botanical Forest & Warm Sunlit Glow
+   CTA Banner — Blueprint Monograph Invitation
    =================================================== */
 .theme-botanical-enhanced .cta-card {
-  background: linear-gradient(135deg, #2d3b29 0%, #3d523e 50%, #255847 100%);
-  border: 1.5px solid rgba(250, 248, 245, 0.22);
-  border-radius: 26px;
-  box-shadow: 0 24px 56px rgba(45, 59, 41, 0.26);
+  background-color: #253425;
+  background-image:
+    linear-gradient(rgba(250, 248, 244, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 248, 244, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  border: 2px solid #1b271b;
+  border-radius: 18px;
+  box-shadow: 8px 8px 0 rgba(46, 125, 91, 0.35);
+}
+
+.theme-botanical-enhanced .cta-card::before {
+  inset: 12px;
+  border: 1px dashed rgba(250, 248, 244, 0.26);
+  border-radius: 10px;
 }
 
 .cta-card__glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(68px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.cta-card__glow--1 {
-  width: 320px;
-  height: 320px;
-  top: -110px;
-  left: -70px;
-  background: rgba(142, 229, 184, 0.24);
-}
-
-.cta-card__glow--2 {
-  width: 320px;
-  height: 320px;
-  bottom: -110px;
-  right: -70px;
-  background: rgba(232, 201, 126, 0.24);
+  display: none;
 }
 
 .theme-botanical-enhanced .cta-card__eyebrow {
-  background: rgba(250, 248, 245, 0.12);
-  border: 1px solid rgba(250, 248, 245, 0.28);
-  padding: 5px 15px;
-  border-radius: 999px;
-  color: #e8f5ec;
+  font-family: var(--font-mono);
+  background: rgba(250, 248, 244, 0.1);
+  border: 1px solid rgba(250, 248, 244, 0.3);
+  padding: 5px 14px;
+  border-radius: 6px;
+  color: #e4f2e8;
 }
 
 .theme-botanical-enhanced .cta-card__btn--primary {
-  background: #faf8f5;
-  color: #2d3b29;
-  border: 2px solid #faf8f5;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background: #faf8f4;
+  color: #253224;
+  border: 1.5px solid #faf8f4;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 #2e7d5b;
 }
 
 .theme-botanical-enhanced .cta-card__btn--primary:hover {
   background: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.26);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #8ee5b8;
+}
+
+.theme-botanical-enhanced .cta-card__btn--secondary {
+  border-radius: 10px;
+  border: 1.5px solid rgba(250, 248, 244, 0.65);
+}
+
+.theme-botanical-enhanced .cta-card__btn--secondary:hover {
+  background: rgba(250, 248, 244, 0.14);
+  transform: translate(-2px, -2px);
 }
 
 /* ===================================================
@@ -1424,23 +1656,23 @@
   gap: 8px;
   margin-top: 6px;
   padding: 5px 12px;
-  border-radius: 999px;
+  border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.76rem;
+  font-weight: 700;
   text-decoration: none;
   color: var(--color-text);
-  background: rgba(250, 248, 245, 0.75);
-  border: 1px solid rgba(111, 127, 99, 0.42);
+  background: var(--bot-ivory, #fcfbf7);
+  border: 1px solid rgba(37, 50, 36, 0.38);
   width: fit-content;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .footer__domain-pill:hover {
-  border-color: #2e7d5b;
+  border-color: #253224;
   color: #2e7d5b;
-  background: #ffffff;
-  transform: translateY(-1px);
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 #2e7d5b;
 }
 
 .footer__domain-dot {
@@ -1448,11 +1680,10 @@
   height: 7px;
   border-radius: 50%;
   background: #2e7d5b;
-  box-shadow: 0 0 8px rgba(46, 125, 91, 0.55);
 }
 
 /* ===================================================
-   Full Responsive Breakpoints (Tablet, Mobile, Small Phone)
+   Full Responsive Breakpoints
    =================================================== */
 @media (max-width: 1080px) {
   .hero-split {
@@ -1496,46 +1727,37 @@
 @media (max-width: 768px) {
   .theme-botanical-enhanced .hero-section--redesigned {
     min-height: auto;
-    padding: calc(var(--navbar-height) + 32px) 16px 56px;
+    padding: calc(var(--navbar-height) + 32px) 16px 54px;
   }
 
   .hero-stage-shell {
     gap: 2rem;
   }
 
-  .hero-showcase {
-    padding: 12px 0;
+  .specimen-plate {
+    transform: none !important;
+    box-shadow: 5px 5px 0 rgba(37, 50, 36, 0.8);
   }
 
-  .hero-satellite {
-    display: none !important;
+  .specimen-plate__viewport {
+    height: 214px;
   }
 
-  .hero-orb-stage {
-    height: 210px;
+  .specimen-orbital {
+    width: 198px;
+    height: 198px;
   }
 
-  .hero-ring--3 {
-    width: 204px;
-    height: 204px;
+  .specimen-ring--3 { width: 188px; height: 188px; }
+  .specimen-ring--2 { width: 160px; height: 160px; }
+  .specimen-ring--1 { width: 132px; height: 132px; }
+
+  .specimen-core {
+    width: 94px;
+    height: 94px;
   }
 
-  .hero-ring--2 {
-    width: 174px;
-    height: 174px;
-  }
-
-  .hero-ring--1 {
-    width: 142px;
-    height: 142px;
-  }
-
-  .hero-medallion {
-    width: 106px;
-    height: 106px;
-  }
-
-  .hero-medallion__sym {
+  .specimen-core__sym {
     font-size: 2rem;
   }
 
@@ -1552,7 +1774,7 @@
   }
 
   .theme-botanical-enhanced .hero-element-tile {
-    padding: 9px 6px;
+    padding: 8px 6px;
   }
 
   .theme-botanical-enhanced .hero-element-tile__mass {
@@ -1597,18 +1819,13 @@
 }
 
 @media (max-width: 520px) {
-  .hero-orb-card {
-    padding: 18px 16px 16px;
-    border-radius: 22px;
-  }
-
   .theme-botanical-enhanced .hero-deck {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
   .theme-botanical-enhanced .hero-element-tile {
-    padding: 10px 12px;
+    padding: 10px 10px 8px;
   }
 
   .theme-botanical-enhanced .hero-element-tile__mass {
@@ -1620,15 +1837,19 @@
   }
 
   .theme-botanical-enhanced .about-metric {
-    padding: 1rem 0.5rem;
+    padding: 0.85rem 0.65rem;
+  }
+
+  .about-metric__code {
+    font-size: 0.54rem;
   }
 
   .theme-botanical-enhanced .about-metric__value {
-    font-size: 1.65rem;
+    font-size: 1.55rem;
   }
 
   .theme-botanical-enhanced .about-metric__label {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
   }
 
   .theme-botanical-enhanced .about-atom-observatory {
@@ -1646,7 +1867,7 @@
   }
 
   .theme-botanical-enhanced .element-specimen-card {
-    padding: 1rem 0.85rem;
+    padding: 0.95rem 0.85rem;
   }
 
   .theme-botanical-enhanced .element-specimen-card__symbol {
@@ -1676,8 +1897,9 @@
   .hero-orb,
   .hero-sunbeam,
   .hero-title__gradient,
-  .hero-ring,
-  .hero-satellite,
+  .specimen-ring,
+  .specimen-plate__progress-fill,
+  .specimen-core,
   .hero-scroll-cue__wheel,
   .hero-animate,
   .specimen-pop,

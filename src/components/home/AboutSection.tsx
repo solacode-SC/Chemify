@@ -28,17 +28,20 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
               {t.about.p2}
             </p>
 
-            {/* Metric / Feature Highlights */}
+            {/* Precision Telemetry Metric Cards */}
             <div className="about-metrics">
               <div className="about-metric about-metric--emerald">
+                <span className="about-metric__code formula-ltr">01 // IUPAC</span>
                 <span className="about-metric__value">118</span>
                 <span className="about-metric__label">{t.about.metricElements}</span>
               </div>
               <div className="about-metric about-metric--teal">
+                <span className="about-metric__code formula-ltr">02 // LAB</span>
                 <span className="about-metric__value">50+</span>
                 <span className="about-metric__label">{t.about.metricReactions}</span>
               </div>
               <div className="about-metric about-metric--gold">
+                <span className="about-metric__code formula-ltr">03 // MATH</span>
                 <span className="about-metric__value">10</span>
                 <span className="about-metric__label">{t.about.metricCalculators}</span>
               </div>

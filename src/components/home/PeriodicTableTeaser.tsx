@@ -107,8 +107,11 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
                 }}
                 title={`View ${localizedName} (${el.symbol}) details`}
               >
+                <div className="element-specimen-card__watermark formula-ltr" aria-hidden="true">
+                  {String(el.atomicNumber).padStart(2, '0')}
+                </div>
                 <div className="element-specimen-card__header">
-                  <span className="element-specimen-card__num">№ {el.atomicNumber}</span>
+                  <span className="element-specimen-card__num formula-ltr">Z={el.atomicNumber}</span>
                   <span
                     className="element-specimen-card__badge"
                     style={{
