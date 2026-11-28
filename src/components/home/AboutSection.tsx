@@ -15,7 +15,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
       <div className="about-container">
         <div className="about-grid">
           {/* Left Column: Text & Values */}
-          <div className="about-content">
+          <div className="about-content reveal-on-scroll">
             <span className="section-eyebrow">{t.about.badge}</span>
             <h2 className="section-title">
               {t.about.titleLine1}<br />
@@ -30,15 +30,15 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
 
             {/* Metric / Feature Highlights */}
             <div className="about-metrics">
-              <div className="about-metric about-metric--cyan">
+              <div className="about-metric about-metric--emerald">
                 <span className="about-metric__value">118</span>
                 <span className="about-metric__label">{t.about.metricElements}</span>
               </div>
-              <div className="about-metric about-metric--emerald">
+              <div className="about-metric about-metric--teal">
                 <span className="about-metric__value">50+</span>
                 <span className="about-metric__label">{t.about.metricReactions}</span>
               </div>
-              <div className="about-metric about-metric--violet">
+              <div className="about-metric about-metric--gold">
                 <span className="about-metric__value">10</span>
                 <span className="about-metric__label">{t.about.metricCalculators}</span>
               </div>
@@ -58,8 +58,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Right Column: Luminous 3D Quantum Observatory Frame */}
-          <div className="about-visual">
+          {/* Right Column: Botanical Observatory Atom Frame */}
+          <div className="about-visual reveal-on-scroll reveal-delay-1">
             <div className="about-atom-observatory">
               <div className="about-atom-observatory__header">
                 <span className="about-atom-observatory__dot"></span>
@@ -69,9 +69,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
                 <AtomVisualizer size={280} />
               </div>
               <div className="about-atom-observatory__shells formula-ltr">
-                <span className="shell-chip shell-chip--cyan">1s²</span>
-                <span className="shell-chip shell-chip--violet">2s² 2p⁶</span>
-                <span className="shell-chip shell-chip--emerald">3s² 3p⁶</span>
+                <span className="shell-chip shell-chip--emerald">1s²</span>
+                <span className="shell-chip shell-chip--teal">2s² 2p⁶</span>
+                <span className="shell-chip shell-chip--gold">3s² 3p⁶</span>
               </div>
               <div className="about-atom-observatory__caption">
                 {t.about.bohrModelCaption}

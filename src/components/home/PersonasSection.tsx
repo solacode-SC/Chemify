@@ -13,7 +13,7 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
     <section className="personas-section" id="personas">
       <div className="personas-container">
         {/* Section Header */}
-        <div className="section-header">
+        <div className="section-header reveal-on-scroll">
           <span className="section-eyebrow">{t.personas.badge}</span>
           <h2 className="section-title">{t.personas.title}</h2>
           <p className="section-desc">
@@ -24,16 +24,15 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
         {/* 3 Personas Cards Grid */}
         <div className="personas-grid">
           {/* Card 1: Student */}
-          <article className="persona-card persona-card--cyan">
+          <article className="persona-card persona-card--emerald reveal-on-scroll">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-student-chemist.png"
-                  alt="Student chemist studying glowing atomic models in sunlit greenhouse laboratory"
+                  alt="Student chemist studying glowing atomic models in sunlit botanical greenhouse"
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.studentBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -59,16 +58,15 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           </article>
 
           {/* Card 2: Researcher */}
-          <article className="persona-card persona-card--violet">
+          <article className="persona-card persona-card--teal reveal-on-scroll reveal-delay-1">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-researcher-chemist.png"
-                  alt="Researcher examining glowing crystal solutions and analytical balances"
+                  alt="Researcher examining glowing crystal solutions and analytical balances in vintage greenhouse herbarium"
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.researcherBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -94,16 +92,15 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           </article>
 
           {/* Card 3: Curious Mind */}
-          <article className="persona-card persona-card--emerald">
+          <article className="persona-card persona-card--gold reveal-on-scroll reveal-delay-2">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-tools-guide.png"
-                  alt="Curious explorer discovering atomic structures and glowing reactions"
+                  alt="Curious explorer discovering atomic structures and glowing reactions in botanical conservatory"
                   className="persona-card__img"
                   loading="lazy"
                 />
-                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.curiousBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -130,11 +127,11 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
         </div>
 
         {/* Reaction Studio Showcase Banner */}
-        <div className="studio-showcase">
+        <div className="studio-showcase reveal-on-scroll">
           <div className="studio-showcase__image-wrap">
             <img
               src="assets/images/ghibli-botanical-lab.png"
-              alt="Reaction Studio laboratory apparatus with distillation flask and glowing solutions"
+              alt="Reaction Studio botanical laboratory apparatus with distillation flask and glowing solutions"
               className="studio-showcase__img"
               loading="lazy"
             />
@@ -158,19 +155,19 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             </p>
             <div className="studio-showcase__features">
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E7D5B" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'حرارة التفاعل والإنثالبي المباشر (ΔH)' : language === 'fr' ? 'Enthalpie & Énergie thermique en direct' : 'Live Heat of Reaction & Enthalpy (ΔH)'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2C7A7B" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'موازنة المعادلات بمصفوفات غاوس' : language === 'fr' ? 'Équilibrage matriciel gaussien automatique' : 'Gaussian Matrix Automatic Equation Balancing'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6923A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'حساب المتفاعل المحدِّد والإنتاجية' : language === 'fr' ? 'Calculateur de réactif limitant et rendement' : 'Limiting Reagent & Theoretical Yield Solver'}</span>

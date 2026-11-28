@@ -18,7 +18,7 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
         } as React.CSSProperties
       }
     >
-      {/* Ambient Quantum Core Halo */}
+      {/* Ambient Sunlit Botanical Halo */}
       <div className="about__atom-halo" aria-hidden="true" />
 
       <div
@@ -30,7 +30,7 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
           transformStyle: 'preserve-3d'
         }}
       >
-        {/* Luminous Nucleus */}
+        {/* Warm Botanical Emerald-Gold Nucleus */}
         <div
           className="about__nucleus"
           style={{
@@ -41,12 +41,12 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
             width: '17%',
             height: '17%',
             borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 35%, #A5F3FC 0%, #22D3EE 40%, #10B981 78%, #6366F1 100%)',
-            boxShadow: '0 0 28px rgba(34, 211, 238, 0.7), 0 0 56px rgba(139, 92, 246, 0.4)'
+            background: 'radial-gradient(circle at 32% 32%, #E8C97E 0%, #5B8C68 48%, #2F4231 100%)',
+            boxShadow: '0 0 24px rgba(46, 125, 91, 0.45), 0 0 42px rgba(198, 146, 58, 0.25)'
           }}
         />
 
-        {/* Orbit 1 — Electric Cyan */}
+        {/* Orbit 1 — Botanical Emerald */}
         <div
           className="about__orbit about__orbit--1"
           style={{
@@ -56,8 +56,8 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
             width: '90%',
             height: '38%',
             margin: '-19% 0 0 -45%',
-            border: '1.6px solid rgba(34, 211, 238, 0.55)',
-            boxShadow: '0 0 14px rgba(34, 211, 238, 0.16) inset',
+            border: '1.7px solid rgba(46, 125, 91, 0.55)',
+            boxShadow: '0 0 12px rgba(46, 125, 91, 0.14) inset',
             borderRadius: '50%',
             transform: 'rotate(0deg)'
           }}
@@ -71,13 +71,13 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
               width: '11px',
               height: '11px',
               borderRadius: '50%',
-              backgroundColor: '#67E8F9',
-              boxShadow: '0 0 14px #22D3EE, 0 0 26px rgba(34, 211, 238, 0.9)'
+              backgroundColor: '#2E7D5B',
+              boxShadow: '0 0 12px rgba(46, 125, 91, 0.8), 0 0 20px rgba(46, 125, 91, 0.45)'
             }}
           />
         </div>
 
-        {/* Orbit 2 — Quantum Violet */}
+        {/* Orbit 2 — Verdigris Teal */}
         <div
           className="about__orbit about__orbit--2"
           style={{
@@ -87,8 +87,8 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
             width: '90%',
             height: '38%',
             margin: '-19% 0 0 -45%',
-            border: '1.6px solid rgba(167, 139, 250, 0.55)',
-            boxShadow: '0 0 14px rgba(167, 139, 250, 0.16) inset',
+            border: '1.7px solid rgba(44, 122, 123, 0.5)',
+            boxShadow: '0 0 12px rgba(44, 122, 123, 0.12) inset',
             borderRadius: '50%',
             transform: 'rotate(60deg)'
           }}
@@ -102,13 +102,13 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
               width: '11px',
               height: '11px',
               borderRadius: '50%',
-              backgroundColor: '#C4B5FD',
-              boxShadow: '0 0 14px #A78BFA, 0 0 26px rgba(167, 139, 250, 0.9)'
+              backgroundColor: '#2C7A7B',
+              boxShadow: '0 0 12px rgba(44, 122, 123, 0.8), 0 0 20px rgba(44, 122, 123, 0.45)'
             }}
           />
         </div>
 
-        {/* Orbit 3 — Bioluminescent Emerald */}
+        {/* Orbit 3 — Alchemical Copper Gold */}
         <div
           className="about__orbit about__orbit--3"
           style={{
@@ -118,8 +118,8 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
             width: '90%',
             height: '38%',
             margin: '-19% 0 0 -45%',
-            border: '1.6px solid rgba(52, 211, 153, 0.55)',
-            boxShadow: '0 0 14px rgba(52, 211, 153, 0.16) inset',
+            border: '1.7px solid rgba(198, 146, 58, 0.55)',
+            boxShadow: '0 0 12px rgba(198, 146, 58, 0.14) inset',
             borderRadius: '50%',
             transform: 'rotate(-60deg)'
           }}
@@ -133,8 +133,8 @@ export const AtomVisualizer: React.FC<{ size?: number }> = ({ size = 260 }) => {
               width: '11px',
               height: '11px',
               borderRadius: '50%',
-              backgroundColor: '#6EE7B7',
-              boxShadow: '0 0 14px #34D399, 0 0 26px rgba(52, 211, 153, 0.9)'
+              backgroundColor: '#C6923A',
+              boxShadow: '0 0 12px rgba(198, 146, 58, 0.8), 0 0 20px rgba(198, 146, 58, 0.45)'
             }}
           />
         </div>

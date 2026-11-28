@@ -38,14 +38,12 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isLuminousView = currentView === 'home' || currentView === 'about';
-
   return (
     <div
-      className={`app-container ${isLuminousView ? 'theme-luminous' : ''}`}
+      className={`app-container ${currentView === 'home' || currentView === 'about' ? 'theme-botanical-enhanced' : ''}`}
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
     >
-      <Navbar currentView={currentView} onNavigate={handleNavigate} isDarkTheme={isLuminousView} />
+      <Navbar currentView={currentView} onNavigate={handleNavigate} />
 
       <main style={{ flex: 1 }}>
         {currentView === 'home' && <HomeView onNavigate={handleNavigate} />}
@@ -59,7 +57,7 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      <Footer onNavigate={handleNavigate} isDarkTheme={isLuminousView} />
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 };

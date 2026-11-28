@@ -6,10 +6,9 @@ export type AppView = 'home' | 'elements' | 'lab' | 'tools' | 'about';
 interface NavbarProps {
   currentView: AppView;
   onNavigate: (view: AppView) => void;
-  isDarkTheme?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkTheme = false }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const { language, setLanguage, t, isRTL } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -65,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
       id: 'home',
       icon: '🏛️',
       label: t.nav.home,
-      desc: l('Chemistry observatory overview', 'Aperçu de l’observatoire chimique', 'نظرة عامة على المرصد الكيميائي')
+      desc: l('Botanical chemistry observatory overview', 'Aperçu de l’observatoire chimique', 'نظرة عامة على المرصد الكيميائي')
     },
     {
       id: 'elements',
@@ -90,22 +89,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
     },
     {
       id: 'about',
-      icon: '✨',
+      icon: '🌿',
       label: t.nav.about,
       desc: l('Scientific mission & design philosophy', 'Mission scientifique & philosophie', 'الرسالة العلمية وفلسفة التصميم')
     }
   ];
 
-  const logoStroke = isDarkTheme ? '#22D3EE' : '#4E5B47';
-  const logoCore = isDarkTheme ? '#34D399' : '#4E5B47';
-  const logoDot = isDarkTheme ? '#A78BFA' : '#4E5B47';
-
   return (
     <>
-      <header
-        className={`navbar ${isScrolled ? 'navbar--scrolled' : ''} ${isDarkTheme ? 'navbar--luminous' : ''}`}
-        id="navbar"
-      >
+      <header className={`navbar ${isScrolled ? 'navbar--scrolled' : ''}`} id="navbar">
         <div className="navbar__inner">
           {/* LEFT: Logo & Brand */}
           <div className="navbar__left">
@@ -121,15 +113,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
               >
-                <circle cx="20" cy="20" r="4.2" fill={logoCore} />
-                <ellipse cx="20" cy="20" rx="16" ry="7" stroke={logoStroke} strokeWidth="1.7" fill="none" />
+                <circle cx="20" cy="20" r="4.2" fill="#2E7D5B" />
+                <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#4E5B47" strokeWidth="1.65" fill="none" />
                 <ellipse
                   cx="20"
                   cy="20"
                   rx="16"
                   ry="7"
-                  stroke={isDarkTheme ? '#A78BFA' : logoStroke}
-                  strokeWidth="1.7"
+                  stroke="#2C7A7B"
+                  strokeWidth="1.65"
                   fill="none"
                   transform="rotate(60 20 20)"
                 />
@@ -138,14 +130,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
                   cy="20"
                   rx="16"
                   ry="7"
-                  stroke={isDarkTheme ? '#34D399' : logoStroke}
-                  strokeWidth="1.7"
+                  stroke="#6F7F63"
+                  strokeWidth="1.65"
                   fill="none"
                   transform="rotate(-60 20 20)"
                 />
-                <circle cx="36" cy="20" r="2.3" fill={logoStroke} />
-                <circle cx="12" cy="6.15" r="2.3" fill={logoDot} />
-                <circle cx="12" cy="33.85" r="2.3" fill={logoCore} />
+                <circle cx="36" cy="20" r="2.2" fill="#2E7D5B" />
+                <circle cx="12" cy="6.15" r="2.2" fill="#2C7A7B" />
+                <circle cx="12" cy="33.85" r="2.2" fill="#C6923A" />
               </svg>
               <span className="navbar__logo-text">Chemify</span>
             </button>
@@ -251,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
       />
 
       <aside
-        className={`side-drawer ${isMobileOpen ? 'is-open' : ''} ${isRTL ? 'side-drawer--rtl' : ''} ${isDarkTheme ? 'side-drawer--luminous' : ''}`}
+        className={`side-drawer ${isMobileOpen ? 'is-open' : ''} ${isRTL ? 'side-drawer--rtl' : ''}`}
         id="mobileOverlay"
         aria-hidden={!isMobileOpen}
         aria-label={l('Site Navigation Drawer', 'Menu latéral de navigation', 'القائمة الجانبية للتصفح')}
@@ -261,16 +253,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isDarkT
           <div className="side-drawer__brand">
             <div className="side-drawer__brand-icon">
               <svg viewBox="0 0 40 40" fill="none" width="28" height="28">
-                <circle cx="20" cy="20" r="4" fill={isDarkTheme ? '#34D399' : '#FAF8F5'} />
-                <ellipse cx="20" cy="20" rx="16" ry="7" stroke={isDarkTheme ? '#22D3EE' : '#FAF8F5'} strokeWidth="1.8" fill="none" />
-                <ellipse cx="20" cy="20" rx="16" ry="7" stroke={isDarkTheme ? '#A78BFA' : '#FAF8F5'} strokeWidth="1.8" fill="none" transform="rotate(60 20 20)" />
-                <ellipse cx="20" cy="20" rx="16" ry="7" stroke={isDarkTheme ? '#34D399' : '#FAF8F5'} strokeWidth="1.8" fill="none" transform="rotate(-60 20 20)" />
+                <circle cx="20" cy="20" r="4" fill="#FAF8F5" />
+                <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#FAF8F5" strokeWidth="1.8" fill="none" />
+                <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#FAF8F5" strokeWidth="1.8" fill="none" transform="rotate(60 20 20)" />
+                <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#FAF8F5" strokeWidth="1.8" fill="none" transform="rotate(-60 20 20)" />
               </svg>
             </div>
             <div>
               <div className="side-drawer__brand-title">Chemify</div>
               <div className="side-drawer__brand-subtitle">
-                {l('Interactive Chemistry Studio', 'Observatoire Chimique', 'مرصد الكيمياء التفاعلي')}
+                {l('Botanical Chemistry Studio', 'Observatoire Chimique', 'مرصد الكيمياء النباتي')}
               </div>
             </div>
           </div>

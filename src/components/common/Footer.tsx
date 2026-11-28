@@ -5,14 +5,13 @@ import { SITE_DOMAIN, SITE_URL } from '../../config/site';
 
 interface FooterProps {
   onNavigate: (view: AppView) => void;
-  isDarkTheme?: boolean;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, isDarkTheme = false }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { t } = useLanguage();
 
   return (
-    <footer className={`footer ${isDarkTheme ? 'footer--luminous' : ''}`}>
+    <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
           <button
@@ -31,14 +30,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, isDarkTheme = false 
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <circle cx="20" cy="20" r="4" fill={isDarkTheme ? '#34D399' : '#5F6F5B'} />
-              <ellipse cx="20" cy="20" rx="16" ry="7" stroke={isDarkTheme ? '#22D3EE' : '#5F6F5B'} strokeWidth="1.5" fill="none" />
+              <circle cx="20" cy="20" r="4" fill="#2E7D5B" />
+              <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#4E5B47" strokeWidth="1.5" fill="none" />
               <ellipse
                 cx="20"
                 cy="20"
                 rx="16"
                 ry="7"
-                stroke={isDarkTheme ? '#A78BFA' : '#5F6F5B'}
+                stroke="#2C7A7B"
                 strokeWidth="1.5"
                 fill="none"
                 transform="rotate(60 20 20)"
@@ -48,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, isDarkTheme = false 
                 cy="20"
                 rx="16"
                 ry="7"
-                stroke={isDarkTheme ? '#34D399' : '#5F6F5B'}
+                stroke="#6F7F63"
                 strokeWidth="1.5"
                 fill="none"
                 transform="rotate(-60 20 20)"

@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-const PULSE_COLORS = [
-  { r: 34, g: 211, b: 238 },  // Electric Cyan
-  { r: 52, g: 211, b: 153 },  // Bioluminescent Emerald
-  { r: 167, g: 139, b: 250 }, // Quantum Violet
-  { r: 251, g: 191, b: 36 }   // Catalyst Amber
+const BOTANICAL_PULSE_COLORS = [
+  { r: 46, g: 125, b: 91 },  // Botanical Emerald
+  { r: 78, g: 91, b: 71 },   // Deep Olive Sage
+  { r: 44, g: 122, b: 123 }, // Mineral Verdigris Teal
+  { r: 198, g: 146, b: 58 }, // Alchemical Gold
+  { r: 194, g: 109, b: 74 }  // Burnished Copper
 ];
 
 export const HeroCanvas: React.FC = () => {
@@ -21,9 +22,9 @@ export const HeroCanvas: React.FC = () => {
     let height = 0;
     let dpr = 1;
     const mouse = { x: -1000, y: -1000 };
-    const GRID_SPACING = 64;
-    const LINE_ALPHA = 0.055;
-    const MOUSE_RADIUS = 240;
+    const GRID_SPACING = 60;
+    const LINE_ALPHA = 0.075;
+    const MOUSE_RADIUS = 230;
 
     class Pulse {
       horizontal = false;
@@ -33,7 +34,7 @@ export const HeroCanvas: React.FC = () => {
       limit = 0;
       length = 0;
       alpha = 0;
-      color = PULSE_COLORS[0];
+      color = BOTANICAL_PULSE_COLORS[0];
 
       constructor() {
         this.reset();
@@ -41,22 +42,22 @@ export const HeroCanvas: React.FC = () => {
 
       reset() {
         this.horizontal = Math.random() > 0.5;
-        this.color = PULSE_COLORS[Math.floor(Math.random() * PULSE_COLORS.length)];
+        this.color = BOTANICAL_PULSE_COLORS[Math.floor(Math.random() * BOTANICAL_PULSE_COLORS.length)];
         if (this.horizontal) {
           const row = Math.floor(Math.random() * Math.max(1, Math.ceil((height || 800) / GRID_SPACING)));
           this.fixedPos = row * GRID_SPACING;
           this.pos = -30;
-          this.speed = 0.9 + Math.random() * 1.6;
+          this.speed = 0.75 + Math.random() * 1.45;
           this.limit = (width || 1400) + 60;
         } else {
           const col = Math.floor(Math.random() * Math.max(1, Math.ceil((width || 1400) / GRID_SPACING)));
           this.fixedPos = col * GRID_SPACING;
           this.pos = -30;
-          this.speed = 0.9 + Math.random() * 1.6;
+          this.speed = 0.75 + Math.random() * 1.45;
           this.limit = (height || 800) + 60;
         }
-        this.length = 45 + Math.random() * 80;
-        this.alpha = 0.25 + Math.random() * 0.4;
+        this.length = 42 + Math.random() * 72;
+        this.alpha = 0.24 + Math.random() * 0.34;
       }
 
       update() {
@@ -83,8 +84,8 @@ export const HeroCanvas: React.FC = () => {
         const { r, g, b } = this.color;
         const grad = c.createLinearGradient(x0, y0, x1, y1);
         grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
-        grad.addColorStop(0.65, `rgba(${r}, ${g}, ${b}, ${this.alpha})`);
-        grad.addColorStop(1, `rgba(255, 255, 255, ${this.alpha * 0.95})`);
+        grad.addColorStop(0.55, `rgba(${r}, ${g}, ${b}, ${this.alpha})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
 
         c.strokeStyle = grad;
         c.lineWidth = 1.8;
@@ -93,8 +94,8 @@ export const HeroCanvas: React.FC = () => {
         c.lineTo(x1, y1);
         c.stroke();
 
-        // Glowing leading spark
-        c.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.alpha * 0.9})`;
+        // Warm leading spark
+        c.fillStyle = `rgba(${r}, ${g}, ${b}, ${Math.min(0.75, this.alpha * 1.4)})`;
         c.beginPath();
         c.arc(x1, y1, 2.2, 0, Math.PI * 2);
         c.fill();
@@ -107,15 +108,15 @@ export const HeroCanvas: React.FC = () => {
       vx = 0;
       vy = 0;
       radius = 2;
-      color = PULSE_COLORS[0];
+      color = BOTANICAL_PULSE_COLORS[0];
 
       constructor() {
         this.x = Math.random() * (width || 1200);
         this.y = Math.random() * (height || 800);
-        this.vx = (Math.random() - 0.5) * 0.45;
-        this.vy = (Math.random() - 0.5) * 0.45;
-        this.radius = 1.6 + Math.random() * 2.2;
-        this.color = PULSE_COLORS[Math.floor(Math.random() * 3)];
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = 2 + Math.random() * 2.2;
+        this.color = BOTANICAL_PULSE_COLORS[Math.floor(Math.random() * BOTANICAL_PULSE_COLORS.length)];
       }
 
       update() {
@@ -127,7 +128,7 @@ export const HeroCanvas: React.FC = () => {
 
       draw(c: CanvasRenderingContext2D) {
         const { r, g, b } = this.color;
-        c.fillStyle = `rgba(${r}, ${g}, ${b}, 0.55)`;
+        c.fillStyle = `rgba(${r}, ${g}, ${b}, 0.36)`;
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         c.fill();
@@ -149,7 +150,7 @@ export const HeroCanvas: React.FC = () => {
 
       const isCompact = width < 768;
       const pulseCount = isCompact ? 16 : 30;
-      const nodeCount = isCompact ? 18 : 34;
+      const nodeCount = isCompact ? 16 : 30;
 
       pulses.length = 0;
       for (let i = 0; i < pulseCount; i++) {
@@ -168,7 +169,7 @@ export const HeroCanvas: React.FC = () => {
       for (let x = 0; x <= width; x += GRID_SPACING) {
         const dx = Math.abs(x - mouse.x);
         const glow = dx < MOUSE_RADIUS ? (1 - dx / MOUSE_RADIUS) * 0.14 : 0;
-        ctx.strokeStyle = `rgba(56, 189, 248, ${LINE_ALPHA + glow})`;
+        ctx.strokeStyle = `rgba(78, 91, 71, ${LINE_ALPHA + glow})`;
         ctx.lineWidth = 0.6;
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -179,7 +180,7 @@ export const HeroCanvas: React.FC = () => {
       for (let y = 0; y <= height; y += GRID_SPACING) {
         const dy = Math.abs(y - mouse.y);
         const glow = dy < MOUSE_RADIUS ? (1 - dy / MOUSE_RADIUS) * 0.14 : 0;
-        ctx.strokeStyle = `rgba(56, 189, 248, ${LINE_ALPHA + glow})`;
+        ctx.strokeStyle = `rgba(78, 91, 71, ${LINE_ALPHA + glow})`;
         ctx.lineWidth = 0.6;
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -194,10 +195,10 @@ export const HeroCanvas: React.FC = () => {
             const dy = y - mouse.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < MOUSE_RADIUS) {
-              const a = (1 - dist / MOUSE_RADIUS) * 0.5;
-              ctx.fillStyle = `rgba(34, 211, 238, ${a})`;
+              const a = (1 - dist / MOUSE_RADIUS) * 0.38;
+              ctx.fillStyle = `rgba(46, 125, 91, ${a})`;
               ctx.beginPath();
-              ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+              ctx.arc(x, y, 2.6, 0, Math.PI * 2);
               ctx.fill();
             }
           }
@@ -206,7 +207,7 @@ export const HeroCanvas: React.FC = () => {
     };
 
     const drawMolecularWeb = () => {
-      const linkDist = width < 768 ? 110 : 145;
+      const linkDist = width < 768 ? 105 : 140;
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
         a.update();
@@ -216,8 +217,8 @@ export const HeroCanvas: React.FC = () => {
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < linkDist) {
-            const opacity = (1 - dist / linkDist) * 0.22;
-            ctx.strokeStyle = `rgba(52, 211, 153, ${opacity})`;
+            const opacity = (1 - dist / linkDist) * 0.18;
+            ctx.strokeStyle = `rgba(78, 91, 71, ${opacity})`;
             ctx.lineWidth = 0.9;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
