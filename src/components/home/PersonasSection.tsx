@@ -24,15 +24,16 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
         {/* 3 Personas Cards Grid */}
         <div className="personas-grid">
           {/* Card 1: Student */}
-          <article className="persona-card">
+          <article className="persona-card persona-card--cyan">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-student-chemist.png"
-                  alt="Student chemist with dark wavy hair studying glowing atomic models in sunlit botanical greenhouse with white wisteria and kitten"
+                  alt="Student chemist studying glowing atomic models in sunlit greenhouse laboratory"
                   className="persona-card__img"
                   loading="lazy"
                 />
+                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.studentBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -58,15 +59,16 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           </article>
 
           {/* Card 2: Researcher */}
-          <article className="persona-card">
+          <article className="persona-card persona-card--violet">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-researcher-chemist.png"
-                  alt="Researcher examining glowing crystal solutions and analytical balances in vintage greenhouse herbarium"
+                  alt="Researcher examining glowing crystal solutions and analytical balances"
                   className="persona-card__img"
                   loading="lazy"
                 />
+                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.researcherBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -92,15 +94,16 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           </article>
 
           {/* Card 3: Curious Mind */}
-          <article className="persona-card">
+          <article className="persona-card persona-card--emerald">
             <div className="persona-card__frame">
               <div className="persona-card__image-container">
                 <img
                   src="assets/images/botanical-tools-guide.png"
-                  alt="Curious explorer discovering atomic structures and glowing reactions in botanical conservatory"
+                  alt="Curious explorer discovering atomic structures and glowing reactions"
                   className="persona-card__img"
                   loading="lazy"
                 />
+                <div className="persona-card__image-fade" aria-hidden="true" />
                 <span className="persona-card__badge">{t.personas.curiousBadge}</span>
               </div>
               <div className="persona-card__content">
@@ -131,12 +134,18 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
           <div className="studio-showcase__image-wrap">
             <img
               src="assets/images/ghibli-botanical-lab.png"
-              alt="Reaction Studio botanical laboratory apparatus with distillation flask and glowing solutions"
+              alt="Reaction Studio laboratory apparatus with distillation flask and glowing solutions"
               className="studio-showcase__img"
               loading="lazy"
             />
+            <div className="studio-showcase__image-overlay" aria-hidden="true" />
             <div className="studio-showcase__stamp">
+              <span className="studio-showcase__stamp-dot" />
               <span>{t.personas.stampText}</span>
+            </div>
+            <div className="studio-showcase__telemetry formula-ltr">
+              <span>2H₂ + O₂ → 2H₂O</span>
+              <span className="studio-showcase__delta">ΔH = −483.6 kJ/mol</span>
             </div>
           </div>
           <div className="studio-showcase__body">
@@ -149,19 +158,19 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
             </p>
             <div className="studio-showcase__features">
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'حرارة التفاعل والإنثالبي المباشر (ΔH)' : language === 'fr' ? 'Enthalpie & Énergie thermique en direct' : 'Live Heat of Reaction & Enthalpy (ΔH)'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'موازنة المعادلات بمصفوفات غاوس' : language === 'fr' ? 'Équilibrage matriciel gaussien automatique' : 'Gaussian Matrix Automatic Equation Balancing'}</span>
               </div>
               <div className="studio-feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4E5B47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{language === 'ar' ? 'حساب المتفاعل المحدِّد والإنتاجية' : language === 'fr' ? 'Calculateur de réactif limitant et rendement' : 'Limiting Reagent & Theoretical Yield Solver'}</span>
@@ -172,7 +181,7 @@ export const PersonasSection: React.FC<PersonasSectionProps> = ({ onNavigate }) 
               className="studio-showcase__btn"
             >
               <span>{t.personas.bannerCta}</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rtl-flip">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>

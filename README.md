@@ -219,7 +219,7 @@ Chemify/
 * **Node.js** $\ge 18.0.0$ (Node 20 or 22 recommended)
 * **npm** $\ge 9.0.0$
 
-### Installation
+### Installation & Local Dev Mode
 ```bash
 # 1. Clone repository
 git clone https://github.com/solacode-SC/Chemify.git
@@ -227,19 +227,23 @@ cd Chemify
 
 # 2. Install dependencies
 npm install
+# or: make install
 
-# 3. Start local Vite development server
+# 3. Start local Vite development server (http://localhost:3000)
 npm run dev
+# or: make dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Production Build
+### Production Build & Preview
 ```bash
 # Type check with tsc and bundle with Vite
 npm run build
+# or: make build
 
-# Preview production build locally
+# Preview production build locally (http://localhost:4173)
 npm run preview
+# or: make preview
 ```
 
 ---
@@ -262,10 +266,14 @@ curl -s http://localhost:4326/healthz
 
 ## 🛠️ Turnkey Makefile Automation (`chemify.solaymanbuilds.com`)
 
-A dedicated [`Makefile`](file:///wsl.localhost/Ubuntu/home/soel/Desktop/Projects/Chemify/Makefile) provides multi-app safe orchestration for production containers, host Nginx reverse proxy, SSL certificates (`elmouden00den@gmail.com`), and zero-downtime updates:
+A dedicated [`Makefile`](./Makefile) provides local development helpers (`make install`, `make dev`, `make preview`) as well as multi-app safe orchestration for production containers, host Nginx reverse proxy, SSL certificates (`elmouden00den@gmail.com`), and zero-downtime updates:
 
 | Target | Description |
 | :--- | :--- |
+| `make install` | Install all local npm dependencies |
+| `make dev` | Start local Vite development server on `http://localhost:3000` |
+| `make preview` | Build and preview production bundle locally on `http://localhost:4173` |
+| `make build` | Type-check (`tsc`) and build production bundle into `dist/` |
 | `sudo make vps-config` | Configure `.env`, verify ports, deploy container, configure Nginx vhost & SSL for `chemify.solaymanbuilds.com` (`elmouden00den@gmail.com`) |
 | `sudo make vps-setup` | Run complete end-to-end multi-app safe VPS deployment script |
 | `make update` | Pull latest Git changes, rebuild & update Chemify container, prune old images, and verify health |

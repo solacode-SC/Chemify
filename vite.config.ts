@@ -2,10 +2,17 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  base: '/',
   plugins: [react()],
   server: {
+    host: true,
     port: 3000,
-    open: true,
+    allowedHosts: ['chemify.solaymanbuilds.com'],
+  },
+  preview: {
+    host: true,
+    port: 4173,
+    allowedHosts: ['chemify.solaymanbuilds.com'],
   },
   build: {
     outDir: 'dist',

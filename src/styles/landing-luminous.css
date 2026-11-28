@@ -1,0 +1,1416 @@
+/* ===================================================
+   Chemify — Luminous Quantum Observatory Landing Theme
+   Vibrant Bioluminescent Cyan, Emerald & Violet Palette
+   Full Multi-Breakpoint Responsive + EN / FR / AR RTL
+   =================================================== */
+
+.theme-luminous {
+  --lum-bg-deep: #060a14;
+  --lum-bg-mid: #0b1121;
+  --lum-bg-elevated: #111a2e;
+  --lum-surface: rgba(15, 23, 42, 0.72);
+  --lum-surface-strong: rgba(15, 23, 42, 0.88);
+  --lum-border: rgba(148, 163, 184, 0.18);
+  --lum-border-bright: rgba(56, 189, 248, 0.42);
+  --lum-text: #f8fafc;
+  --lum-text-secondary: #cbd5e1;
+  --lum-text-muted: #94a3b8;
+  --lum-cyan: #22d3ee;
+  --lum-emerald: #34d399;
+  --lum-violet: #a78bfa;
+  --lum-amber: #fbbf24;
+  --lum-rose: #fb7185;
+  --lum-font-display: 'Space Grotesk', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background-color: var(--lum-bg-deep);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 88% 28%, rgba(139, 92, 246, 0.12), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 12% 68%, rgba(16, 185, 129, 0.1), transparent 60%);
+  color: var(--lum-text);
+  overflow-x: clip;
+}
+
+.about-standalone-view {
+  padding-top: calc(var(--navbar-height) + 24px);
+  min-height: 82vh;
+}
+
+/* Preserve crisp calligraphic Amiri typography in Arabic */
+html[lang="ar"] .theme-luminous {
+  --lum-font-display: 'Amiri', 'Readex Pro', serif;
+}
+
+/* Shared Luminous Section Typography */
+.theme-luminous .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--lum-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  padding: 6px 16px;
+  border-radius: 999px;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+}
+
+.theme-luminous .section-title {
+  font-family: var(--lum-font-display);
+  color: var(--lum-text);
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+.theme-luminous .section-desc {
+  color: var(--lum-text-secondary);
+}
+
+.text-gradient-accent {
+  background: linear-gradient(125deg, #34d399 0%, #22d3ee 48%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===================================================
+   Luminous Glassmorphic Navbar & Side Drawer
+   =================================================== */
+.navbar--luminous {
+  background: rgba(6, 10, 20, 0.72);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.navbar--luminous.navbar--scrolled {
+  background: rgba(6, 10, 20, 0.9);
+  border-bottom-color: rgba(34, 211, 238, 0.24);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+}
+
+.navbar--luminous .navbar__logo-text {
+  font-family: var(--lum-font-display);
+  background: linear-gradient(135deg, #f8fafc 20%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.01em;
+}
+
+.navbar--luminous .navbar__logo-icon {
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+}
+
+.navbar--luminous .navbar__links {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.navbar--luminous .navbar__link {
+  color: #cbd5e1;
+}
+
+.navbar--luminous .navbar__link:hover {
+  color: #f8fafc;
+  background: rgba(34, 211, 238, 0.12);
+}
+
+.navbar--luminous .navbar__link.is-active {
+  background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+  color: #03111c;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.35);
+}
+
+.navbar--luminous .lang-switcher {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.navbar--luminous .lang-switcher__btn {
+  color: #94a3b8;
+}
+
+.navbar--luminous .lang-switcher__btn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.navbar--luminous .lang-switcher__btn.is-active {
+  background: rgba(34, 211, 238, 0.18);
+  color: #67e8f9;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.22);
+}
+
+.navbar--luminous .navbar__cta {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  color: #04131c;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 6px 22px rgba(34, 211, 238, 0.35);
+}
+
+.navbar--luminous .navbar__cta:hover {
+  background: linear-gradient(135deg, #67e8f9 0%, #34d399 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(34, 211, 238, 0.5);
+}
+
+.navbar--luminous .navbar__hamburger {
+  background: rgba(15, 23, 42, 0.78);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.navbar--luminous .navbar__hamburger:hover {
+  background: rgba(30, 41, 59, 0.92);
+  border-color: rgba(34, 211, 238, 0.45);
+}
+
+.navbar--luminous .navbar__hamburger-line {
+  background-color: #f8fafc;
+}
+
+/* Luminous Mobile Side Drawer */
+.side-drawer--luminous {
+  background: linear-gradient(180deg, #0b1121 0%, #070b15 100%);
+  border-left: 1px solid rgba(34, 211, 238, 0.25);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.65);
+}
+
+.side-drawer--luminous.side-drawer--rtl {
+  border-left: none;
+  border-right: 1px solid rgba(34, 211, 238, 0.25);
+  box-shadow: 20px 0 60px rgba(0, 0, 0, 0.65);
+}
+
+.side-drawer--luminous .side-drawer__header {
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.side-drawer--luminous .side-drawer__brand-icon {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(139, 92, 246, 0.25));
+  border: 1px solid rgba(34, 211, 238, 0.35);
+}
+
+.side-drawer--luminous .side-drawer__brand-title {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+}
+
+.side-drawer--luminous .side-drawer__brand-subtitle,
+.side-drawer--luminous .side-drawer__section-label {
+  color: #94a3b8;
+}
+
+.side-drawer--luminous .side-drawer__close {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #e2e8f0;
+}
+
+.side-drawer--luminous .side-drawer__close:hover {
+  background: #22d3ee;
+  border-color: #22d3ee;
+  color: #04131c;
+}
+
+.side-drawer--luminous .side-drawer__nav-card {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(148, 163, 184, 0.16);
+  box-shadow: none;
+}
+
+.side-drawer--luminous .side-drawer__nav-card:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(34, 211, 238, 0.4);
+}
+
+.side-drawer--luminous .side-drawer__nav-card.is-active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.22), rgba(16, 185, 129, 0.22));
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 6px 20px rgba(34, 211, 238, 0.18);
+}
+
+.side-drawer--luminous .side-drawer__nav-icon {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.side-drawer--luminous .side-drawer__nav-title {
+  color: #f8fafc;
+}
+
+.side-drawer--luminous .side-drawer__nav-desc,
+.side-drawer--luminous .side-drawer__nav-arrow {
+  color: #94a3b8;
+}
+
+.side-drawer--luminous .side-drawer__nav-badge {
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.side-drawer--luminous .side-drawer__highlight-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(99, 102, 241, 0.16) 100%);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.side-drawer--luminous .side-drawer__highlight-header {
+  color: #f8fafc;
+}
+
+.side-drawer--luminous .side-drawer__highlight-text {
+  color: #cbd5e1;
+}
+
+.side-drawer--luminous .side-drawer__cta-btn {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  color: #04131c;
+  border: none;
+}
+
+.side-drawer--luminous .side-drawer__footer {
+  background: rgba(15, 23, 42, 0.85);
+  border-top-color: rgba(148, 163, 184, 0.16);
+}
+
+.side-drawer--luminous .side-drawer__lang-btn {
+  background: rgba(30, 41, 59, 0.72);
+  border-color: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+}
+
+.side-drawer--luminous .side-drawer__lang-btn.is-active {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  border-color: transparent;
+  color: #04131c;
+}
+
+/* ===================================================
+   Hero Section — Luminous Quantum Atmosphere
+   =================================================== */
+.theme-luminous .hero-section {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--navbar-height) + 64px) 24px 88px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 82% 24%, rgba(139, 92, 246, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.14) 0%, transparent 50%),
+    linear-gradient(180deg, #060a14 0%, #090f1e 65%, #0b1224 100%);
+}
+
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(85px);
+  opacity: 0.55;
+  animation: orbFloat 16s ease-in-out infinite alternate;
+}
+
+.hero-orb--cyan {
+  width: 440px;
+  height: 440px;
+  top: -120px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.45) 0%, rgba(6, 182, 212, 0) 70%);
+}
+
+.hero-orb--violet {
+  width: 480px;
+  height: 480px;
+  top: 40px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.42) 0%, rgba(99, 102, 241, 0) 70%);
+  animation-delay: -5s;
+}
+
+.hero-orb--emerald {
+  width: 380px;
+  height: 380px;
+  bottom: -100px;
+  left: 38%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.35) 0%, rgba(52, 211, 153, 0) 70%);
+  animation-delay: -10s;
+}
+
+@keyframes orbFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(28px, -24px, 0) scale(1.08);
+  }
+}
+
+.theme-luminous .hero-container {
+  max-width: 1020px;
+  width: 100%;
+}
+
+.theme-luminous .hero-eyebrow {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(34, 211, 238, 0.36);
+  color: #a5f3fc;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 7px 20px;
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-luminous .hero-eyebrow__dot {
+  width: 9px;
+  height: 9px;
+  background-color: #34d399;
+  box-shadow: 0 0 12px #34d399, 0 0 24px rgba(52, 211, 153, 0.8);
+  animation: pulseDot 2.2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.75;
+  }
+}
+
+.theme-luminous .hero-title {
+  font-family: var(--lum-font-display);
+  font-size: clamp(2.65rem, 6.8vw, 5.15rem);
+  font-weight: 700;
+  line-height: 1.07;
+  letter-spacing: -0.03em;
+  color: #f8fafc;
+  margin-bottom: 1.4rem;
+}
+
+.hero-title__line1 {
+  color: #f8fafc;
+}
+
+.hero-title__gradient {
+  background: linear-gradient(120deg, #34d399 0%, #22d3ee 45%, #a78bfa 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 28px rgba(34, 211, 238, 0.25));
+}
+
+.theme-luminous .hero-subtitle {
+  color: #cbd5e1;
+  font-size: clamp(1.02rem, 1.85vw, 1.24rem);
+  max-width: 720px;
+  margin-bottom: 2.2rem;
+}
+
+.theme-luminous .hero-actions {
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.theme-luminous .hero-btn--primary {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  color: #03111c;
+  border: none;
+  font-weight: 700;
+  padding: 15px 34px;
+  box-shadow: 0 8px 28px rgba(34, 211, 238, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.theme-luminous .hero-btn--primary:hover {
+  background: linear-gradient(135deg, #67e8f9 0%, #34d399 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(34, 211, 238, 0.52);
+}
+
+.theme-luminous .hero-btn--ghost {
+  background: rgba(15, 23, 42, 0.65);
+  color: #f8fafc;
+  border: 1.5px solid rgba(167, 139, 250, 0.45);
+  padding: 14px 32px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 24px rgba(139, 92, 246, 0.15);
+}
+
+.theme-luminous .hero-btn--ghost:hover {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: #c4b5fd;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.3);
+}
+
+/* Live Capability Pills */
+.hero-highlights {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 3rem;
+}
+
+.hero-highlight-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.22s ease;
+}
+
+.hero-highlight-pill:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: rgba(30, 41, 59, 0.82);
+  transform: translateY(-2px);
+}
+
+.hero-highlight-pill__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Curated Luminous Element Deck */
+.theme-luminous .hero-deck-wrapper {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.theme-luminous .hero-deck-label {
+  color: #94a3b8;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  margin-bottom: 1.15rem;
+}
+
+.theme-luminous .hero-deck {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.theme-luminous .hero-element-tile {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 11px 12px;
+  min-width: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.theme-luminous .hero-element-tile::before {
+  height: 3px;
+  background: var(--tile-accent, #22d3ee);
+  box-shadow: 0 0 14px var(--tile-accent, #22d3ee);
+}
+
+.theme-luminous .hero-element-tile:hover {
+  transform: translateY(-6px) scale(1.02);
+  background: rgba(20, 31, 56, 0.94);
+  border-color: var(--tile-accent, #22d3ee);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4), 0 0 22px color-mix(in srgb, var(--tile-accent, #22d3ee) 32%, transparent);
+}
+
+.theme-luminous .hero-element-tile__top {
+  color: #94a3b8;
+  font-size: 0.68rem;
+}
+
+.theme-luminous .hero-element-tile__num {
+  color: var(--tile-accent, #22d3ee);
+}
+
+.theme-luminous .hero-element-tile__sym {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin: 4px 0 2px;
+}
+
+.theme-luminous .hero-element-tile__name {
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===================================================
+   About Section — Quantum Observatory
+   =================================================== */
+.theme-luminous .about-section {
+  background: linear-gradient(180deg, #0b1224 0%, #091020 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.theme-luminous .about-paragraph {
+  color: #cbd5e1;
+}
+
+.theme-luminous .about-metric {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 16px;
+  padding: 1.35rem 1rem;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.theme-luminous .about-metric:hover {
+  transform: translateY(-4px);
+}
+
+.theme-luminous .about-metric--cyan {
+  border-top: 2px solid #22d3ee;
+}
+.theme-luminous .about-metric--cyan .about-metric__value {
+  background: linear-gradient(135deg, #67e8f9, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-luminous .about-metric--emerald {
+  border-top: 2px solid #34d399;
+}
+.theme-luminous .about-metric--emerald .about-metric__value {
+  background: linear-gradient(135deg, #6ee7b7, #10b981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-luminous .about-metric--violet {
+  border-top: 2px solid #a78bfa;
+}
+.theme-luminous .about-metric--violet .about-metric__value {
+  background: linear-gradient(135deg, #ddd6fe, #8b5cf6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-luminous .about-metric__value {
+  font-family: var(--lum-font-display);
+  font-size: 2.3rem;
+}
+
+.theme-luminous .about-metric__label {
+  color: #94a3b8;
+}
+
+.theme-luminous .about-link-btn {
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+  border: 1.5px solid rgba(34, 211, 238, 0.45);
+  box-shadow: 0 6px 20px rgba(34, 211, 238, 0.14);
+}
+
+.theme-luminous .about-link-btn:hover {
+  background: linear-gradient(135deg, #22d3ee 0%, #10b981 100%);
+  color: #03111c;
+  border-color: transparent;
+  box-shadow: 0 10px 28px rgba(34, 211, 238, 0.38);
+}
+
+/* Quantum Atom Observatory Dome */
+.theme-luminous .about-atom-observatory {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(34, 211, 238, 0.14) 0%, rgba(139, 92, 246, 0.08) 45%, rgba(15, 23, 42, 0.92) 80%);
+  border: 1.5px solid rgba(34, 211, 238, 0.3);
+  border-radius: 220px 220px 28px 28px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(34, 211, 238, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.theme-luminous .about-atom-observatory::before {
+  border-color: rgba(167, 139, 250, 0.22);
+}
+
+.theme-luminous .about-atom-observatory__dot {
+  background: #22d3ee;
+  box-shadow: 0 0 12px #22d3ee;
+  animation: pulseDot 2.4s ease-in-out infinite;
+}
+
+.theme-luminous .about-atom-observatory__label {
+  color: #a5f3fc;
+}
+
+.about__atom-halo {
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.22) 0%, rgba(139, 92, 246, 0.12) 48%, transparent 72%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.about-atom-observatory__shells {
+  display: flex !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.75rem;
+}
+
+.shell-chip {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.shell-chip--cyan {
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+.shell-chip--violet {
+  color: #ddd6fe;
+  background: rgba(167, 139, 250, 0.12);
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+.shell-chip--emerald {
+  color: #6ee7b7;
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.theme-luminous .about-atom-observatory__caption {
+  color: #94a3b8;
+  margin-top: 1rem;
+}
+
+/* ===================================================
+   Features Section — 3-Spectrum Spotlight Cards
+   =================================================== */
+.theme-luminous .features-section {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99, 102, 241, 0.1), transparent 65%),
+    #070c18;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.theme-luminous .feature-card {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 22px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.32);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.theme-luminous .feature-card::before {
+  inset: 0;
+  border: none;
+  border-radius: 0;
+  height: 3px;
+  bottom: auto;
+  background: var(--card-accent, #22d3ee);
+  box-shadow: 0 0 22px var(--card-accent, #22d3ee);
+}
+
+.feature-card--cyan {
+  --card-accent: #22d3ee;
+  --card-glow: rgba(34, 211, 238, 0.24);
+}
+.feature-card--emerald {
+  --card-accent: #34d399;
+  --card-glow: rgba(52, 211, 153, 0.24);
+}
+.feature-card--violet {
+  --card-accent: #a78bfa;
+  --card-glow: rgba(167, 139, 250, 0.24);
+}
+
+.theme-luminous .feature-card:hover {
+  transform: translateY(-9px);
+  border-color: var(--card-accent);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.45), 0 0 36px var(--card-glow);
+  background: rgba(18, 28, 52, 0.9);
+}
+
+.feature-card__top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.theme-luminous .feature-card__icon-box {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 0;
+  padding: 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.feature-card__index {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--card-accent, #22d3ee);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.theme-luminous .feature-card__title {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+}
+
+.theme-luminous .feature-card__desc {
+  color: #cbd5e1;
+}
+
+.theme-luminous .feature-card__list li {
+  color: #e2e8f0;
+}
+
+.theme-luminous .feature-card__list li::before {
+  color: var(--card-accent, #22d3ee);
+}
+
+.theme-luminous .feature-card__cta {
+  color: var(--card-accent, #22d3ee);
+}
+
+/* ===================================================
+   Periodic Table Spectrogram Teaser
+   =================================================== */
+.theme-luminous .ptable-section {
+  background: linear-gradient(180deg, #091020 0%, #0b1326 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.theme-luminous .ptable-tab {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: #cbd5e1;
+  box-shadow: none;
+}
+
+.theme-luminous .ptable-tab:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: var(--tab-accent, #22d3ee);
+  color: #f8fafc;
+}
+
+.theme-luminous .ptable-tab.is-active {
+  background: var(--tab-bg, rgba(34, 211, 238, 0.18));
+  color: #f8fafc;
+  border-color: var(--tab-accent, #22d3ee);
+  box-shadow: 0 0 22px var(--tab-glow, rgba(34, 211, 238, 0.35));
+}
+
+.theme-luminous .ptable-tab.is-active .ptable-tab__dot {
+  background-color: var(--tab-accent, #22d3ee) !important;
+  box-shadow: 0 0 10px var(--tab-accent, #22d3ee);
+}
+
+.theme-luminous .element-specimen-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-top: 2.5px solid var(--spec-accent, #22d3ee);
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+
+.theme-luminous .element-specimen-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--spec-accent, #22d3ee);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.42), 0 0 26px var(--spec-glow, rgba(34, 211, 238, 0.32));
+  background: rgba(19, 30, 54, 0.94);
+}
+
+.theme-luminous .element-specimen-card__num {
+  color: var(--spec-accent, #22d3ee);
+}
+
+.theme-luminous .element-specimen-card__symbol {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+  text-shadow: 0 0 22px var(--spec-glow, rgba(34, 211, 238, 0.25));
+}
+
+.theme-luminous .element-specimen-card__name {
+  color: #e2e8f0;
+}
+
+.theme-luminous .element-specimen-card__footer {
+  color: #94a3b8;
+  border-top-color: rgba(148, 163, 184, 0.16);
+}
+
+/* 18-Column Neon Spectrogram Preview */
+.theme-luminous .ptable-preview-wrap {
+  background: rgba(10, 16, 30, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.38);
+}
+
+.theme-luminous .ptable-preview-title {
+  color: #f8fafc;
+}
+
+.theme-luminous .ptable-preview-hint {
+  color: #94a3b8;
+}
+
+.theme-luminous .ptable-mini-cell__num {
+  color: #64748b;
+}
+
+.theme-luminous .ptable-mini-cell__sym {
+  color: #94a3b8;
+}
+
+.theme-luminous .ptable-mini-cell:hover {
+  transform: scale(1.22);
+  background: rgba(34, 211, 238, 0.22) !important;
+  border-color: #67e8f9 !important;
+}
+
+.theme-luminous .ptable-mini-cell:hover .ptable-mini-cell__sym {
+  color: #ffffff;
+}
+
+.theme-luminous .ptable-explore-btn {
+  background: linear-gradient(135deg, #22d3ee 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.38);
+}
+
+.theme-luminous .ptable-explore-btn:hover {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(99, 102, 241, 0.52);
+}
+
+/* ===================================================
+   Personas & Studio Showcase Section
+   =================================================== */
+.theme-luminous .personas-section {
+  background: linear-gradient(180deg, #0b1326 0%, #070c18 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.theme-luminous .persona-card {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 22px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.34);
+}
+
+.persona-card--cyan {
+  --persona-accent: #22d3ee;
+  --persona-btn: linear-gradient(135deg, #06b6d4, #22d3ee);
+}
+.persona-card--violet {
+  --persona-accent: #a78bfa;
+  --persona-btn: linear-gradient(135deg, #7c3aed, #a78bfa);
+}
+.persona-card--emerald {
+  --persona-accent: #34d399;
+  --persona-btn: linear-gradient(135deg, #059669, #34d399);
+}
+
+.theme-luminous .persona-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--persona-accent);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.48), 0 0 28px color-mix(in srgb, var(--persona-accent) 26%, transparent);
+}
+
+.theme-luminous .persona-card__image-container {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+.persona-card__image-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 10, 20, 0.05) 45%, rgba(6, 10, 20, 0.62) 100%);
+  pointer-events: none;
+}
+
+.theme-luminous .persona-card__badge {
+  background: rgba(6, 10, 20, 0.82);
+  color: var(--persona-accent, #22d3ee);
+  border: 1px solid var(--persona-accent, #22d3ee);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.theme-luminous .persona-card__title {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+}
+
+.theme-luminous .persona-card__text {
+  color: #cbd5e1;
+}
+
+.theme-luminous .persona-card__footer {
+  border-top-color: rgba(148, 163, 184, 0.16);
+}
+
+.theme-luminous .persona-card__link {
+  background: var(--persona-btn);
+  color: #03111c;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+}
+
+.theme-luminous .persona-card--violet .persona-card__link {
+  color: #ffffff;
+}
+
+.theme-luminous .persona-card__link:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--persona-accent) 40%, transparent);
+}
+
+/* Reaction Studio Showcase Banner */
+.theme-luminous .studio-showcase {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(17, 24, 39, 0.94) 100%);
+  border: 1.5px solid rgba(52, 211, 153, 0.32);
+  border-radius: 26px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48), 0 0 42px rgba(16, 185, 129, 0.12);
+}
+
+.theme-luminous .studio-showcase::before {
+  border-color: rgba(34, 211, 238, 0.16);
+}
+
+.studio-showcase__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 10, 20, 0.12) 0%, rgba(6, 10, 20, 0.72) 100%);
+  pointer-events: none;
+}
+
+.theme-luminous .studio-showcase__stamp {
+  top: 16px;
+  bottom: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 10, 20, 0.84);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #6ee7b7;
+}
+
+.studio-showcase__stamp-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+.studio-showcase__telemetry {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(6, 10, 20, 0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(34, 211, 238, 0.32);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.studio-showcase__delta {
+  color: #34d399;
+}
+
+.theme-luminous .studio-showcase__tag {
+  color: #34d399;
+}
+
+.theme-luminous .studio-showcase__title {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+}
+
+.theme-luminous .studio-showcase__text {
+  color: #cbd5e1;
+}
+
+.theme-luminous .studio-feature-item {
+  color: #e2e8f0;
+}
+
+.theme-luminous .studio-showcase__btn {
+  background: linear-gradient(135deg, #34d399 0%, #22d3ee 100%);
+  color: #03111c;
+  border: none;
+  box-shadow: 0 8px 26px rgba(52, 211, 153, 0.35);
+}
+
+.theme-luminous .studio-showcase__btn:hover {
+  background: linear-gradient(135deg, #6ee7b7 0%, #67e8f9 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(34, 211, 238, 0.45);
+}
+
+/* ===================================================
+   CTA Banner Section — High-Energy Cosmic Gradient
+   =================================================== */
+.theme-luminous .cta-section {
+  background: #070c18;
+  padding: 92px 24px 104px;
+}
+
+.theme-luminous .cta-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 48%, #064e3b 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  border-radius: 28px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55), 0 0 60px rgba(99, 102, 241, 0.22);
+}
+
+.theme-luminous .cta-card::before {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.cta-card__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cta-card__glow--1 {
+  width: 320px;
+  height: 320px;
+  top: -100px;
+  left: -60px;
+  background: rgba(34, 211, 238, 0.32);
+}
+
+.cta-card__glow--2 {
+  width: 340px;
+  height: 340px;
+  bottom: -110px;
+  right: -60px;
+  background: rgba(167, 139, 250, 0.32);
+}
+
+.theme-luminous .cta-card__eyebrow {
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+.theme-luminous .cta-card__heading {
+  font-family: var(--lum-font-display);
+  color: #ffffff;
+}
+
+.theme-luminous .cta-card__desc {
+  color: #cbd5e1;
+}
+
+.theme-luminous .cta-card__btn--primary {
+  background: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
+  color: #03111c;
+  border: none;
+  box-shadow: 0 10px 30px rgba(34, 211, 238, 0.38);
+}
+
+.theme-luminous .cta-card__btn--primary:hover {
+  background: linear-gradient(135deg, #67e8f9 0%, #6ee7b7 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(34, 211, 238, 0.52);
+}
+
+.theme-luminous .cta-card__btn--secondary {
+  background: rgba(15, 23, 42, 0.45);
+  color: #f8fafc;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.theme-luminous .cta-card__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #ffffff;
+}
+
+/* ===================================================
+   Footer — Adaptive Luminous + Domain Badge
+   =================================================== */
+.footer__domain-pill {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-text);
+  background: rgba(111, 127, 99, 0.12);
+  border: 1px solid rgba(111, 127, 99, 0.3);
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.footer__domain-pill:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.footer__domain-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.65);
+}
+
+.footer--luminous {
+  background: #050810;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.footer--luminous .footer__logo-text {
+  font-family: var(--lum-font-display);
+  color: #f8fafc;
+}
+
+.footer--luminous .footer__tagline {
+  color: #94a3b8;
+  max-width: 460px;
+}
+
+.footer--luminous .footer__domain-pill {
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.footer--luminous .footer__domain-pill:hover {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: #22d3ee;
+}
+
+.footer--luminous .footer__link {
+  color: #cbd5e1;
+}
+
+.footer--luminous .footer__link:hover {
+  color: #22d3ee;
+}
+
+.footer--luminous .footer__bottom {
+  border-top-color: rgba(148, 163, 184, 0.12);
+  color: #64748b;
+}
+
+/* ===================================================
+   Full Responsive Breakpoints (Tablet, Mobile, Small Phone)
+   =================================================== */
+@media (max-width: 1024px) {
+  .theme-luminous .about-section,
+  .theme-luminous .features-section,
+  .theme-luminous .ptable-section,
+  .theme-luminous .personas-section {
+    padding: 80px 20px;
+  }
+
+  .theme-luminous .ptable-specimens {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .theme-luminous .hero-section {
+    min-height: auto;
+    padding: calc(var(--navbar-height) + 38px) 18px 64px;
+  }
+
+  .theme-luminous .hero-deck {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .theme-luminous .hero-element-tile {
+    padding: 9px 6px;
+  }
+
+  .theme-luminous .hero-element-tile__mass {
+    display: none;
+  }
+
+  .theme-luminous .about-section,
+  .theme-luminous .features-section,
+  .theme-luminous .ptable-section,
+  .theme-luminous .personas-section,
+  .theme-luminous .cta-section {
+    padding: 68px 16px;
+  }
+
+  .theme-luminous .ptable-preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .theme-luminous .studio-showcase__btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .theme-luminous .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .theme-luminous .about-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .theme-luminous .hero-deck {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .theme-luminous .hero-element-tile {
+    padding: 10px 12px;
+  }
+
+  .theme-luminous .hero-element-tile__mass {
+    display: inline;
+  }
+
+  .theme-luminous .about-metrics {
+    gap: 8px !important;
+  }
+
+  .theme-luminous .about-metric {
+    padding: 1rem 0.5rem;
+  }
+
+  .theme-luminous .about-metric__value {
+    font-size: 1.65rem;
+  }
+
+  .theme-luminous .about-metric__label {
+    font-size: 0.7rem;
+  }
+
+  .theme-luminous .about-atom-observatory {
+    padding: 1.75rem 1rem 1.5rem;
+    border-radius: 140px 140px 22px 22px;
+  }
+
+  .theme-luminous .about-atom-observatory__canvas-wrap {
+    min-height: 210px;
+  }
+
+  .theme-luminous .ptable-specimens {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .theme-luminous .element-specimen-card {
+    padding: 1rem 0.85rem;
+  }
+
+  .theme-luminous .element-specimen-card__symbol {
+    font-size: 2rem;
+  }
+
+  .theme-luminous .ptable-explore-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 0.96rem;
+  }
+
+  .studio-showcase__telemetry {
+    font-size: 0.74rem;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .theme-luminous .ptable-specimens {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orb,
+  .theme-luminous .hero-eyebrow__dot,
+  .theme-luminous .about-atom-observatory__dot {
+    animation: none !important;
+  }
+}

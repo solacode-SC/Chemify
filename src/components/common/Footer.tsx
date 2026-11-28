@@ -1,16 +1,18 @@
 import React from 'react';
 import { AppView } from './Navbar';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { SITE_DOMAIN, SITE_URL } from '../../config/site';
 
 interface FooterProps {
   onNavigate: (view: AppView) => void;
+  isDarkTheme?: boolean;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, isDarkTheme = false }) => {
   const { t } = useLanguage();
 
   return (
-    <footer className="footer">
+    <footer className={`footer ${isDarkTheme ? 'footer--luminous' : ''}`}>
       <div className="footer__inner">
         <div className="footer__brand">
           <button
@@ -29,15 +31,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <circle cx="20" cy="20" r="4" fill="#5F6F5B" />
-              <ellipse cx="20" cy="20" rx="16" ry="7" stroke="#5F6F5B" strokeWidth="1.4" fill="none" />
+              <circle cx="20" cy="20" r="4" fill={isDarkTheme ? '#34D399' : '#5F6F5B'} />
+              <ellipse cx="20" cy="20" rx="16" ry="7" stroke={isDarkTheme ? '#22D3EE' : '#5F6F5B'} strokeWidth="1.5" fill="none" />
               <ellipse
                 cx="20"
                 cy="20"
                 rx="16"
                 ry="7"
-                stroke="#5F6F5B"
-                strokeWidth="1.4"
+                stroke={isDarkTheme ? '#A78BFA' : '#5F6F5B'}
+                strokeWidth="1.5"
                 fill="none"
                 transform="rotate(60 20 20)"
               />
@@ -46,8 +48,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 cy="20"
                 rx="16"
                 ry="7"
-                stroke="#5F6F5B"
-                strokeWidth="1.4"
+                stroke={isDarkTheme ? '#34D399' : '#5F6F5B'}
+                strokeWidth="1.5"
                 fill="none"
                 transform="rotate(-60 20 20)"
               />
@@ -55,6 +57,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <span className="footer__logo-text">Chemify</span>
           </button>
           <p className="footer__tagline">{t.footer.tagline}</p>
+          <a
+            href={SITE_URL}
+            className="footer__domain-pill formula-ltr"
+            rel="noopener noreferrer"
+          >
+            <span className="footer__domain-dot" aria-hidden="true" />
+            <span>{SITE_DOMAIN}</span>
+          </a>
         </div>
 
         <nav className="footer__nav">
@@ -84,9 +94,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       </div>
 
       <div className="footer__bottom">
-        <p>{t.footer.copyright} © {new Date().getFullYear()} Chemify.</p>
+        <p>{t.footer.copyright} © {new Date().getFullYear()} Chemify · {SITE_DOMAIN}</p>
       </div>
     </footer>
   );
 };
-

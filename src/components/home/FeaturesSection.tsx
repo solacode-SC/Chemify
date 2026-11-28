@@ -21,9 +21,9 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
         </div>
 
         <div className="features-grid">
-          {/* Card 1: Periodic Table Explorer */}
+          {/* Card 1: Periodic Table Explorer — Electric Cyan */}
           <div
-            className="feature-card"
+            className="feature-card feature-card--cyan"
             onClick={() => onNavigate('elements')}
             role="button"
             tabIndex={0}
@@ -32,19 +32,22 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
             }}
           >
             <div className="feature-card__inner">
-              <div className="feature-card__icon-box">
-                <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
-                  <rect x="8" y="12" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="26" y="12" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="44" y="12" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="8" y="30" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="26" y="30" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="44" y="30" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="8" y="48" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="26" y="48" width="14" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.8" />
-                  <circle cx="58" cy="52" r="12" stroke="#4E5B47" strokeWidth="1.8" />
-                  <line x1="66.5" y1="60.5" x2="74" y2="68" stroke="#4E5B47" strokeWidth="2.2" strokeLinecap="round" />
-                </svg>
+              <div className="feature-card__top-row">
+                <div className="feature-card__icon-box">
+                  <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
+                    <rect x="8" y="12" width="14" height="14" rx="3.5" stroke="#22D3EE" strokeWidth="2" fill="rgba(34,211,238,0.12)" />
+                    <rect x="26" y="12" width="14" height="14" rx="3.5" stroke="#38BDF8" strokeWidth="2" />
+                    <rect x="44" y="12" width="14" height="14" rx="3.5" stroke="#22D3EE" strokeWidth="2" />
+                    <rect x="8" y="30" width="14" height="14" rx="3.5" stroke="#38BDF8" strokeWidth="2" />
+                    <rect x="26" y="30" width="14" height="14" rx="3.5" stroke="#22D3EE" strokeWidth="2" fill="rgba(34,211,238,0.16)" />
+                    <rect x="44" y="30" width="14" height="14" rx="3.5" stroke="#38BDF8" strokeWidth="2" />
+                    <rect x="8" y="48" width="14" height="14" rx="3.5" stroke="#22D3EE" strokeWidth="2" />
+                    <rect x="26" y="48" width="14" height="14" rx="3.5" stroke="#38BDF8" strokeWidth="2" />
+                    <circle cx="58" cy="52" r="12" stroke="#67E8F9" strokeWidth="2.2" fill="rgba(34,211,238,0.12)" />
+                    <line x1="66.5" y1="60.5" x2="74" y2="68" stroke="#67E8F9" strokeWidth="2.6" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <span className="feature-card__index">01</span>
               </div>
               <h3 className="feature-card__title">{t.features.card1Title}</h3>
               <p className="feature-card__desc">
@@ -65,9 +68,9 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
             </div>
           </div>
 
-          {/* Card 2: Reaction Studio */}
+          {/* Card 2: Reaction Studio — Bioluminescent Emerald */}
           <div
-            className="feature-card"
+            className="feature-card feature-card--emerald"
             onClick={() => onNavigate('lab')}
             role="button"
             tabIndex={0}
@@ -76,20 +79,24 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
             }}
           >
             <div className="feature-card__inner">
-              <div className="feature-card__icon-box">
-                <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
-                  <path
-                    d="M32 10 L48 10 M40 10 L40 28 L18 64 C16 67 18 70 22 70 L58 70 C62 70 64 67 62 64 L40 28"
-                    stroke="#4E5B47"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path d="M24 54 C30 50 36 58 42 54 C48 50 54 56 56 54" stroke="#4E5B47" strokeWidth="1.6" strokeLinecap="round" />
-                  <circle cx="34" cy="46" r="2.5" fill="#4E5B47" />
-                  <circle cx="44" cy="40" r="1.8" fill="#4E5B47" />
-                  <circle cx="42" cy="62" r="2" fill="#4E5B47" />
-                </svg>
+              <div className="feature-card__top-row">
+                <div className="feature-card__icon-box">
+                  <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
+                    <path
+                      d="M32 10 L48 10 M40 10 L40 28 L18 64 C16 67 18 70 22 70 L58 70 C62 70 64 67 62 64 L40 28"
+                      stroke="#34D399"
+                      strokeWidth="2.1"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      fill="rgba(52,211,153,0.1)"
+                    />
+                    <path d="M24 54 C30 50 36 58 42 54 C48 50 54 56 56 54" stroke="#6EE7B7" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="34" cy="46" r="2.8" fill="#34D399" />
+                    <circle cx="44" cy="40" r="2" fill="#6EE7B7" />
+                    <circle cx="42" cy="62" r="2.2" fill="#34D399" />
+                  </svg>
+                </div>
+                <span className="feature-card__index">02</span>
               </div>
               <h3 className="feature-card__title">{t.features.card2Title}</h3>
               <p className="feature-card__desc">
@@ -110,9 +117,9 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
             </div>
           </div>
 
-          {/* Card 3: Chemistry Calculators */}
+          {/* Card 3: Chemistry Calculators — Quantum Violet */}
           <div
-            className="feature-card"
+            className="feature-card feature-card--violet"
             onClick={() => onNavigate('tools')}
             role="button"
             tabIndex={0}
@@ -121,20 +128,23 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
             }}
           >
             <div className="feature-card__inner">
-              <div className="feature-card__icon-box">
-                <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
-                  <rect x="18" y="10" width="44" height="60" rx="8" stroke="#4E5B47" strokeWidth="1.8" />
-                  <rect x="26" y="18" width="28" height="14" rx="3" stroke="#4E5B47" strokeWidth="1.6" />
-                  <circle cx="28" cy="42" r="3" fill="#4E5B47" />
-                  <circle cx="40" cy="42" r="3" fill="#4E5B47" />
-                  <circle cx="52" cy="42" r="3" fill="#4E5B47" />
-                  <circle cx="28" cy="52" r="3" fill="#4E5B47" />
-                  <circle cx="40" cy="52" r="3" fill="#4E5B47" />
-                  <circle cx="52" cy="52" r="3" fill="#4E5B47" />
-                  <circle cx="28" cy="62" r="3" fill="#4E5B47" />
-                  <circle cx="40" cy="62" r="3" fill="#4E5B47" />
-                  <rect x="49" y="59" width="6" height="6" rx="2" fill="#4E5B47" />
-                </svg>
+              <div className="feature-card__top-row">
+                <div className="feature-card__icon-box">
+                  <svg viewBox="0 0 80 80" fill="none" className="feature-card__icon">
+                    <rect x="18" y="10" width="44" height="60" rx="9" stroke="#A78BFA" strokeWidth="2.1" fill="rgba(167,139,250,0.08)" />
+                    <rect x="26" y="18" width="28" height="14" rx="3.5" stroke="#C4B5FD" strokeWidth="1.9" fill="rgba(167,139,250,0.18)" />
+                    <circle cx="28" cy="42" r="3" fill="#A78BFA" />
+                    <circle cx="40" cy="42" r="3" fill="#A78BFA" />
+                    <circle cx="52" cy="42" r="3" fill="#C4B5FD" />
+                    <circle cx="28" cy="52" r="3" fill="#A78BFA" />
+                    <circle cx="40" cy="52" r="3" fill="#A78BFA" />
+                    <circle cx="52" cy="52" r="3" fill="#C4B5FD" />
+                    <circle cx="28" cy="62" r="3" fill="#A78BFA" />
+                    <circle cx="40" cy="62" r="3" fill="#A78BFA" />
+                    <rect x="49" y="59" width="6" height="6" rx="2" fill="#E879F9" />
+                  </svg>
+                </div>
+                <span className="feature-card__index">03</span>
               </div>
               <h3 className="feature-card__title">{t.features.card3Title}</h3>
               <p className="feature-card__desc">

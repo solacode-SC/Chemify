@@ -4,6 +4,7 @@ import App from './App';
 import { LanguageProvider } from './i18n/LanguageContext';
 import 'katex/dist/katex.min.css';
 import './styles/index.css';
+import './styles/landing-luminous.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -12,4 +13,3 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </LanguageProvider>
   </React.StrictMode>
 );
-

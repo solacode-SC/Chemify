@@ -38,26 +38,30 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return (
-    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar currentView={currentView} onNavigate={handleNavigate} />
+  const isLuminousView = currentView === 'home' || currentView === 'about';
 
-      <div style={{ flex: 1 }}>
+  return (
+    <div
+      className={`app-container ${isLuminousView ? 'theme-luminous' : ''}`}
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
+    >
+      <Navbar currentView={currentView} onNavigate={handleNavigate} isDarkTheme={isLuminousView} />
+
+      <main style={{ flex: 1 }}>
         {currentView === 'home' && <HomeView onNavigate={handleNavigate} />}
         {currentView === 'elements' && <ExplorerView />}
         {currentView === 'lab' && <LabView />}
         {currentView === 'tools' && <ToolsView />}
         {currentView === 'about' && (
-          <div style={{ paddingTop: '100px', minHeight: '80vh' }}>
+          <div className="about-standalone-view">
             <AboutSection onNavigate={handleNavigate} />
           </div>
         )}
-      </div>
+      </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <Footer onNavigate={handleNavigate} isDarkTheme={isLuminousView} />
     </div>
   );
 };
 
 export default App;
-

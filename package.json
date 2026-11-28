@@ -2,7 +2,7 @@
   "name": "chemify",
   "version": "1.0.0",
   "type": "module",
-  "description": "<div align=\"center\">   <img src=\"assets/favicon.png\" alt=\"Chemify Logo\" width=\"120\" />   <h1>Chemify</h1>   <p><strong>Chemistry, finally made visual.</strong></p>",
+  "description": "Chemify — Interactive periodic table, real-time chemical reaction studio, and precision chemistry calculators.",
   "main": "script.js",
   "scripts": {
     "dev": "vite",
@@ -13,13 +13,19 @@
     "type": "git",
     "url": "git+https://github.com/solacode-SC/Chemify.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "chemistry",
+    "periodic-table",
+    "stoichiometry",
+    "reaction-simulator",
+    "chemify"
+  ],
+  "author": "Solayman",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/solacode-SC/Chemify/issues"
   },
-  "homepage": "https://github.com/solacode-SC/Chemify#readme",
+  "homepage": "https://chemify.solaymanbuilds.com",
   "dependencies": {
     "canvas-confetti": "^1.9.4",
     "katex": "^0.19.1",

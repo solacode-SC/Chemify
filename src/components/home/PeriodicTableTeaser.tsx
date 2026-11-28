@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ELEMENTS, CATEGORIES } from '../../data/elementsData';
+import { ELEMENTS } from '../../data/elementsData';
 import { ElementCategory } from '../../types/element';
 import { AppView } from '../common/Navbar';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -20,12 +20,25 @@ const SHOWCASE_CATEGORIES: { id: ElementCategory; count: number }[] = [
   { id: 'halogen', count: 6 }
 ];
 
+const LUMINOUS_SPECTRUM: Record<ElementCategory, { accent: string; bg: string; glow: string }> = {
+  'alkali-metal': { accent: '#FB7185', bg: 'rgba(251, 113, 133, 0.16)', glow: 'rgba(251, 113, 133, 0.42)' },
+  'alkaline-earth': { accent: '#FBBF24', bg: 'rgba(251, 191, 36, 0.16)', glow: 'rgba(251, 191, 36, 0.42)' },
+  'transition-metal': { accent: '#60A5FA', bg: 'rgba(96, 165, 250, 0.16)', glow: 'rgba(96, 165, 250, 0.42)' },
+  'post-transition': { accent: '#34D399', bg: 'rgba(52, 211, 153, 0.16)', glow: 'rgba(52, 211, 153, 0.42)' },
+  'metalloid': { accent: '#A3E635', bg: 'rgba(163, 230, 53, 0.16)', glow: 'rgba(163, 230, 53, 0.4)' },
+  'nonmetal': { accent: '#22D3EE', bg: 'rgba(34, 211, 238, 0.16)', glow: 'rgba(34, 211, 238, 0.45)' },
+  'halogen': { accent: '#E879F9', bg: 'rgba(232, 121, 249, 0.16)', glow: 'rgba(232, 121, 249, 0.45)' },
+  'noble-gas': { accent: '#A78BFA', bg: 'rgba(167, 139, 250, 0.16)', glow: 'rgba(167, 139, 250, 0.45)' },
+  'lanthanide': { accent: '#F472B6', bg: 'rgba(244, 114, 182, 0.16)', glow: 'rgba(244, 114, 182, 0.42)' },
+  'actinide': { accent: '#FB923C', bg: 'rgba(251, 146, 60, 0.16)', glow: 'rgba(251, 146, 60, 0.42)' }
+};
+
 export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavigate }) => {
   const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<ElementCategory>('nonmetal');
 
   const filteredElements = ELEMENTS.filter(e => e.category === activeCategory).slice(0, 8);
-  const currentCategoryInfo = CATEGORIES[activeCategory];
+  const currentSpectrum = LUMINOUS_SPECTRUM[activeCategory];
 
   return (
     <section className="ptable-section" id="periodic-table">
@@ -43,17 +56,26 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
         <div className="ptable-tabs no-scrollbar" role="tablist">
           {SHOWCASE_CATEGORIES.map(cat => {
             const catLabel = t.explorer.categories[cat.id] || cat.id;
+            const spec = LUMINOUS_SPECTRUM[cat.id];
+            const isActive = activeCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 role="tab"
-                aria-selected={activeCategory === cat.id}
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`ptable-tab ${activeCategory === cat.id ? 'is-active' : ''}`}
+                className={`ptable-tab ${isActive ? 'is-active' : ''}`}
+                style={
+                  {
+                    '--tab-accent': spec.accent,
+                    '--tab-bg': spec.bg,
+                    '--tab-glow': spec.glow
+                  } as React.CSSProperties
+                }
               >
                 <span
                   className="ptable-tab__dot"
-                  style={{ backgroundColor: CATEGORIES[cat.id]?.border || '#6F7F63' }}
+                  style={{ backgroundColor: spec.accent }}
                 />
                 <span className="ptable-tab__text">{catLabel}</span>
                 <span className="ptable-tab__count">({cat.count})</span>
@@ -72,6 +94,13 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
                 key={el.atomicNumber}
                 onClick={() => onNavigate('elements')}
                 className="element-specimen-card"
+                style={
+                  {
+                    '--spec-accent': currentSpectrum.accent,
+                    '--spec-bg': currentSpectrum.bg,
+                    '--spec-glow': currentSpectrum.glow
+                  } as React.CSSProperties
+                }
                 role="button"
                 tabIndex={0}
                 onKeyDown={e => {
@@ -84,8 +113,9 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
                   <span
                     className="element-specimen-card__badge"
                     style={{
-                      backgroundColor: currentCategoryInfo?.color || '#E8EFE3',
-                      borderColor: currentCategoryInfo?.border || '#6F7F63'
+                      backgroundColor: currentSpectrum.bg,
+                      borderColor: currentSpectrum.accent,
+                      color: currentSpectrum.accent
                     }}
                   >
                     {catLabel}
@@ -102,7 +132,7 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
           })}
         </div>
 
-        {/* Mini 18-Column Grid Architecture Preview */}
+        {/* Mini 18-Column Grid Architecture Spectrogram Preview */}
         <div className="ptable-preview-wrap">
           <div className="ptable-preview-header">
             <span className="ptable-preview-title">
@@ -110,21 +140,21 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
                 ? 'معاينة بنية الجدول الدوري (الدورات 1–7)'
                 : language === 'fr'
                 ? 'Aperçu de la Structure du Tableau (Périodes 1–7)'
-                : 'Periodic Table Architecture Preview (Periods 1–7)'}
+                : 'Periodic Table Spectrogram Preview (Periods 1–7)'}
             </span>
             <span className="ptable-preview-hint">
               {language === 'ar'
                 ? 'انقر على أي عنصر لفتح التفاصيل'
                 : language === 'fr'
                 ? 'Cliquez sur une case pour ouvrir sa fiche'
-                : 'Click any cell to open its details'}
+                : 'Click any cell to explore its properties'}
             </span>
           </div>
 
           <div className="ptable-scroll-container">
             <div className="ptable-mini-grid">
               {ELEMENTS.map(el => {
-                const cat = CATEGORIES[el.category];
+                const spec = LUMINOUS_SPECTRUM[el.category];
                 const isHighlighted = el.category === activeCategory;
                 const localizedName = getElementName(el.atomicNumber, language, el.name);
 
@@ -136,13 +166,24 @@ export const PeriodicTableTeaser: React.FC<PeriodicTableTeaserProps> = ({ onNavi
                     style={{
                       gridRow: el.gridRow,
                       gridColumn: el.gridColumn,
-                      backgroundColor: isHighlighted ? (cat?.color || '#fff') : 'rgba(250, 248, 245, 0.7)',
-                      borderColor: isHighlighted ? (cat?.border || '#6F7F63') : 'rgba(111, 127, 99, 0.3)'
+                      backgroundColor: isHighlighted ? spec.bg : 'rgba(255, 255, 255, 0.03)',
+                      borderColor: isHighlighted ? spec.accent : 'rgba(148, 163, 184, 0.14)',
+                      boxShadow: isHighlighted ? `0 0 12px ${spec.glow}` : 'none'
                     }}
                     title={`${el.atomicNumber} — ${localizedName} (${el.symbol})`}
                   >
-                    <span className="ptable-mini-cell__num">{el.atomicNumber}</span>
-                    <span className="ptable-mini-cell__sym">{el.symbol}</span>
+                    <span
+                      className="ptable-mini-cell__num"
+                      style={{ color: isHighlighted ? spec.accent : undefined }}
+                    >
+                      {el.atomicNumber}
+                    </span>
+                    <span
+                      className="ptable-mini-cell__sym"
+                      style={{ color: isHighlighted ? '#F8FAFC' : undefined }}
+                    >
+                      {el.symbol}
+                    </span>
                   </div>
                 );
               })}

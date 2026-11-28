@@ -25,7 +25,7 @@ RED    := \033[0;31m
 BOLD   := \033[1m
 RESET  := \033[0m
 
-.PHONY: help all build clean env-setup check-ports docker-build up down restart \
+.PHONY: help all install dev preview build clean env-setup check-ports docker-build up down restart \
         logs status health deploy update rollback prune nginx-config ssl ssl-renew \
         vps-config config vps-setup
 
@@ -60,11 +60,27 @@ help:
 	@echo -e "    $(CYAN)make prune$(RESET)            Clean up unused dangling Docker build images"
 	@echo -e ""
 	@echo -e "  $(YELLOW)Local Development & Build Targets:$(RESET)"
+	@echo -e "    $(CYAN)make install$(RESET)          Install local npm dependencies"
+	@echo -e "    $(CYAN)make dev$(RESET)              Run local Vite development server (http://localhost:3000)"
+	@echo -e "    $(CYAN)make preview$(RESET)          Preview local production build (http://localhost:4173)"
 	@echo -e "    $(CYAN)make build$(RESET)            Local production bundle build (tsc && vite build)"
 	@echo -e "    $(CYAN)make clean$(RESET)            Remove local build artifacts (dist/)"
 	@echo ""
 
 ## ── Local Development ─────────────────────────────────────────────────────
+install:
+	@echo -e "$(CYAN)==> Installing local dependencies with npm...$(RESET)"
+	npm install
+	@echo -e "$(GREEN)✓ Dependencies installed.$(RESET)"
+
+dev:
+	@echo -e "$(CYAN)==> Starting Chemify local dev server on http://localhost:3000 ...$(RESET)"
+	npm run dev
+
+preview: build
+	@echo -e "$(CYAN)==> Starting local production preview on http://localhost:4173 ...$(RESET)"
+	npm run preview
+
 build:
 	@echo -e "$(CYAN)==> Building local production bundle with TypeScript & Vite...$(RESET)"
 	npm run build
