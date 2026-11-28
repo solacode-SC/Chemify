@@ -21,16 +21,18 @@ const SHELL_META = [
 
 const VALENCE_COLOR = { hex: '#F2C14E', rgb: '242, 193, 78' };
 
-// Balanced 3D orbital plane orientations (Euler tilts in radians) so shells never collapse into a flat mess
+// Balanced 3D orbital plane orientations (Euler tilts in radians)
 const SHELL_TILTS: { rx: number; ry: number; rz: number }[] = [
-  { rx: 0.42, ry: 0.15, rz: 0.25 },
-  { rx: -0.58, ry: 0.52, rz: -0.35 },
-  { rx: 0.82, ry: -0.46, rz: 0.62 },
-  { rx: -0.32, ry: -0.84, rz: 0.48 },
-  { rx: 0.64, ry: 0.78, rz: -0.52 },
+  { rx: 0.44, ry: 0.16, rz: 0.25 },
+  { rx: -0.6, ry: 0.54, rz: -0.35 },
+  { rx: 0.84, ry: -0.46, rz: 0.62 },
+  { rx: -0.34, ry: -0.84, rz: 0.48 },
+  { rx: 0.66, ry: 0.78, rz: -0.52 },
   { rx: -0.86, ry: 0.28, rz: 0.74 },
-  { rx: 0.25, ry: -0.62, rz: -0.78 }
+  { rx: 0.26, ry: -0.62, rz: -0.78 }
 ];
+
+const SPEED_OPTIONS = [0.5, 1, 2] as const;
 
 interface Vec3 {
   x: number;
@@ -39,21 +41,18 @@ interface Vec3 {
 }
 
 function rotatePoint(p: Vec3, rx: number, ry: number, rz: number): Vec3 {
-  // Rotate around X
   const cx = Math.cos(rx);
   const sx = Math.sin(rx);
   const y1 = p.y * cx - p.z * sx;
   const z1 = p.y * sx + p.z * cx;
   const x1 = p.x;
 
-  // Rotate around Y
   const cy = Math.cos(ry);
   const sy = Math.sin(ry);
   const x2 = x1 * cy + z1 * sy;
   const z2 = -x1 * sy + z1 * cy;
   const y2 = y1;
 
-  // Rotate around Z
   const cz = Math.cos(rz);
   const sz = Math.sin(rz);
   return {
@@ -68,16 +67,18 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
   symbol,
   atomicNumber,
   electronConfig,
-  size = 320
+  size = 340
 }) => {
   const { language } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [viewMode, setViewMode] = useState<'3d' | 'bohr'>('3d');
   const [isPaused, setIsPaused] = useState(false);
+  const [speedIdx, setSpeedIdx] = useState(1); // 1x default
   const [focusedShell, setFocusedShell] = useState<number | null>(null);
 
-  // Interactive camera rotation state stored in ref for smooth 60fps rendering
+  const speedMultiplier = SPEED_OPTIONS[speedIdx];
+
   const camRef = useRef({
     rotX: 0.34,
     rotY: -0.38,
@@ -85,12 +86,15 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
     velY: 0,
     dragging: false,
     lastX: 0,
-    lastY: 0
+    lastY: 0,
+    modeBlend: 1, // 1 = full 3D, 0 = flat Bohr (smoothly interpolated!)
+    speedBlend: 1 // smoothly eases pause/play & speed changes
   });
 
   const stateRef = useRef({
     viewMode,
     isPaused,
+    speedMultiplier,
     focusedShell,
     shells,
     symbol,
@@ -98,10 +102,17 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
   });
 
   useEffect(() => {
-    stateRef.current = { viewMode, isPaused, focusedShell, shells, symbol, atomicNumber };
-  }, [viewMode, isPaused, focusedShell, shells, symbol, atomicNumber]);
+    stateRef.current = {
+      viewMode,
+      isPaused,
+      speedMultiplier,
+      focusedShell,
+      shells,
+      symbol,
+      atomicNumber
+    };
+  }, [viewMode, isPaused, speedMultiplier, focusedShell, shells, symbol, atomicNumber]);
 
-  // Reset focused shell when element changes
   useEffect(() => {
     setFocusedShell(null);
   }, [symbol, atomicNumber]);
@@ -118,11 +129,6 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let animId = 0;
     let lastTimestamp = performance.now();
@@ -155,6 +161,7 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
       const {
         viewMode: mode,
         isPaused: paused,
+        speedMultiplier: targetSpeedMult,
         focusedShell: activeShell,
         shells: currentShells,
         symbol: currentSymbol,
@@ -163,38 +170,39 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
 
       const cam = camRef.current;
 
-      if (!paused && !prefersReduced) {
-        simTime += dt;
-        if (!cam.dragging) {
-          // Gentle inertia + slow auto-orbit in 3D mode
-          cam.rotX += cam.velX;
-          cam.rotY += cam.velY + (mode === '3d' ? 0.22 * dt : 0);
-          cam.velX *= 0.92;
-          cam.velY *= 0.92;
-        }
-      } else if (!cam.dragging) {
+      // Smoothly ease orbital speed on Pause/Play and speed changes
+      const targetSpeed = paused ? 0 : targetSpeedMult;
+      cam.speedBlend += (targetSpeed - cam.speedBlend) * Math.min(1, dt * 8);
+      simTime += dt * cam.speedBlend;
+
+      // Smoothly morph between 3D Tilted Shells (1) and Flat Bohr Disc (0)
+      const targetBlend = mode === '3d' ? 1 : 0;
+      cam.modeBlend += (targetBlend - cam.modeBlend) * Math.min(1, dt * 6.5);
+      const blend = cam.modeBlend;
+
+      // Smooth camera inertia & gentle 3D precession
+      if (!cam.dragging) {
         cam.rotX += cam.velX;
-        cam.rotY += cam.velY;
-        cam.velX *= 0.9;
-        cam.velY *= 0.9;
+        cam.rotY += cam.velY + (blend > 0.05 ? 0.24 * dt * cam.speedBlend * blend : 0);
+        cam.velX *= Math.pow(0.92, dt * 60);
+        cam.velY *= Math.pow(0.92, dt * 60);
       }
 
-      // Smoothly ease camera tilt toward flat view when in Bohr Disc mode
-      const targetRotX = mode === 'bohr' ? 0.22 : cam.rotX;
-      const effectiveRotX = mode === 'bohr' ? targetRotX : cam.rotX;
-      const effectiveRotY = mode === 'bohr' ? 0 : cam.rotY;
+      const effectiveRotX = 0.2 * (1 - blend) + cam.rotX * blend;
+      const effectiveRotY = cam.rotY * blend;
 
       ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-      // Subtle radial scientific backdrop inside chamber
+      // Subtle radial scientific chamber glow
+      const pulse = 0.5 + 0.5 * Math.sin(simTime * 2.2);
       const bgGrad = ctx.createRadialGradient(cx, cy, 12, cx, cy, canvasSize * 0.56);
-      bgGrad.addColorStop(0, 'rgba(46, 125, 91, 0.2)');
+      bgGrad.addColorStop(0, `rgba(46, 125, 91, ${0.19 + pulse * 0.05})`);
       bgGrad.addColorStop(0.55, 'rgba(20, 32, 24, 0.08)');
       bgGrad.addColorStop(1, 'rgba(12, 20, 15, 0)');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, canvasSize, canvasSize);
 
-      // Subtle crosshair coordinate guides
+      // Faint instrument crosshairs
       ctx.strokeStyle = 'rgba(220, 224, 207, 0.06)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -205,24 +213,20 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
       ctx.stroke();
 
       const numShells = Math.max(currentShells.length, 1);
-      const minRadius = numShells <= 2 ? 48 : numShells <= 4 ? 38 : 31;
+      const minRadius = numShells <= 2 ? 50 : numShells <= 4 ? 40 : 32;
       const maxRadius = canvasSize * 0.43;
       const step = numShells > 1 ? (maxRadius - minRadius) / (numShells - 1) : 0;
 
-      type RenderItem =
-        | { kind: 'nucleus'; z: number }
-        | {
-            kind: 'electron';
-            x: number;
-            y: number;
-            z: number;
-            scale: number;
-            color: string;
-            rgb: string;
-            isValence: boolean;
-            dimmed: boolean;
-            trail: { x: number; y: number }[];
-          };
+      type RenderItem = {
+        x: number;
+        y: number;
+        z: number;
+        scale: number;
+        rgb: string;
+        isValence: boolean;
+        dimmed: boolean;
+        trail: { x: number; y: number }[];
+      };
 
       const ringSegmentsBack: Array<{
         pts: { x: number; y: number }[];
@@ -238,20 +242,24 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         width: number;
       }> = [];
 
-      const items: RenderItem[] = [{ kind: 'nucleus', z: 0 }];
+      const electrons: RenderItem[] = [];
 
       currentShells.forEach((electronCount, sIdx) => {
         const radius = minRadius + sIdx * step;
         const meta = SHELL_META[sIdx] || SHELL_META[SHELL_META.length - 1];
         const isValence = sIdx === currentShells.length - 1;
-        const shellColor = isValence ? VALENCE_COLOR.hex : meta.color;
         const shellRgb = isValence ? VALENCE_COLOR.rgb : meta.rgb;
         const isDimmed = activeShell !== null && activeShell !== sIdx;
         const isHighlighted = activeShell === sIdx;
 
-        const tilt = mode === '3d' ? SHELL_TILTS[sIdx % SHELL_TILTS.length] : { rx: 0, ry: 0, rz: 0 };
+        const baseTilt = SHELL_TILTS[sIdx % SHELL_TILTS.length];
+        const tilt = {
+          rx: baseTilt.rx * blend,
+          ry: baseTilt.ry * blend,
+          rz: baseTilt.rz * blend
+        };
 
-        // Sample 3D ring into back (z < 0) and front (z >= 0) polylines for true depth occlusion around the nucleus
+        // Sample 3D ring split by back (z < 0) and front (z >= 0) for true depth occlusion around nucleus
         const segCount = 96;
         let currentBack: { x: number; y: number }[] = [];
         let currentFront: { x: number; y: number }[] = [];
@@ -302,10 +310,14 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         flushBack();
         flushFront();
 
-        // Compute exact electron positions (every electronCount electron strictly placed on shell sIdx)
+        // Smooth continuous orbital motion — inner shells orbit faster, alternating directions for dynamic 3D feel
         const dir = sIdx % 2 === 0 ? 1 : -1;
-        const speed = (0.95 / (1 + sIdx * 0.28)) * dir;
-        const baseAngle = simTime * speed + sIdx * 0.7;
+        const angularVel = (1.75 / (1 + sIdx * 0.22)) * dir;
+        const baseAngle = simTime * angularVel + sIdx * 0.85;
+
+        // Curved fading wake trail behind every moving electron
+        const trailSteps = electronCount <= 10 || isHighlighted ? 8 : electronCount <= 18 ? 5 : 3;
+        const trailArcStep = 0.055 * (electronCount > 18 ? 0.65 : 1);
 
         for (let eIdx = 0; eIdx < electronCount; eIdx++) {
           const angle = baseAngle + (eIdx / electronCount) * Math.PI * 2;
@@ -318,12 +330,10 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
           const world = rotatePoint(tilted, effectiveRotX, effectiveRotY, 0);
           const proj = project(world);
 
-          // Short crisp orbital wake trail (only when not heavily crowded or when shell highlighted)
           const trail: { x: number; y: number }[] = [];
-          if (!isDimmed && (electronCount <= 18 || isHighlighted)) {
-            const trailSteps = 4;
+          if (!isDimmed && cam.speedBlend > 0.05) {
             for (let t = 1; t <= trailSteps; t++) {
-              const tAngle = angle - dir * t * 0.065;
+              const tAngle = angle - dir * t * trailArcStep;
               const tLocal: Vec3 = {
                 x: Math.cos(tAngle) * radius,
                 y: Math.sin(tAngle) * radius,
@@ -336,13 +346,11 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
             }
           }
 
-          items.push({
-            kind: 'electron',
+          electrons.push({
             x: proj.x,
             y: proj.y,
             z: world.z,
             scale: proj.scale,
-            color: shellColor,
             rgb: shellRgb,
             isValence,
             dimmed: isDimmed,
@@ -351,7 +359,7 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         }
       });
 
-      // 1. Draw back hemisphere rings
+      // 1. Back hemisphere orbital rings
       for (const seg of ringSegmentsBack) {
         ctx.strokeStyle = `rgba(${seg.color}, ${seg.alpha})`;
         ctx.lineWidth = seg.width;
@@ -363,81 +371,39 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         ctx.stroke();
       }
 
-      // 2. Sort nucleus + electrons back-to-front by Z depth
-      items.sort((a, b) => a.z - b.z);
+      // Sort electrons back-to-front by Z
+      electrons.sort((a, b) => a.z - b.z);
 
-      const drawNucleus = () => {
-        const nucRadius = currentShells.length >= 6 ? 19 : 22;
-
-        // Ambient core glow
-        const halo = ctx.createRadialGradient(cx, cy, nucRadius * 0.4, cx, cy, nucRadius * 2.1);
-        halo.addColorStop(0, 'rgba(56, 178, 135, 0.42)');
-        halo.addColorStop(0.55, 'rgba(242, 193, 78, 0.14)');
-        halo.addColorStop(1, 'rgba(56, 178, 135, 0)');
-        ctx.fillStyle = halo;
-        ctx.beginPath();
-        ctx.arc(cx, cy, nucRadius * 2.1, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 3D lit spherical nucleus
-        const sphereGrad = ctx.createRadialGradient(
-          cx - nucRadius * 0.34,
-          cy - nucRadius * 0.34,
-          nucRadius * 0.14,
-          cx,
-          cy,
-          nucRadius
-        );
-        sphereGrad.addColorStop(0, '#E8F3E5');
-        sphereGrad.addColorStop(0.32, '#5E9B77');
-        sphereGrad.addColorStop(0.76, '#2D4B38');
-        sphereGrad.addColorStop(1, '#19291E');
-
-        ctx.fillStyle = sphereGrad;
-        ctx.beginPath();
-        ctx.arc(cx, cy, nucRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(232, 243, 229, 0.5)';
-        ctx.lineWidth = 1.25;
-        ctx.stroke();
-
-        // Element symbol + proton badge
-        ctx.fillStyle = '#FAF8F4';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.font = `700 ${currentSymbol.length > 1 ? 13 : 15}px "Space Grotesk", "Inter", sans-serif`;
-        ctx.fillText(currentSymbol, cx, currentZ ? cy - 3 : cy);
-
-        if (currentZ) {
-          ctx.fillStyle = 'rgba(242, 193, 78, 0.95)';
-          ctx.font = '700 8.5px "JetBrains Mono", monospace';
-          ctx.fillText(`${currentZ}p⁺`, cx, cy + 9);
-        }
-      };
-
-      const drawElectron = (el: Extract<RenderItem, { kind: 'electron' }>) => {
+      const drawElectron = (el: RenderItem) => {
         const depthNorm = Math.max(0.35, Math.min(1, (el.z + maxRadius) / (2 * maxRadius)));
-        const baseR = el.isValence ? 4.3 : currentShells.length >= 6 ? 3.1 : 3.6;
+        const baseR = el.isValence ? 4.4 : currentShells.length >= 6 ? 3.2 : 3.7;
         const r = Math.max(1.9, baseR * el.scale);
-        const alpha = el.dimmed ? 0.18 : 0.45 + depthNorm * 0.55;
+        const alpha = el.dimmed ? 0.16 : 0.48 + depthNorm * 0.52;
 
-        // Subtle orbital trail
+        // Smooth tapered curved orbital wake trail
         if (el.trail.length > 0 && !el.dimmed) {
-          ctx.beginPath();
-          ctx.moveTo(el.x, el.y);
-          el.trail.forEach(tp => ctx.lineTo(tp.x, tp.y));
-          ctx.strokeStyle = `rgba(${el.rgb}, ${alpha * 0.4})`;
-          ctx.lineWidth = Math.max(1, r * 0.55);
-          ctx.lineCap = 'round';
-          ctx.stroke();
+          let prevX = el.x;
+          let prevY = el.y;
+          for (let i = 0; i < el.trail.length; i++) {
+            const pt = el.trail[i];
+            const fade = 1 - (i + 1) / (el.trail.length + 1);
+            ctx.strokeStyle = `rgba(${el.rgb}, ${alpha * fade * 0.62})`;
+            ctx.lineWidth = Math.max(0.8, r * 0.75 * fade);
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(prevX, prevY);
+            ctx.lineTo(pt.x, pt.y);
+            ctx.stroke();
+            prevX = pt.x;
+            prevY = pt.y;
+          }
         }
 
-        // Glow bloom for front & valence electrons
-        if (!el.dimmed && (el.isValence || depthNorm > 0.6)) {
-          const glowR = r * (el.isValence ? 2.7 : 2.1);
+        // Luminous halo for valence and near-side electrons
+        if (!el.dimmed && (el.isValence || depthNorm > 0.55)) {
+          const glowR = r * (el.isValence ? 2.8 : 2.15);
           const g = ctx.createRadialGradient(el.x, el.y, r * 0.2, el.x, el.y, glowR);
-          g.addColorStop(0, `rgba(${el.rgb}, ${alpha * 0.55})`);
+          g.addColorStop(0, `rgba(${el.rgb}, ${alpha * 0.58})`);
           g.addColorStop(1, `rgba(${el.rgb}, 0)`);
           ctx.fillStyle = g;
           ctx.beginPath();
@@ -445,7 +411,7 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
           ctx.fill();
         }
 
-        // 3D specular sphere for electron
+        // 3D lit sphere
         const eGrad = ctx.createRadialGradient(
           el.x - r * 0.32,
           el.y - r * 0.32,
@@ -464,16 +430,57 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         ctx.fill();
       };
 
-      // Draw back electrons, then nucleus, then front rings, then front electrons
-      for (const item of items) {
-        if (item.kind === 'electron' && item.z < 0) {
-          drawElectron(item);
-        }
+      // 2. Draw electrons behind the nucleus
+      for (const el of electrons) {
+        if (el.z < 0) drawElectron(el);
       }
 
-      drawNucleus();
+      // 3. Draw 3D pulsing central nucleus particle
+      const nucRadius = (currentShells.length >= 6 ? 19 : 22) + Math.sin(simTime * 2.5) * 0.6;
+      const halo = ctx.createRadialGradient(cx, cy, nucRadius * 0.35, cx, cy, nucRadius * 2.25);
+      halo.addColorStop(0, `rgba(56, 178, 135, ${0.42 + pulse * 0.12})`);
+      halo.addColorStop(0.55, 'rgba(242, 193, 78, 0.16)');
+      halo.addColorStop(1, 'rgba(56, 178, 135, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(cx, cy, nucRadius * 2.25, 0, Math.PI * 2);
+      ctx.fill();
 
-      // 3. Draw front hemisphere rings
+      const sphereGrad = ctx.createRadialGradient(
+        cx - nucRadius * 0.34,
+        cy - nucRadius * 0.34,
+        nucRadius * 0.14,
+        cx,
+        cy,
+        nucRadius
+      );
+      sphereGrad.addColorStop(0, '#E8F3E5');
+      sphereGrad.addColorStop(0.32, '#5E9B77');
+      sphereGrad.addColorStop(0.76, '#2D4B38');
+      sphereGrad.addColorStop(1, '#19291E');
+
+      ctx.fillStyle = sphereGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, nucRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(232, 243, 229, 0.55)';
+      ctx.lineWidth = 1.25;
+      ctx.stroke();
+
+      ctx.fillStyle = '#FAF8F4';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = `700 ${currentSymbol.length > 1 ? 13 : 15}px "Space Grotesk", "Inter", sans-serif`;
+      ctx.fillText(currentSymbol, cx, currentZ ? cy - 3 : cy);
+
+      if (currentZ) {
+        ctx.fillStyle = 'rgba(242, 193, 78, 0.96)';
+        ctx.font = '700 8.5px "JetBrains Mono", monospace';
+        ctx.fillText(`${currentZ}p⁺`, cx, cy + 9);
+      }
+
+      // 4. Front hemisphere orbital rings
       for (const seg of ringSegmentsFront) {
         ctx.strokeStyle = `rgba(${seg.color}, ${seg.alpha})`;
         ctx.lineWidth = seg.width;
@@ -485,11 +492,9 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
         ctx.stroke();
       }
 
-      // 4. Draw front electrons
-      for (const item of items) {
-        if (item.kind === 'electron' && item.z >= 0) {
-          drawElectron(item);
-        }
+      // 5. Draw electrons passing in front of the nucleus
+      for (const el of electrons) {
+        if (el.z >= 0) drawElectron(el);
       }
 
       animId = requestAnimationFrame(drawFrame);
@@ -499,7 +504,6 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
     return () => cancelAnimationFrame(animId);
   }, [size]);
 
-  // Pointer drag-to-rotate handlers (works with mouse & touch!)
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (viewMode !== '3d') return;
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -541,6 +545,11 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
     setFocusedShell(null);
   };
 
+  const cycleSpeed = () => {
+    setSpeedIdx(prev => (prev + 1) % SPEED_OPTIONS.length);
+    if (isPaused) setIsPaused(false);
+  };
+
   const activeMeta = focusedShell !== null ? SHELL_META[focusedShell] : null;
   const activeCount = focusedShell !== null ? shells[focusedShell] : null;
 
@@ -578,6 +587,14 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
           <button
             type="button"
             className="shells3d-btn"
+            onClick={cycleSpeed}
+            title={l('Change orbit speed', 'Changer la vitesse', 'تغيير سرعة الدوران')}
+          >
+            {speedMultiplier}×
+          </button>
+          <button
+            type="button"
+            className="shells3d-btn"
             onClick={() => setIsPaused(p => !p)}
             title={isPaused ? l('Resume orbit', 'Reprendre', 'تشغيل') : l('Pause orbit', 'Pause', 'إيقاف مؤقت')}
           >
@@ -608,7 +625,6 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
           aria-label={`3D Electron Shell Distribution for ${symbol}: ${shells.join(', ')}`}
         />
 
-        {/* Corner Hint & Live Focused Shell Readout */}
         <div className="shells3d-overlay-bottom">
           <span className="shells3d-hint">
             {activeMeta && activeCount !== null
@@ -617,7 +633,7 @@ export const ElectronShells: React.FC<ElectronShellsProps> = ({
                 }`
               : viewMode === '3d'
               ? l('Drag to rotate 3D atom · Click a shell below to isolate', 'Glissez pour pivoter en 3D · Cliquez une couche', 'اسحب لتدوير الذرة ثلاثياً · انقر على مدار للتمييز')
-              : l('Flat Bohr projection · Click a shell below to isolate', 'Projection plane de Bohr · Cliquez une couche', 'مسقط بور المسطح · انقر على مدار للتمييز')}
+              : l('Smooth Bohr projection · Click a shell below to isolate', 'Projection de Bohr fluide · Cliquez une couche', 'مسقط بور السلس · انقر على مدار للتمييز')}
           </span>
         </div>
       </div>
